@@ -1,4 +1,4 @@
-package com.cheyrouse.gael.realestatemanagerkt.controllers
+package com.cheyrouse.gael.realestatemanagerkt.controllers.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,6 +9,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.cheyrouse.gael.realestatemanagerkt.R
+import com.cheyrouse.gael.realestatemanagerkt.controllers.fragments.DetailEstateFragment
+import com.cheyrouse.gael.realestatemanagerkt.controllers.fragments.EstateListFragment
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -24,6 +26,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         configureToolbar()
         configureNavDrawer()
         configureNavView()
+        configureAndShowFragmentList()
     }
 
     private fun configureToolbar() {
@@ -98,5 +101,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         } else {
             super.onBackPressed()
         }
+    }
+
+    private fun configureAndShowFragmentList() {
+        val listFragment = EstateListFragment.newInstance()
+        supportFragmentManager.beginTransaction()
+            .add(R.id.activity_main_frame_layout, listFragment).commit()
     }
 }

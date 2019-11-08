@@ -1,0 +1,10 @@
+<resources>
+    <!--App-->
+    <string name="app_name">Real Estate Manager Kt</string>
+    <string name="app_title">Real Estate Manager</string>
+
+    <!--Toolbar-->
+    <string name="item_search_title">Search</string>
+    <string name="item_edit_title">Edit</string>
+    <string name="item_create_title">Create</string>
+</resources>

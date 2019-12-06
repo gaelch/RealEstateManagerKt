@@ -4,9 +4,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".controllers.fragments.DetailEstateFragment"
-        android:background="?android:attr/colorBackground"
-        android:layout_marginTop="56dp">
+        tools:context=".controllers.fragments.DetailEstateFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint1"
@@ -32,6 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginTop="10dp"
+                android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@+id/text_view_detail_title" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -84,6 +83,7 @@ Référence annonce : 07645_6296D"
             android:id="@+id/constraint3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/constraint2">
 
         <!--surface-->
@@ -103,9 +103,9 @@ Référence annonce : 07645_6296D"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="-2dp"
-                android:textStyle="bold"
                 android:text="@string/surface"
                 android:textSize="13dp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/icon_surface"
                 app:layout_constraintTop_toTopOf="@+id/icon_surface" />
 
@@ -138,8 +138,8 @@ Référence annonce : 07645_6296D"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="-2dp"
                 android:text="@string/nbr_of_rooms"
-                android:textStyle="bold"
                 android:textSize="13dp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/icon_nbr_of_rooms"
                 app:layout_constraintTop_toTopOf="@+id/icon_nbr_of_rooms" />
 
@@ -171,9 +171,9 @@ Référence annonce : 07645_6296D"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="-2dp"
-                android:textStyle="bold"
                 android:text="@string/nbr_of_bathrooms"
                 android:textSize="13dp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/icon_nbr_bathrooms"
                 app:layout_constraintTop_toTopOf="@+id/icon_nbr_bathrooms" />
 
@@ -206,9 +206,9 @@ Référence annonce : 07645_6296D"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="-2dp"
-                android:textStyle="bold"
                 android:text="@string/nbr_of_bedrooms"
                 android:textSize="13dp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/icon_nbr_bedrooms"
                 app:layout_constraintTop_toTopOf="@+id/icon_nbr_bedrooms" />
 
@@ -229,32 +229,33 @@ Référence annonce : 07645_6296D"
                 android:id="@+id/icon_location"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/tv_location"
+                app:layout_constraintStart_toEndOf="@+id/tv_nbr_bathrooms"
                 app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
                 android:id="@+id/tv_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:text="@string/location"
                 android:textSize="13dp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@+id/text_location_num_street"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/text_location_num_street"
+                app:layout_constraintHorizontal_bias="0.137"
+                app:layout_constraintStart_toEndOf="@+id/icon_location"
                 app:layout_constraintTop_toTopOf="@+id/icon_location" />
 
         <TextView
                 android:id="@+id/text_location_num_street"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="48dp"
                 android:text="750 av de la République"
                 android:textSize="13dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/icon_location"
                 app:layout_constraintTop_toBottomOf="@id/tv_location" />
 
         <TextView
@@ -298,24 +299,26 @@ Référence annonce : 07645_6296D"
                 app:layout_constraintStart_toStartOf="@id/text_location_cp"
                 app:layout_constraintTop_toBottomOf="@id/text_location_cp" />
 
+        <com.google.android.gms.maps.MapView
+                android:id="@+id/detail_lite_map"
+                android:name="com.google.android.gms.maps.MapFragment"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_marginEnd="15dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="gone"
+                app:cameraZoom="17"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/text_location_num_street"
+                app:layout_constraintTop_toTopOf="parent"
+                app:liteMode="true" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.gms.maps.MapView
-            xmlns:map="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/detail_lite_map"
-            android:name="com.google.android.gms.maps.MapFragment"
-            android:layout_width="0dp"
-            android:layout_height="200dp"
-            android:clickable="true"
-            android:visibility="gone"
-            map:liteMode="true"
-            map:cameraZoom="17"
-            android:focusable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            map:layout_constraintStart_toStartOf="parent"
-            map:layout_constraintTop_toBottomOf="@id/constraint3" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

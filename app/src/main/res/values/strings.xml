@@ -15,7 +15,12 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-
-    <string name="hello_blank_fragment">Hello fragment list</string>
-    <string name="hello_blank_detail">Hello fragment detail</string>
+    <!--Detail fragment-->
+    <string name="media_title">Media</string>
+    <string name="detail_description">Description</string>
+    <string name="surface">Surface</string>
+    <string name="location">Location</string>
+    <string name="nbr_of_rooms">Number of rooms</string>
+    <string name="nbr_of_bathrooms">Number of bathrooms</string>
+    <string name="nbr_of_bedrooms">Number of bedrooms</string>
 </resources>

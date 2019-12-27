@@ -1,5 +1,6 @@
 package com.cheyrouse.gael.realestatemanagerkt.models
 
+import android.net.Uri
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -12,6 +13,6 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Picture(@PrimaryKey(autoGenerate = true) val id:Long,
                    var pictureName:String?,
-                   var picturePath: String,
+                   var picturePath: Uri?,
                    var propertyId:Long
 ) : Parcelable

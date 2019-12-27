@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.cheyrouse.gael.realestatemanagerkt.R
@@ -34,25 +35,41 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var db7: String = "25,006,230"
     private var db8: String = "56,400,030"
 
+
+    private var str: String = "/storage/sdcard0/DCIM/Camera/IMG_20190831_110307.jp"
+    private val uri = str.toUri()
+
     private val pictureList = listOf(
-        Picture(0, "Lounge", "/storage/sdcard0/DCIM/Camera/IMG_20190831_110307.jpg", 0),
-        Picture(1, "Lounge", Environment.getExternalStoragePublicDirectory("/storage/sdcard0/DCIM/Camera/IMG_20190831_110307.jpg").path, 0),
-        Picture(2, "Lounge", Environment.DIRECTORY_DCIM + "/Camera/IMG_20190831_110307.jpg", 0),
-        Picture(3, "Lounge", Environment.DIRECTORY_DCIM + "/Camera/IMG_20190831_110307.jpg", 0),
-        Picture(4, "Lounge", Environment.DIRECTORY_DCIM + "/Camera/IMG_20190831_110307.jpg", 0),
-        Picture(5, "Lounge", Environment.DIRECTORY_DCIM + "/Camera/IMG_20190831_110307.jpg", 0),
-        Picture(6, "Lounge", Environment.DIRECTORY_DCIM + "/Camera/IMG_20190831_110307.jpg", 0),
-        Picture(7, "Lounge", Environment.DIRECTORY_DCIM + "/Camera/IMG_20190831_110307.jpg", 0)
+        Picture(0, "Lounge", uri, 0),
+        Picture(1, "Lounge", uri, 0),
+        Picture(2, "Lounge", uri, 0),
+        Picture(3, "Lounge", uri, 0),
+        Picture(4, "Lounge", uri, 0),
+        Picture(5, "Lounge", uri, 0),
+        Picture(6, "Lounge", uri, 0),
+        Picture(7, "Lounge", uri, 0)
     )
+
+    private val pointInterestList = listOf(
+        "school", "bus", "shops")
+
     private val propertiesList = listOf(
-        Property(0, "Manor", "", db1, 300, 5, 2, 2, true,  null, null, "Jake", pictureList),
-        Property(1, "Loft", "", db2, 300, 5, 2, 2, true,  null, null, "Jake", pictureList),
-        Property(2, "Flat", "", db3, 300, 5, 2, 2, true,  null, null, "Emmy", pictureList),
-        Property(3, "House", "", db4, 300, 5, 2, 2, true,  null, null, "Jennifer", pictureList),
-        Property(4, "House", "", db5, 300, 5, 2, 2, true,  null, null, "Billy", pictureList),
-        Property(5, "Duplex", "", db6, 300, 5, 2, 2, true,  null, null, "Emmy", pictureList),
-        Property(6, "Loft", "", db7, 300, 5, 2, 2, true,  null, null, "Jennifer", pictureList),
-        Property(7, "House", "", db8, 300, 5, 2, 2, true,  null, null, "Billy", pictureList))
+        Property(0, "Manor", "", db1, 300, 5,
+            "2, rue Cavial 46100 Figeac", pointInterestList, true,  null, null, "Jake", pictureList),
+        Property(1, "Loft", "", db2, 300, 5,
+            "2, rue Cavial 46100 Figeac", pointInterestList, true,  null, null, "Jake", pictureList),
+        Property(2, "Flat", "", db3, 300, 5,
+            "2, rue Cavial 46100 Figeac", pointInterestList, true,  null, null, "Emmy", pictureList),
+        Property(3, "House", "", db4, 300, 5,
+            "2, rue Cavial 46100 Figeac", pointInterestList, true,  null, null, "Jennifer", pictureList),
+        Property(4, "House", "", db5, 300, 5,
+            "2, rue Cavial 46100 Figeac", pointInterestList, true,  null, null, "Billy", pictureList),
+        Property(5, "Duplex", "", db6, 300, 5,
+            "2, rue Cavial 46100 Figeac", pointInterestList, true,  null, null, "Emmy", pictureList),
+        Property(6, "Loft", "", db7, 300, 5,
+            "2, rue Cavial 46100 Figeac", pointInterestList, true,  null, null, "Jennifer", pictureList),
+        Property(7, "House", "", db8, 300, 5,
+            "2, rue Cavial 46100 Figeac", pointInterestList, true,  null, null, "Billy", pictureList))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,8 +119,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return true
             }
             R.id.menu_create -> {
-                // Open create fragment
-                Toast.makeText(this, "create", Toast.LENGTH_SHORT).show()
+                // Open create activity
+                val intent = Intent(this, CreateEstateActivity::class.java)
+//                intent.putExtra(DetailActivity.PROPERTY, property)
+                startActivity(intent)
                 return true
             }
         }

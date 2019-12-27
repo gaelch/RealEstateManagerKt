@@ -32,7 +32,7 @@ class EstateListViewHolder (inflater: LayoutInflater, parent: ViewGroup) :
         mPriceView?.text = "$" + property.price.toString()
 //
         mImageView?.let {
-            glide.load(Uri.parse(property.pictures?.get(0)?.picturePath)).apply(RequestOptions().centerCrop()).into(
+            glide.load(property.pictures?.get(0)?.picturePath).apply(RequestOptions().centerCrop()).into(
                 it
             )
         }

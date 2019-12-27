@@ -44,14 +44,20 @@ data class Property (
     @ColumnInfo(name = "price") val price: String?,
     @ColumnInfo(name = "living_space") val livingSpace: Int?,
     @ColumnInfo(name = "number_of_rooms") val rooms: Int?,
-    @ColumnInfo(name = "id_address") val idAdresse: Int?,
-    @ColumnInfo(name = "points_of_interest") val pointsOfInterest: Int?,
+    @ColumnInfo(name = "address") val address: String?,
+    @ColumnInfo(name = "points_of_interest") val pointsOfInterest: List<String>?,
     @ColumnInfo(name = "status") val status: Boolean?,
-    @ColumnInfo(name = "date_of_entry") val dateOfEntry: Date?,
-    @ColumnInfo(name = "date_of_sale") val dateOfSale: Date?,
+    @ColumnInfo(name = "date_of_entry") val dateOfEntry: String?,
+    @ColumnInfo(name = "date_of_sale") val dateOfSale: String?,
     @ColumnInfo(name = "id_realtor") val realtor: String?,
     @ColumnInfo(name = "pictures") val pictures: List<Picture>?
-) : Parcelable
+) : Parcelable {
+    constructor() : this(0, "", "", "", 0,
+        0, "", null, true, null,
+        null, "", null
+    )
+}
+
 
 
 

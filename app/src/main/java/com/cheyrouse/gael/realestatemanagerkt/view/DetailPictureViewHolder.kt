@@ -1,11 +1,7 @@
 package com.cheyrouse.gael.realestatemanagerkt.view
 
-import android.graphics.Color
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
@@ -25,7 +21,7 @@ class DetailPictureViewHolder (inflater: LayoutInflater, parent: ViewGroup) :
         mNameView?.text = picture.pictureName.toString()
         mNameView?.setBackgroundColor(80808080)
         mImageView?.let {
-            glide.load(Uri.parse(picture.picturePath)).apply(RequestOptions().centerCrop()).into(
+            glide.load(picture.picturePath).apply(RequestOptions().centerCrop()).into(
                 it
             )
         }

@@ -8,18 +8,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
 
 import com.cheyrouse.gael.realestatemanagerkt.R
 import com.cheyrouse.gael.realestatemanagerkt.models.Picture
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
 import com.cheyrouse.gael.realestatemanagerkt.view.EstateListAdapter
 import kotlinx.android.synthetic.main.fragment_estate_list.*
-import java.io.File
-import java.sql.Date
 
 
 class EstateListFragment : Fragment() {
@@ -33,23 +29,36 @@ class EstateListFragment : Fragment() {
     private var db7: String = "25,006,230"
     private var db8: String = "56,400,030"
 
-    private val pictureList = listOf(Picture(0, "Lounge", "/storage/sdcard0/DCIM/Camera/IMG_20190831_110307.jpg", 0),
-        Picture(1, "Lounge", Environment.getExternalStoragePublicDirectory("/storage/sdcard0/DCIM/Camera/IMG_20190831_110307.jpg").path, 0),
-        Picture(2, "Lounge", Environment.DIRECTORY_DCIM + "/Camera/IMG_20190831_110307.jpg", 0),
-        Picture(3, "Lounge", Environment.DIRECTORY_DCIM + "/Camera/IMG_20190831_110307.jpg", 0),
-        Picture(4, "Lounge", Environment.DIRECTORY_DCIM + "/Camera/IMG_20190831_110307.jpg", 0),
-        Picture(5, "Lounge", Environment.DIRECTORY_DCIM + "/Camera/IMG_20190831_110307.jpg", 0),
-        Picture(6, "Lounge", Environment.DIRECTORY_DCIM + "/Camera/IMG_20190831_110307.jpg", 0),
-        Picture(7, "Lounge", Environment.DIRECTORY_DCIM + "/Camera/IMG_20190831_110307.jpg", 0))
+    private var str: String = "/storage/sdcard0/DCIM/Camera/IMG_20190831_110307.jp"
+    private val uri = str.toUri()
+
+    private val pictureList = listOf(Picture(0, "Lounge", uri, 0),
+        Picture(1, "Lounge", uri, 0),
+        Picture(2, "Lounge", uri, 0),
+        Picture(3, "Lounge", uri, 0),
+        Picture(4, "Lounge", uri, 0),
+        Picture(5, "Lounge", uri, 0),
+        Picture(6, "Lounge", uri, 0),
+        Picture(7, "Lounge", uri, 0))
+    private val pointInterestList = listOf(
+        "school", "bus", "shops")
     private val propertiesList = listOf(
-        Property(0, "Manor", "", db1, 300, 5, 2, 2, true,  null, null, "Jake", pictureList),
-        Property(1, "Loft", "", db2, 300, 5, 2, 2, true,  null, null, "Jake", pictureList),
-        Property(2, "Flat", "", db3, 300, 5, 2, 2, true,  null, null, "Emmy", pictureList),
-        Property(3, "House", "", db4, 300, 5, 2, 2, true,  null, null, "Jennifer", pictureList),
-        Property(4, "House", "", db5, 300, 5, 2, 2, true,  null, null, "Billy", pictureList),
-        Property(5, "Duplex", "", db6, 300, 5, 2, 2, true,  null, null, "Emmy", pictureList),
-        Property(6, "Loft", "", db7, 300, 5, 2, 2, true,  null, null, "Jennifer", pictureList),
-        Property(7, "House", "", db8, 300, 5, 2, 2, true,  null, null, "Billy", pictureList)
+        Property(0, "Manor", "", db1, 300, 5,
+            "2, rue Cavial 46100 Figeac", pointInterestList, true,  null, null, "Jake", pictureList),
+        Property(1, "Loft", "", db2, 300, 5,
+            "2, rue Cavial 46100 Figeac", pointInterestList, true,  null, null, "Jake", pictureList),
+        Property(2, "Flat", "", db3, 300, 5,
+            "2, rue Cavial 46100 Figeac", pointInterestList, true,  null, null, "Emmy", pictureList),
+        Property(3, "House", "", db4, 300, 5,
+            "2, rue Cavial 46100 Figeac", pointInterestList, true,  null, null, "Jennifer", pictureList),
+        Property(4, "House", "", db5, 300, 5,
+            "2, rue Cavial 46100 Figeac", pointInterestList, true,  null, null, "Billy", pictureList),
+        Property(5, "Duplex", "", db6, 300, 5,
+            "2, rue Cavial 46100 Figeac", pointInterestList, true,  null, null, "Emmy", pictureList),
+        Property(6, "Loft", "", db7, 300, 5,
+            "2, rue Cavial 46100 Figeac", pointInterestList, true,  null, null, "Jennifer", pictureList),
+        Property(7, "House", "", db8, 300, 5,
+            "2, rue Cavial 46100 Figeac", pointInterestList, true,  null, null, "Billy", pictureList)
     )
 
     companion object {

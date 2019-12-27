@@ -7,6 +7,7 @@
     <string name="item_search_title">Search</string>
     <string name="item_edit_title">Edit</string>
     <string name="item_create_title">Create</string>
+    <string name="create_title">Create Property</string>
 
     <!--Navigation Drawer-->
     <string name="item_estate_loan_simulator">Estate loan simulator</string>
@@ -23,4 +24,37 @@
     <string name="nbr_of_rooms">Number of rooms</string>
     <string name="nbr_of_bathrooms">Number of bathrooms</string>
     <string name="nbr_of_bedrooms">Number of bedrooms</string>
+
+    <!--    Create Activity-->
+    <string name="type_choice_tv">Choose a type</string>
+    <string name="surface_tv">Surface: </string>
+    <string name="address_tv">Address</string>
+    <string name="address_tv_detail">Art House 253W 28th streetNew York, NY 10001 USA</string>
+    <string name="points_of_interest">points of interest</string>
+    <string name="school">School</string>
+    <string name="shops">Shops</string>
+    <string name="parc">Parc</string>
+    <string name="train_station">Train station</string>
+    <string name="subway_station">Subway station</string>
+    <string name="airport">Airport</string>
+    <string name="status">Status</string>
+    <string name="available">Available</string>
+    <string name="sold">Sold</string>
+    <string name="description_tv">Description</string>
+    <string name="description_example">" Magnificent house of 350m ² living space located 10 minutes walk from the city center of Figeac with 6 bedrooms,
+        kitchen, dining room, large living room, 3 bathrooms, office, dressing room, pool house with shower and separate toilet,
+        superb heated pool 14x6.Tennis. 3 garages. Beautiful fenced park of 5500 m².Free shuttle to 50 meters.
+        A must see ! Contact Damien at 06 84 29 05 32 Reference: 07645_6296D "</string>
+    <string name="pictures_tv">Pictures</string>
+    <string name="pictures_gallery">Gallery</string>
+    <string name="pictures_camera">Camera</string>
+    <string name="surface_m">m2</string>
+    <string name="price_tv">Price</string>
+    <string name="price">10 000 000$</string>
+    <string name="entry_date_tv">Entry date</string>
+    <string name="sold_date_tv">Sold date</string>
+    <string name="realtor_tv">Realtor name</string>
+    <string name="name_example">John Smith</string>
+
+
 </resources>

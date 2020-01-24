@@ -69,7 +69,8 @@ class DetailEstateFragment : Fragment() {
         tv_description_text.text = property.description
         text_surface.text = property.livingSpace.toString()
         text_nbr_of_rooms.text = property.rooms.toString()
-//        text_nbr_bathrooms.text = property.
+        text_nbr_bathrooms.text = property.numOfBath.toString()
+        text_nbr_bedrooms.text = property.numOfBed.toString()
 //        text_location_num_street.text = property.address.
         text_location_town.text = property.address?.address
         configureRecyclerView()

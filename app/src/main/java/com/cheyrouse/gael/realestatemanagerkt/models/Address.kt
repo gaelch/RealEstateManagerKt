@@ -12,13 +12,14 @@ import androidx.room.PrimaryKey
 data class Address(@PrimaryKey var addressId:Long,
                    var address:String?,
                    var sector:String?,
+                   var apartmentNumber:Int?,
                    var city:String?,
                    var postalCode:String?,
                    var country:String?,
                    var additionalAddress:String?,
                    @ColumnInfo(name = "propertyId", index = true) var propertyId:Long)
 {
-    constructor() : this(0, "", "","","","","",0)
+    constructor() : this(0, "", "",0,"","","","",0)
 
 }
 

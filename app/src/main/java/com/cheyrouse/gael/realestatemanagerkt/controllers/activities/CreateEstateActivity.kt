@@ -29,6 +29,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.*
 import androidx.core.content.FileProvider
+import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -56,6 +57,9 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
     private lateinit var typeOfProperty: String
     private var surface: Int = 0
     private var numbreOfRooms: Int = 0
+    private var numbreOfBed: Int = 0
+    private var numbreOfBath: Int = 0
+    private var apartNumber: Int = 0
     private lateinit var address: Address
     private lateinit var description: String
     private var price: String = ""
@@ -87,6 +91,9 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         configureSpinner()
         configureSurface()
         configureNumRooms()
+        configureNumBed()
+        configureNumBath()
+        configureNumApart()
         configureAddress()
         configureDescription()
         configurePrice()
@@ -125,14 +132,14 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         typeOfProperty = property.type
         if (property.livingSpace != null) surface = property.livingSpace!!
         if (property.rooms != null) numbreOfRooms = property.rooms!!
-//        if (property.address != null) address = property.address!!   ------->>>> à remplacer par l'objet ADDRESS
+        if (property.numOfBed!= null) numbreOfBed = property.numOfBed!!
+        if (property.numOfBath!= null) numbreOfBath= property.numOfBath!!
         if (property.description != null) description = property.description!!
         if (property.price != null) price = property.price!!
         if (property.realtor != null) realtorName = property.realtor!!
         if (property.dateOfEntry != null) entryDate = property.dateOfEntry!!
         if (property.dateOfSale != null) soldDate = property.dateOfSale!!
         if (property.status != null) sold = property.status!!
-//        if (property.pictures != null) pictures = property.pictures as ArrayList<Picture>  -------->>>> à remplacer pas PICTURE
         if (property.airport != null) this.airport = property.airport!!
         if (property.subway != null) this.subway = property.subway!!
         if (property.school != null) this.school = property.school!!
@@ -140,6 +147,11 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         if (property.trainStation != null) this.trainStation = property.trainStation!!
         if (property.park != null) this.park = property.park!!
         if(property.pictures!=null) this.pictures = property.pictures as ArrayList<Picture>
+        if(property.address?.apartmentNumber !=0){
+            this.apartNumber = property.address?.apartmentNumber!!
+            apart_number.isVisible = true
+            edit_apart_nbr.isVisible = true
+        }
         initWidgets()
     }
 
@@ -148,7 +160,10 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         val spinnerPosition: Int = listOfItems.indexOf(typeOfProperty)
         type_spinner.setSelection(spinnerPosition)
         if (property.livingSpace != null) edit_surface.setText(surface.toString())
-        if (property.rooms != null) edit_nbr_rooms.setText(numbreOfRooms.toString())
+        if (numbreOfRooms!=0) edit_nbr_rooms.setText(numbreOfRooms.toString())
+        if (numbreOfBed!=0) edit_nbr_bed.setText(numbreOfBed.toString())
+        if (numbreOfBath!=0) edit_nbr_bath.setText(numbreOfBath.toString())
+        if (apartNumber!=0) edit_apart_nbr.setText(apartNumber.toString())
         if (property.address != null) {
             edit_address.setText(property.address!!.address)
         } else {
@@ -342,7 +357,78 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
                 before: Int, count: Int
             ) {
                 val nbrRoomsStr: String = edit_nbr_rooms.text.toString()
-                numbreOfRooms = nbrRoomsStr.toInt()
+                if(nbrRoomsStr.isNotEmpty()){
+                    numbreOfRooms = nbrRoomsStr.toInt()
+                }
+            }
+        })
+    }
+
+    private fun configureNumBed() {
+        edit_nbr_bed.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(s: Editable) {}
+
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int,
+                count: Int, after: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                s: CharSequence, start: Int,
+                before: Int, count: Int
+            ) {
+                val nbrBedStr: String = edit_nbr_bed.text.toString()
+                if(nbrBedStr.isNotEmpty()){
+                    numbreOfBed = nbrBedStr.toInt()
+                }
+            }
+        })
+    }
+
+    private fun configureNumBath() {
+        edit_nbr_bath.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(s: Editable) {}
+
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int,
+                count: Int, after: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                s: CharSequence, start: Int,
+                before: Int, count: Int
+            ) {
+                val nbrBathStr: String = edit_nbr_bath.text.toString()
+                if(nbrBathStr.isNotEmpty()){
+                    numbreOfBath = nbrBathStr.toInt()
+                }
+            }
+        })
+    }
+
+    private fun configureNumApart() {
+        edit_apart_nbr.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(s: Editable) {}
+
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int,
+                count: Int, after: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                s: CharSequence, start: Int,
+                before: Int, count: Int
+            ) {
+                val nbrApartStr: String = edit_apart_nbr.text.toString()
+                if(nbrApartStr.isNotEmpty()){
+                    apartNumber = nbrApartStr.toInt()
+                }
             }
         })
     }
@@ -363,7 +449,9 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
                 before: Int, count: Int
             ) {
                 val surfaceStr: String = edit_surface.text.toString()
-                surface = surfaceStr.toInt()
+                if(surfaceStr.isNotEmpty()){
+                    surface = surfaceStr.toInt()
+                }
             }
         })
     }
@@ -390,6 +478,10 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
         typeOfProperty = listOfItems[position]
+        if(typeOfProperty == "Apartment"){
+            apart_number.isVisible = true
+            edit_apart_nbr.isVisible = true
+        }
     }
 
     private fun configureCheckBoxClick() {
@@ -572,7 +664,10 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
             if (description.isNotEmpty()) property.description = description
             if (price.isNotEmpty()) property.price = price
             if (numbreOfRooms != 0) property.rooms = numbreOfRooms
+            if (numbreOfBed != 0) property.numOfBed = numbreOfBed
+            if (numbreOfBath != 0) property.numOfBath = numbreOfBath
             if (surface != 0) property.livingSpace = surface
+            if (apartNumber != 0) property.address?.apartmentNumber = apartNumber
             property.airport = airport
             property.park = park
             property.school = school

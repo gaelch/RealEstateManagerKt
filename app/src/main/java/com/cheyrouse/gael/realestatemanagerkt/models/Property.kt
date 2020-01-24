@@ -36,6 +36,8 @@ data class Property(
     var dateOfEntry: String?,
     var dateOfSale: String?,
     var realtor: String?,
+    var numOfBath: Int?,
+    var numOfBed: Int?,
     @Embedded
     var address: Address?,
     @TypeConverters
@@ -45,7 +47,7 @@ data class Property(
     constructor() : this(
         0, "", "", "", 0,
         0, false,false,false,false,false,false, true, "", "",
-        "", null, emptyList()
+        "",0, 0, null, emptyList()
     )
 }
 

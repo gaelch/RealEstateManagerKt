@@ -25,15 +25,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/scrollView">
 
 
-            <ImageView
-                    android:id="@+id/imagetest"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/line6"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
             <TextView
                     android:id="@+id/tvType"
                     android:layout_width="wrap_content"
@@ -62,6 +53,31 @@
                     android:layout_marginTop="20dp"
                     app:layout_constraintTop_toBottomOf="@+id/type_spinner"
                     tools:layout_editor_absoluteX="25dp" />
+
+            <TextView
+                    android:id="@+id/apart_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/nbr_of_rooms"
+                    android:textColor="@android:color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:visibility="gone"/>
+
+            <EditText
+                    android:id="@+id/edit_apart_nbr"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:color/white"
+                    android:hint="0"
+                    android:inputType="number"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    app:layout_constraintTop_toBottomOf="@+id/apart_number"
+                    android:visibility="gone"/>
 
             <TextView
                     android:id="@+id/tvSurface"
@@ -127,9 +143,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:layout_marginStart="20dp"
                     android:text="@string/nbr_of_rooms"
                     android:textColor="@android:color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
                     app:layout_constraintTop_toTopOf="@+id/line1" />
 
@@ -138,10 +154,10 @@
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:layout_marginStart="60dp"
                     android:background="@android:color/white"
                     android:hint="0"
                     android:inputType="number"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
                     app:layout_constraintTop_toBottomOf="@+id/tv_rooms" />
 
@@ -436,6 +452,29 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_price" />
 
+            <TextView
+                    android:id="@+id/tv_nbr_bed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/nbr_of_bedrooms"
+                    android:textColor="@android:color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    app:layout_constraintTop_toTopOf="@+id/line8" />
+
+            <EditText
+                    android:id="@+id/edit_nbr_bed"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@android:color/white"
+                    android:hint="0"
+                    android:inputType="number"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_nbr_bed" />
+
             <View
                     android:id="@+id/line9"
                     android:layout_width="match_parent"
@@ -515,7 +554,7 @@
 
             <EditText
                     android:id="@+id/edit_realtor"
-                    android:layout_width="250dp"
+                    android:layout_width="200dp"
                     android:layout_height="30dp"
                     android:layout_marginStart="30dp"
                     android:layout_marginTop="20dp"
@@ -525,6 +564,30 @@
                     android:textColor="@android:color/black"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_realtor" />
+
+            <TextView
+                    android:id="@+id/tv_nbr_bath"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/nbr_of_bathrooms"
+                    android:textColor="@android:color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    app:layout_constraintTop_toTopOf="@+id/line10" />
+
+            <EditText
+                    android:id="@+id/edit_nbr_bath"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="50dp"
+                    android:background="@android:color/white"
+                    android:hint="0"
+                    android:inputType="number"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_nbr_bath" />
 
             <View
                     android:id="@+id/line11"

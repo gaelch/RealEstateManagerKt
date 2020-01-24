@@ -10,7 +10,6 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.cheyrouse.gael.realestatemanagerkt.R
 import com.cheyrouse.gael.realestatemanagerkt.controllers.fragments.DetailEstateFragment
-import com.cheyrouse.gael.realestatemanagerkt.models.Property
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -19,7 +18,7 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
-    private lateinit var property: Property
+    private var propertyId: Long = 0
 
     companion object {
         const val PROPERTY = "property"
@@ -36,7 +35,7 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     }
 
     private fun getTheBundle() {
-        property = intent.getParcelableExtra(PROPERTY)
+        propertyId = intent.getLongExtra(PROPERTY, 0)
     }
 
     private fun configureToolbar() {
@@ -114,7 +113,7 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     }
 
     private fun configureAndShowFragmentList() {
-        val detailEstateFragment = DetailEstateFragment.newInstance(property)
+        val detailEstateFragment = DetailEstateFragment.newInstance(propertyId)
         supportFragmentManager.beginTransaction()
             .add(R.id.activity_detail_frame_layout, detailEstateFragment).commit()
     }

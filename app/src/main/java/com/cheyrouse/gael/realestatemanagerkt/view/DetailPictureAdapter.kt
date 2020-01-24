@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.cheyrouse.gael.realestatemanagerkt.models.Picture
-import com.cheyrouse.gael.realestatemanagerkt.models.Property
 
 class DetailPictureAdapter (private val list: List<Picture>)
     : RecyclerView.Adapter<DetailPictureViewHolder>() {

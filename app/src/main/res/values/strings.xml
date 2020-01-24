@@ -33,7 +33,8 @@
     <string name="points_of_interest">points of interest</string>
     <string name="school">School</string>
     <string name="shops">Shops</string>
-    <string name="parc">Parc</string>
+    <string name="subway">Subway</string>
+    <string name="parc">Park</string>
     <string name="train_station">Train station</string>
     <string name="subway_station">Subway station</string>
     <string name="airport">Airport</string>
@@ -55,6 +56,7 @@
     <string name="sold_date_tv">Sold date</string>
     <string name="realtor_tv">Realtor name</string>
     <string name="name_example">John Smith</string>
+    <string name="validate">VALIDATE</string>
 
 
 </resources>

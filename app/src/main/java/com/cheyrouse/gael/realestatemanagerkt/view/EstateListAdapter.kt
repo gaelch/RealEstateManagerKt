@@ -1,9 +1,9 @@
 package com.cheyrouse.gael.realestatemanagerkt.view
 
+import android.os.Build
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
 
@@ -15,6 +15,7 @@ class EstateListAdapter (private val list: List<Property>, private val clickList
         return EstateListViewHolder(inflater, parent)
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onBindViewHolder(holder: EstateListViewHolder, position: Int) {
         val property: Property = list[position]
         holder.bind(property, clickListener)

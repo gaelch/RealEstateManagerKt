@@ -204,7 +204,7 @@
 
 
             <CheckBox
-                    android:id="@+id/checkbox_parc"
+                    android:id="@+id/checkbox_park"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -231,7 +231,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:backgroundTint="@color/colorPrimary"
-                    android:text="@string/school"
+                    android:text="@string/subway"
                     app:layout_constraintStart_toStartOf="@+id/checkbox_shops"
                     app:layout_constraintTop_toBottomOf="@+id/checkbox_school"
                     tools:targetApi="lollipop" />
@@ -500,6 +500,20 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <Button
+            android:id="@+id/button_validate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/colorPrimary"
+            android:text="@string/validate"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toTopOf="@+id/scrollView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     <include
             layout="@layout/toolbar_create"

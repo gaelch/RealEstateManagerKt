@@ -203,7 +203,7 @@
 
 
             <CheckBox
-                    android:id="@+id/checkbox_parc"
+                    android:id="@+id/checkbox_park"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -230,7 +230,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:backgroundTint="@color/colorPrimary"
-                    android:text="@string/school"
+                    android:text="@string/subway"
                     app:layout_constraintStart_toStartOf="@+id/checkbox_shops"
                     app:layout_constraintTop_toBottomOf="@+id/checkbox_school"
                     tools:targetApi="lollipop" />
@@ -243,8 +243,8 @@
                     android:layout_marginTop="20dp"
                     android:backgroundTint="@color/colorPrimary"
                     android:text="@string/airport"
-                    app:layout_constraintStart_toStartOf="@+id/checkbox_parc"
-                    app:layout_constraintTop_toBottomOf="@+id/checkbox_parc"
+                    app:layout_constraintStart_toStartOf="@+id/checkbox_park"
+                    app:layout_constraintTop_toBottomOf="@+id/checkbox_park"
                     tools:targetApi="lollipop" />
 
             <View
@@ -519,9 +519,24 @@
 
     </androidx.core.widget.NestedScrollView>
 
+    <Button
+            android:id="@+id/button_validate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/colorPrimary"
+            android:text="@string/validate"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="@+id/include2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/scrollView" />
+
     <include
+            android:id="@+id/include2"
             layout="@layout/toolbar_create"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

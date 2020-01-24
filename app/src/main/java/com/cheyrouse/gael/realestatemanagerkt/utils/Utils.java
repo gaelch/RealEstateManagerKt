@@ -53,4 +53,8 @@ public class Utils {
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnected();
     }
+
+    public static int convertStringToInt(String price){
+      return Integer.parseInt(price.replace(",", ""));
+    }
 }

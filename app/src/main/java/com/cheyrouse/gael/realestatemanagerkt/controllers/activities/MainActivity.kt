@@ -3,18 +3,19 @@ package com.cheyrouse.gael.realestatemanagerkt.controllers.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.cheyrouse.gael.realestatemanagerkt.R
 import com.cheyrouse.gael.realestatemanagerkt.controllers.fragments.DetailEstateFragment
 import com.cheyrouse.gael.realestatemanagerkt.controllers.fragments.EstateListFragment
-import com.cheyrouse.gael.realestatemanagerkt.models.Picture
+import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.DataInjection
+import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.PropertyViewModel
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -24,60 +25,31 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
+//    private var str: String = "/storage/sdcard0/DCIM/Camera/IMG_20190831_110307.jp"
+    private lateinit var propertiesList: List<Property>
+    private var propertyId: Long = 0
 
-    // juste pour test
-    private var db1: String = "12,456,230"
-    private var db2: String = "33,400,300"
-    private var db3: String = "15,505,000"
-    private var db4: String = "22,006,230"
-    private var db5: String = "42,400,030"
-    private var db6: String = "30,000,230"
-    private var db7: String = "25,006,230"
-    private var db8: String = "56,400,030"
-
-
-    private var str: String = "/storage/sdcard0/DCIM/Camera/IMG_20190831_110307.jp"
-    private val uri = str.toUri()
-
-    private val pictureList = listOf(
-        Picture(0, "Lounge", uri, 0),
-        Picture(1, "Lounge", uri, 0),
-        Picture(2, "Lounge", uri, 0),
-        Picture(3, "Lounge", uri, 0),
-        Picture(4, "Lounge", uri, 0),
-        Picture(5, "Lounge", uri, 0),
-        Picture(6, "Lounge", uri, 0),
-        Picture(7, "Lounge", uri, 0)
-    )
-
-    private val pointInterestList = listOf(
-        "school", "bus", "shops")
-
-    private val propertiesList = listOf(
-        Property(0, "Manor", "", db1, 300, 5,
-            "2, rue Cavial 46100 Figeac", pointInterestList, true,  null, null, "Jake", pictureList),
-        Property(1, "Loft", "", db2, 300, 5,
-            "2, rue Cavial 46100 Figeac", pointInterestList, true,  null, null, "Jake", pictureList),
-        Property(2, "Flat", "", db3, 300, 5,
-            "2, rue Cavial 46100 Figeac", pointInterestList, true,  null, null, "Emmy", pictureList),
-        Property(3, "House", "", db4, 300, 5,
-            "2, rue Cavial 46100 Figeac", pointInterestList, true,  null, null, "Jennifer", pictureList),
-        Property(4, "House", "", db5, 300, 5,
-            "2, rue Cavial 46100 Figeac", pointInterestList, true,  null, null, "Billy", pictureList),
-        Property(5, "Duplex", "", db6, 300, 5,
-            "2, rue Cavial 46100 Figeac", pointInterestList, true,  null, null, "Emmy", pictureList),
-        Property(6, "Loft", "", db7, 300, 5,
-            "2, rue Cavial 46100 Figeac", pointInterestList, true,  null, null, "Jennifer", pictureList),
-        Property(7, "House", "", db8, 300, 5,
-            "2, rue Cavial 46100 Figeac", pointInterestList, true,  null, null, "Billy", pictureList))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         configureToolbar()
+        initViewModel()
         configureNavDrawer()
         configureNavView()
         configureAndShowFragmentList()
+    }
+
+    private fun initViewModel() {
+        val propertyViewModel: PropertyViewModel = ViewModelProviders.of(
+            this,
+            DataInjection.Injection.provideViewModelFactory(this)
+        ).get(PropertyViewModel::class.java)
+        propertyViewModel.getAllProperty().observe(this, Observer<List<Property>>{createDefaultList(it!!)})
+    }
+
+    private fun createDefaultList(properties:List<Property>) {
+        propertiesList = properties
     }
 
     private fun configureToolbar() {
@@ -115,13 +87,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.menu_edit-> {
                 // Open edit fragment
-                Toast.makeText(this, "edit", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, CreateEstateActivity::class.java)
+                if(propertyId==0L){
+                      propertyId = propertiesList[0].id
+                }
+                intent.putExtra(DetailActivity.PROPERTY, propertyId)
+                startActivity(intent)
                 return true
             }
             R.id.menu_create -> {
                 // Open create activity
                 val intent = Intent(this, CreateEstateActivity::class.java)
-//                intent.putExtra(DetailActivity.PROPERTY, property)
                 startActivity(intent)
                 return true
             }
@@ -164,7 +140,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .commit()
 
         if(activity_detail_frame_layout != null) {
-            val detailFragment = DetailEstateFragment.newInstance(propertiesList[0])
+            val detailFragment = DetailEstateFragment.newInstance(0)
             supportFragmentManager.beginTransaction()
                 .add(R.id.activity_detail_frame_layout, detailFragment)
                 .addToBackStack("detailFragment")
@@ -173,11 +149,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
     override fun onFragmentInteraction(property: Property) {
         Toast.makeText(this, "Clicked: ${property.type}", Toast.LENGTH_LONG).show()
+        this.propertyId = property.id
         configureAndShowFragmentDetail(property)
     }
 
     private fun configureAndShowFragmentDetail(property: Property) {
-        val detailFragment = DetailEstateFragment.newInstance(property)
+        val detailFragment = DetailEstateFragment.newInstance(property.id)
         if(activity_detail_frame_layout != null) {
             supportFragmentManager.beginTransaction()
             .add(R.id.activity_detail_frame_layout, detailFragment)
@@ -185,8 +162,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .commit()
         }else{
             val intent = Intent(this, DetailActivity::class.java)
-            intent.putExtra(DetailActivity.PROPERTY, property)
+            intent.putExtra(DetailActivity.PROPERTY, property.id)
             startActivity(intent)
         }
     }
 }
+

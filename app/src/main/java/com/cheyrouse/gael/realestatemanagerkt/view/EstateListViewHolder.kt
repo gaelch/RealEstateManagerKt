@@ -1,6 +1,7 @@
 package com.cheyrouse.gael.realestatemanagerkt.view
 
 import android.annotation.SuppressLint
+import android.content.res.Resources
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -16,6 +17,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.cheyrouse.gael.realestatemanagerkt.R
 import com.cheyrouse.gael.realestatemanagerkt.models.Address
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
+import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.SYMBOL
 import kotlinx.android.synthetic.main.estate_list_item.view.*
 import java.io.File
 
@@ -30,17 +32,14 @@ class EstateListViewHolder (inflater: LayoutInflater, parent: ViewGroup) :
     val glide: RequestManager = Glide.with(itemView)
 
 
-    @SuppressLint("InlinedApi")
+
+    @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun bind(property: Property, clickListener: (Property) -> Unit) {
-        var address: Address
-        mTypeView?.text = property.type.toString()
-//        mTownView?.text = address.type
-        mPriceView?.text = "$" + property.price.toString()
-//
+        mTypeView?.text = property.type
+        mTownView?.text = property.address?.city
+        mPriceView?.text = SYMBOL + property.price.toString()
         //get image from storage
-//        val downloadsFolder: File = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-//        val file: Uri = Uri.fromFile(File(downloadsFolder, "person.png"))
         Log.e("test estate list vh", (property.pictures?.get(0)?.picturePath))
         mImageView?.let {
             glide.load(Uri.parse(property.pictures?.get(0)?.picturePath)).apply(RequestOptions().centerCrop()).into(

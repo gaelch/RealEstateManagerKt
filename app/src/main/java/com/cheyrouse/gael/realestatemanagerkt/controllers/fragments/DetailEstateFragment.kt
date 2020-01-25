@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isInvisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -71,8 +72,16 @@ class DetailEstateFragment : Fragment() {
         text_nbr_of_rooms.text = property.rooms.toString()
         text_nbr_bathrooms.text = property.numOfBath.toString()
         text_nbr_bedrooms.text = property.numOfBed.toString()
-//        text_location_num_street.text = property.address.
-        text_location_town.text = property.address?.address
+        text_location_num_street.text = property.address?.address
+        text_location_additional.text = property.address?.additionalAddress
+        text_location_town.text = property.address?.city
+        if(property.address?.apartmentNumber!=0){
+            text_location_num_type.text = "Apartment n°" + property.address?.apartmentNumber.toString()
+        }else{
+            text_location_num_type.isInvisible = false
+        }
+        text_location_country.text = property.address?.country
+        text_location_cp.text = property.address?.postalCode
         configureRecyclerView()
     }
 

@@ -79,7 +79,11 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
     private var shops: Boolean = false
     private var trainStation: Boolean = false
     private var park: Boolean = false
-    var image_uri: Uri? = null
+    private var image_uri: Uri? = null
+    private var city:String = ""
+    private var postalCode:String = ""
+    private var country:String = ""
+    private var additionalAddress:String = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,6 +99,10 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         configureNumBath()
         configureNumApart()
         configureAddress()
+        configureCity()
+        configurePostalCode()
+        configureCountry()
+        configureAdditAddress()
         configureDescription()
         configurePrice()
         configureRealtorName()
@@ -151,7 +159,12 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
             this.apartNumber = property.address?.apartmentNumber!!
             apart_number.isVisible = true
             edit_apart_nbr.isVisible = true
+            edit_apart_nbr.setText(apartNumber.toString())
         }
+        if (property.address!!.city != null)city = property.address!!.city.toString()
+        if (property.address!!.postalCode != null)postalCode = property.address!!.postalCode.toString()
+        if (property.address!!.country != null)country = property.address!!.country.toString()
+        if (property.address!!.additionalAddress != null)additionalAddress = property.address!!.additionalAddress.toString()
         initWidgets()
     }
 
@@ -163,7 +176,6 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         if (numbreOfRooms!=0) edit_nbr_rooms.setText(numbreOfRooms.toString())
         if (numbreOfBed!=0) edit_nbr_bed.setText(numbreOfBed.toString())
         if (numbreOfBath!=0) edit_nbr_bath.setText(numbreOfBath.toString())
-        if (apartNumber!=0) edit_apart_nbr.setText(apartNumber.toString())
         if (property.address != null) {
             edit_address.setText(property.address!!.address)
         } else {
@@ -180,6 +192,10 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         } else {
             checkbox_sold.isChecked = true
         }
+        if(city.isNotEmpty())edit_city.setText(city)
+        if(postalCode.isNotEmpty())edit_postal_code.setText(postalCode)
+        if(country.isNotEmpty())edit_country.setText(country)
+        if(additionalAddress.isNotEmpty())edit_additional_address.setText(additionalAddress)
         configureRecyclerView()
     }
 
@@ -259,15 +275,12 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
 
     private fun configureRealtorName() {
         edit_realtor.addTextChangedListener(object : TextWatcher {
-
             override fun afterTextChanged(s: Editable) {}
-
             override fun beforeTextChanged(
                 s: CharSequence, start: Int,
                 count: Int, after: Int
             ) {
             }
-
             override fun onTextChanged(
                 s: CharSequence, start: Int,
                 before: Int, count: Int
@@ -275,20 +288,16 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
                 realtorName = edit_realtor.text.toString()
             }
         })
-
     }
 
     private fun configurePrice() {
         picker_price.addTextChangedListener(object : TextWatcher {
-
             override fun afterTextChanged(s: Editable) {}
-
             override fun beforeTextChanged(
                 s: CharSequence, start: Int,
                 count: Int, after: Int
             ) {
             }
-
             override fun onTextChanged(
                 s: CharSequence, start: Int,
                 before: Int, count: Int
@@ -297,20 +306,16 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
                 price = priceStr
             }
         })
-
     }
 
     private fun configureDescription() {
         edit_description.addTextChangedListener(object : TextWatcher {
-
             override fun afterTextChanged(s: Editable) {}
-
             override fun beforeTextChanged(
                 s: CharSequence, start: Int,
                 count: Int, after: Int
             ) {
             }
-
             override fun onTextChanged(
                 s: CharSequence, start: Int,
                 before: Int, count: Int
@@ -322,21 +327,86 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
 
     private fun configureAddress() {
         edit_address.addTextChangedListener(object : TextWatcher {
-
             override fun afterTextChanged(s: Editable) {}
-
             override fun beforeTextChanged(
                 s: CharSequence, start: Int,
                 count: Int, after: Int
             ) {
             }
-
             override fun onTextChanged(
                 s: CharSequence, start: Int,
                 before: Int, count: Int
             ) {
                 address = Address()
                 address.address = edit_address.text.toString()
+            }
+        })
+    }
+
+    private fun configureCity() {
+        edit_city.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int,
+                count: Int, after: Int
+            ) {
+            }
+            override fun onTextChanged(
+                s: CharSequence, start: Int,
+                before: Int, count: Int
+            ) {
+                city = edit_city.text.toString()
+            }
+        })
+    }
+
+    private fun configurePostalCode() {
+        edit_postal_code.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int,
+                count: Int, after: Int
+            ) {
+            }
+            override fun onTextChanged(
+                s: CharSequence, start: Int,
+                before: Int, count: Int
+            ) {
+                postalCode = edit_postal_code.text.toString()
+            }
+        })
+    }
+
+    private fun configureCountry() {
+        edit_country.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int,
+                count: Int, after: Int
+            ) {
+            }
+            override fun onTextChanged(
+                s: CharSequence, start: Int,
+                before: Int, count: Int
+            ) {
+                country = edit_country.text.toString()
+            }
+        })
+    }
+
+    private fun configureAdditAddress() {
+        edit_additional_address.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int,
+                count: Int, after: Int
+            ) {
+            }
+            override fun onTextChanged(
+                s: CharSequence, start: Int,
+                before: Int, count: Int
+            ) {
+                additionalAddress = edit_additional_address.text.toString()
             }
         })
     }
@@ -481,6 +551,10 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         if(typeOfProperty == "Apartment"){
             apart_number.isVisible = true
             edit_apart_nbr.isVisible = true
+        }else {
+            apart_number.isVisible = false
+            edit_apart_nbr.isVisible = false
+            apartNumber = 0
         }
     }
 
@@ -500,49 +574,6 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
             checkbox_available.isChecked = false
         }
     }
-
-//    override fun onClick(p0: View?) {
-//        p0 as CheckBox
-//        var isChecked: Boolean = p0.isChecked
-//        when (p0.id) {
-//
-//            R.id.checkbox_airport ->
-//                if (isChecked) {
-//                    airport = true
-//                }
-//            R.id.checkbox_school ->
-//                if (isChecked) {
-//                    school = true
-//                }
-//            R.id.checkbox_shops ->
-//                if (isChecked) {
-//                    shops = true
-//                }
-//            R.id.checkbox_subway ->
-//                if (isChecked) {
-//                    subway = true
-//                }
-//            R.id.checkbox_train_station ->
-//                if (isChecked) {
-//                    trainStation = true
-//                }
-//            R.id.checkbox_park ->
-//                if (isChecked) {
-//                    park = true
-//                }
-//            // Status
-//            R.id.checkbox_available ->
-//                if (isChecked) {
-//                    sold = true
-//                    checkbox_sold.isChecked = false
-//                }
-//            R.id.checkbox_sold ->
-//                if (isChecked) {
-//                    sold = false
-//                    checkbox_available.isChecked = false
-//                }
-//        }
-//    }
 
     private fun checkPermissionToReadStorage() {
         if (ContextCompat.checkSelfPermission(
@@ -667,7 +698,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
             if (numbreOfBed != 0) property.numOfBed = numbreOfBed
             if (numbreOfBath != 0) property.numOfBath = numbreOfBath
             if (surface != 0) property.livingSpace = surface
-            if (apartNumber != 0) property.address?.apartmentNumber = apartNumber
+            address.apartmentNumber = apartNumber
             property.airport = airport
             property.park = park
             property.school = school
@@ -680,6 +711,10 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
             if (realtorName.isNotEmpty()) property.realtor = realtorName
             property.address = Address()
             if (address.address?.isNotEmpty()!!) property.address = address
+            if (city.isNotEmpty()) property.address!!.city = city
+            if (postalCode.isNotEmpty()) property.address!!.postalCode = postalCode
+            if (country.isNotEmpty()) property.address!!.country = country
+            if (additionalAddress.isNotEmpty()) property.address!!.additionalAddress = additionalAddress
             if (pictures.size != 0) property.pictures = pictures
 
             propertyViewModel.createProperty(property)

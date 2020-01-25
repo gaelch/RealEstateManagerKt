@@ -24,12 +24,15 @@
     <string name="nbr_of_rooms">Number of rooms</string>
     <string name="nbr_of_bathrooms">Number of bathrooms</string>
     <string name="nbr_of_bedrooms">Number of bedrooms</string>
+    <string name="nbr_of_apart">apart N°</string>
 
     <!--    Create Activity-->
     <string name="type_choice_tv">Choose a type</string>
     <string name="surface_tv">Surface: </string>
     <string name="address_tv">Address</string>
-    <string name="address_tv_detail">Art House 253W 28th streetNew York, NY 10001 USA</string>
+    <string name="additional_address_tv">Additional Address</string>
+    <string name="additional_address_example">Staten Island road</string>
+    <string name="address_tv_detail">Street N°, name of the street…</string>
     <string name="points_of_interest">points of interest</string>
     <string name="school">School</string>
     <string name="shops">Shops</string>
@@ -55,8 +58,13 @@
     <string name="entry_date_tv">Entry date</string>
     <string name="sold_date_tv">Sold date</string>
     <string name="realtor_tv">Realtor name</string>
+    <string name="city_tv">City</string>
+    <string name="post_code_tv">Postal Code</string>
+    <string name="country_tv">Country</string>
+    <string name="country_example">United-States</string>
     <string name="name_example">John Smith</string>
+    <string name="post_code_example">15000</string>
+    <string name="city_example">New York</string>
     <string name="validate">VALIDATE</string>
-
 
 </resources>

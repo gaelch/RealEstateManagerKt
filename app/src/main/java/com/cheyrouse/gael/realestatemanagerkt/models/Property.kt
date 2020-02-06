@@ -4,23 +4,8 @@ import androidx.room.*
 
 
 @Entity
-//    foreignKeys = arrayOf(
-//        ForeignKey(
-//            entity = Address::class,
-//            parentColumns = arrayOf("id"),
-//            childColumns = arrayOf("address")
-//        ),
-//        ForeignKey(
-//            entity = Picture::class,
-//            parentColumns = arrayOf("id"),
-//            childColumns = arrayOf("pictures")
-//        )
-//
-//    )
-//)
 data class Property(
-
-    @PrimaryKey(autoGenerate = true) var id: Long = 0,
+    @PrimaryKey(autoGenerate = true) var id: Long,
     var type: String,
     var description: String?,
     var price: String?,

@@ -1,6 +1,5 @@
 package com.cheyrouse.gael.realestatemanagerkt.models
 
-import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -16,10 +15,12 @@ data class Address(@PrimaryKey var addressId:Long,
                    var city:String?,
                    var postalCode:String?,
                    var country:String?,
+                   var lat:Double?,
+                   var lng:Double?,
                    var additionalAddress:String?,
                    @ColumnInfo(name = "propertyId", index = true) var propertyId:Long)
 {
-    constructor() : this(0, "", "",0,"","","","",0)
+    constructor() : this(0, "", "",0,"","","",0.0,0.0,"",0)
 
 }
 

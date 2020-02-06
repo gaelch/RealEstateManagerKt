@@ -1,15 +1,20 @@
 package com.cheyrouse.gael.realestatemanagerkt.controllers.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.cheyrouse.gael.realestatemanagerkt.R
 import com.cheyrouse.gael.realestatemanagerkt.controllers.fragments.DetailEstateFragment
+import com.cheyrouse.gael.realestatemanagerkt.controllers.fragments.MapsFragment
+import com.cheyrouse.gael.realestatemanagerkt.utils.Utils
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -66,6 +71,11 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle presses on the action bar menu items
         when (item.itemId) {
+            R.id.menu_map-> {
+                checkIfLocationIsEnable()
+                return true
+            }
+
             R.id.menu_search -> {
                 // Open search fragment
                 Toast.makeText(this, "search", Toast.LENGTH_SHORT).show()
@@ -73,16 +83,46 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             }
             R.id.menu_edit-> {
                 // Open edit fragment
-                Toast.makeText(this, "edit", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, CreateEstateActivity::class.java)
+                intent.putExtra(PROPERTY, propertyId)
+                startActivity(intent)
                 return true
             }
             R.id.menu_create -> {
-                // Open create fragment
-                Toast.makeText(this, "create", Toast.LENGTH_SHORT).show()
+                // Open create activity
+                val intent = Intent(this, CreateEstateActivity::class.java)
+                startActivity(intent)
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun checkIfLocationIsEnable() {
+        if(Utils.isLocationEnabled(this)){
+            // Open search fragment
+            val mapsFragment = MapsFragment.newInstance()
+            supportFragmentManager.beginTransaction()
+                .add(R.id.activity_detail_frame_layout, mapsFragment)
+                .addToBackStack("mapsFragment")
+                .commit()
+        }else{
+            showAlertDialog()
+        }
+    }
+
+    private fun showAlertDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Location Alert")
+        builder.setMessage("To open map, enable location please.")
+        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+            startActivity(intent)
+        }
+        builder.setNegativeButton(android.R.string.no) { dialog, which ->
+
+        }
+        builder.show()
     }
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {

@@ -1,6 +1,7 @@
 package com.cheyrouse.gael.realestatemanagerkt.controllers.repositories
 
 import androidx.lifecycle.LiveData
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.cheyrouse.gael.realestatemanagerkt.database.dao.PropertyDao
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
 
@@ -29,4 +30,7 @@ class PropertyDataRepository(private val propertyDao: PropertyDao) {
         propertyDao.updateProperty(property!!)
     }
 
+    fun getPropertyByArgs(query: SimpleSQLiteQuery) : LiveData<List<Property>>{
+        return propertyDao.getPropertyByArgs(query)
+    }
 }

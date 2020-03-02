@@ -12,22 +12,22 @@ object DataInjection {
 
     object Injection {
 
-        fun providePropertyDataSource(context: Context): PropertyDataRepository {
+        private fun providePropertyDataSource(context: Context): PropertyDataRepository {
             val database: RealEstateDatabase = RealEstateDatabase.getInstance(context)
             return PropertyDataRepository(database.propertyDao())
         }
 
-        fun provideAddressDataSource(context: Context): AddressDataRepository {
+        private fun provideAddressDataSource(context: Context): AddressDataRepository {
             val database: RealEstateDatabase = RealEstateDatabase.getInstance(context)
             return AddressDataRepository(database.addressDao())
         }
 
-        fun providePictureDataSource(context: Context): PictureDataRepository {
+        private fun providePictureDataSource(context: Context): PictureDataRepository {
             val database: RealEstateDatabase = RealEstateDatabase.getInstance(context)
             return PictureDataRepository(database.pictureDao())
         }
 
-        fun provideExecutor(): Executor {
+        private fun provideExecutor(): Executor {
             return Executors.newSingleThreadExecutor()
         }
 

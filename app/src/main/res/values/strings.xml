@@ -23,13 +23,19 @@
     <string name="surface">Surface</string>
     <string name="location">Location</string>
     <string name="nbr_of_rooms">Number of rooms</string>
+    <string name="nbr_of_rooms_min">Rooms min: </string>
+    <string name="nbr_of_rooms_max">Rooms max: </string>
     <string name="nbr_of_bathrooms">Number of bathrooms</string>
     <string name="nbr_of_bedrooms">Number of bedrooms</string>
+    <string name="bedrooms_min">Bedrooms min</string>
+    <string name="bedrooms_max">Bedrooms max</string>
     <string name="nbr_of_apart">apart N°</string>
 
     <!--    Create Activity-->
     <string name="type_choice_tv">Choose a type</string>
     <string name="surface_tv">Surface: </string>
+    <string name="surface_tv_min">Surface min: </string>
+    <string name="surface_tv_max">Surface max: </string>
     <string name="address_tv">Address</string>
     <string name="additional_address_tv">Additional Address</string>
     <string name="additional_address_example">Staten Island road</string>
@@ -52,6 +58,8 @@
     <string name="pictures_camera">Camera</string>
     <string name="surface_m">m2</string>
     <string name="price_tv">Price</string>
+    <string name="price_min">Price min</string>
+    <string name="price_max">Price max</string>
     <string name="price">10 000 000$</string>
     <string name="entry_date_tv">Entry date</string>
     <string name="sold_date_tv">Sold date</string>
@@ -64,10 +72,13 @@
     <string name="post_code_example">15000</string>
     <string name="city_example">New York</string>
     <string name="validate">VALIDATE</string>
+    <string name="valid_search">SEARCHING</string>
     <string name="dialogTitle">Network not available!</string>
     <string name="dialog_not_internet_text">Sorry but the internet does not allow us to record the location of this property. Do you want to save the property anyway? Its location will be recorded from the map if the network allows it.</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--    SEARCH-->
+    <string name="result_is_empty">Sorry but no property matches your search</string>
+    <string name="test_query">test query result</string>
+    <!-- Notification -->
+    <string name="notification_text">The new property has been successfully added !</string>
 
 </resources>

@@ -1,5 +1,6 @@
 package com.cheyrouse.gael.realestatemanagerkt
 
+import com.cheyrouse.gael.realestatemanagerkt.utils.Utils
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -11,7 +12,12 @@ import org.junit.Assert.*
  */
 class ExampleUnitTest {
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun convertDollarToEuroTest(){
+        assertEquals(8, Utils.convertDollarToEuro(10))
+    }
+
+    @Test
+    fun convertEuroToDollarTest(){
+        assertEquals(12, Utils.convertEuroToDollar(10))
     }
 }

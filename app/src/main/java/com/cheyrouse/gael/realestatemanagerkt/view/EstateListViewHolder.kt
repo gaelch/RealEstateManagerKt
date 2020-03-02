@@ -1,11 +1,8 @@
 package com.cheyrouse.gael.realestatemanagerkt.view
 
 import android.annotation.SuppressLint
-import android.content.res.Resources
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
-import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -15,11 +12,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.cheyrouse.gael.realestatemanagerkt.R
-import com.cheyrouse.gael.realestatemanagerkt.models.Address
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
 import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.SYMBOL
 import kotlinx.android.synthetic.main.estate_list_item.view.*
-import java.io.File
 
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -29,9 +24,8 @@ class EstateListViewHolder (inflater: LayoutInflater, parent: ViewGroup) :
     private val mTownView = itemView.estate_town
     private var mPriceView = itemView.estate_price
     private var mImageView = itemView.estate_picture
-    val glide: RequestManager = Glide.with(itemView)
-
-
+    private var constraint = itemView.constraint_item
+    private val glide: RequestManager = Glide.with(itemView)
 
     @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -46,7 +40,10 @@ class EstateListViewHolder (inflater: LayoutInflater, parent: ViewGroup) :
                 it
             )
         }
-        itemView.setOnClickListener { clickListener(property)}
+
+        itemView.setOnClickListener {
+            clickListener(property)
+        }
     }
 
 }

@@ -48,6 +48,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
     private lateinit var mLocationCallback: LocationCallback
     private lateinit var marker: Marker
     private var initPosition: Boolean = false
+    private var mLocationRequest = LocationRequest()
 
     companion object {
         fun newInstance(): MapsFragment {
@@ -180,18 +181,20 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
 
     @SuppressLint("MissingPermission")
     private fun requestNewLocationData() {
-        progressBar.visibility = View.VISIBLE
-
+        if (progressBar!=null){
+            progressBar.visibility = View.VISIBLE
+        }
         mLocationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 locationResult ?: return
                 for (location in locationResult.locations) {
                     getLocation(location)
-                    progressBar.visibility = View.GONE
+                    if(progressBar!=null){
+                        progressBar.visibility = View.GONE
+                    }
                 }
             }
         }
-        val mLocationRequest = LocationRequest()
         mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         mLocationRequest.interval = (30 * 1000)
         mLocationRequest.fastestInterval = 1000

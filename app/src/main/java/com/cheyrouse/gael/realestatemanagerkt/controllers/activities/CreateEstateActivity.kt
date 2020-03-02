@@ -1,48 +1,53 @@
 package com.cheyrouse.gael.realestatemanagerkt.controllers.activities
 
-import android.app.DatePickerDialog
-import android.content.Intent
-import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.view.View
-import androidx.core.content.ContextCompat
-import com.cheyrouse.gael.realestatemanagerkt.R
-import kotlinx.android.synthetic.main.activity_create_estate.*
-import kotlinx.android.synthetic.main.toolbar.*
-import java.util.*
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.app.AlertDialog
+import android.app.*
 import android.content.ContentValues
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.media.RingtoneManager
 import android.net.Uri
+import android.os.Build
+import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
-import android.widget.*
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.OrientationHelper
+import com.cheyrouse.gael.realestatemanagerkt.R
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.DataInjection
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.PropertyViewModel
 import com.cheyrouse.gael.realestatemanagerkt.models.Address
 import com.cheyrouse.gael.realestatemanagerkt.models.GeocodeInfo
 import com.cheyrouse.gael.realestatemanagerkt.models.Picture
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
-import com.cheyrouse.gael.realestatemanagerkt.utils.Constant
+import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.CHANEL_ID
+import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.NOTIFICATION_ID
+import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.listOfTypes
 import com.cheyrouse.gael.realestatemanagerkt.utils.RealEstateStream
 import com.cheyrouse.gael.realestatemanagerkt.utils.Utils
 import com.cheyrouse.gael.realestatemanagerkt.view.DetailPictureAdapter
 import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableObserver
+import kotlinx.android.synthetic.main.activity_create_estate.*
 import kotlinx.android.synthetic.main.picture_title_dialogue.view.*
-import okhttp3.internal.Util
-import kotlin.collections.ArrayList
+import kotlinx.android.synthetic.main.toolbar.*
+import java.util.*
 
 class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
@@ -51,7 +56,6 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
     private lateinit var disposable: Disposable
     private lateinit var geoLocation: GeocodeInfo
     private lateinit var propertyViewModel: PropertyViewModel
-    private var listOfItems = Constant.ConstantVal.listOfItems
     private lateinit var typeOfProperty: String
     private var surface: Int = 0
     private var numberOfRooms: Int = 0
@@ -60,10 +64,10 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
     private var apartNumber: Int = 0
     private var address: Address = Address()
     private lateinit var description: String
-    private var price: String = ""
+    private var price: Double = 0.0
     private lateinit var realtorName: String
-    private lateinit var entryDate: String
-    private lateinit var soldDate: String
+    private var entryDate: String = ""
+    private var soldDate: String = ""
     private val c = Calendar.getInstance()
     private val year = c.get(Calendar.YEAR)
     private val month = c.get(Calendar.MONTH)
@@ -174,7 +178,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
 
     private fun initWidgets() {
         configureRecyclerView()
-        val spinnerPosition: Int = listOfItems.indexOf(typeOfProperty)
+        val spinnerPosition: Int = listOfTypes.indexOf(typeOfProperty)
         type_spinner.setSelection(spinnerPosition)
         if (property.livingSpace != null) edit_surface.setText(surface.toString())
         if (numberOfRooms != 0) edit_nbr_rooms.setText(numberOfRooms.toString())
@@ -187,7 +191,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         }
         if (property.realtor != null) edit_realtor.setText(realtorName)
         if (property.description != null) edit_description.setText(description)
-        if (property.price != null) picker_price.setText(price)
+        if (property.price != null) picker_price.setText(price.toString())
         if (property.dateOfSale != null) picker_sold_date.text = soldDate
         if (property.dateOfEntry != null) picker_entry_date.text = entryDate
         initCheckbox()
@@ -248,10 +252,10 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         picker_sold_date.setOnClickListener {
             val dpd = DatePickerDialog(
                 this,
-                DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
                     // Display Selected date in TextView
                     picker_sold_date.text = Utils.getStringDate(year, dayOfMonth, monthOfYear)
-                    soldDate = picker_entry_date.text.toString()
+                    soldDate = picker_sold_date.text.toString()
                 },
                 year,
                 month,
@@ -266,7 +270,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         picker_entry_date.setOnClickListener {
             val dpd = DatePickerDialog(
                 this,
-                DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
                     // Display Selected date in TextView
                     picker_entry_date.text = Utils.getStringDate(year, dayOfMonth, monthOfYear)
                     entryDate = picker_entry_date.text.toString()
@@ -311,7 +315,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
                 before: Int, count: Int
             ) {
                 val priceStr: String = picker_price.text.toString()
-                price = priceStr
+                price = priceStr.toDouble()
             }
         })
     }
@@ -549,7 +553,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
     private fun configureSpinner() {
         type_spinner!!.onItemSelectedListener = this
         // Create an ArrayAdapter using a simple spinner layout and languages array
-        val aa = ArrayAdapter(this, android.R.layout.simple_spinner_item, listOfItems)
+        val aa = ArrayAdapter(this, android.R.layout.simple_spinner_item, listOfTypes)
         // Set layout to use when the list of choices appear
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         // Set Adapter to Spinner
@@ -561,7 +565,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
     }
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-        typeOfProperty = listOfItems[position]
+        typeOfProperty = listOfTypes[position]
         if (typeOfProperty == "Apartment") {
             apart_number.isVisible = true
             edit_apart_nbr.isVisible = true
@@ -670,7 +674,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
     }
 
     private fun showCustomDialog(image_uri: Uri) {
-        var picture: Picture? = null
+        var picture: Picture?
         //Inflate the dialog with custom view
         val mDialogView = LayoutInflater.from(this).inflate(R.layout.picture_title_dialogue, null)
         //AlertDialogBuilder
@@ -746,11 +750,11 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         builder.setIcon(android.R.drawable.ic_dialog_alert)
 
         //performing positive action
-        builder.setPositiveButton("Yes"){dialogInterface, which ->
+        builder.setPositiveButton("Yes"){ _, _ ->
            checkValues()
         }
         //performing negative action
-        builder.setNegativeButton("No"){dialogInterface, which ->
+        builder.setNegativeButton("No"){ _, _ ->
           returnToHome()
         }
         // Create the AlertDialog
@@ -763,7 +767,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
     private fun checkValues() {
         if (typeOfProperty.isNotEmpty()) property.type = typeOfProperty
         if (description.isNotEmpty()) property.description = description
-        if (price.isNotEmpty()) property.price = price
+        if (price != 0.0) property.price = price
         if (numberOfRooms != 0) property.rooms = numberOfRooms
         if (numberOfBed != 0) property.numOfBed = numberOfBed
         if (numberOfBath != 0) property.numOfBath = numberOfBath
@@ -792,15 +796,46 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         if(soldDate!="")property.dateOfSale = soldDate
 
         propertyViewModel.createProperty(property)
-        Toast.makeText(applicationContext, "Property registered", Toast.LENGTH_LONG).show()
-
+        showNotification()
         returnToHome()
+    }
+
+    //To display notification
+    private fun showNotification() {
+            val textContent: String = resources.getString(R.string.notification_text)
+            // 2 - Create a Style for the Notification
+            val inboxStyle: NotificationCompat.InboxStyle = NotificationCompat.InboxStyle()
+            inboxStyle.setBigContentTitle("Notification")
+            inboxStyle.addLine(textContent)
+            // 3 - Create a Channel (Android 8)
+            val channelId: String = CHANEL_ID
+            // 4 - Build a Notification object
+            val notificationBuilder: NotificationCompat.Builder = NotificationCompat.Builder(
+                baseContext,
+                channelId
+            ).setSmallIcon(R.drawable.ic_real_estate_m)
+                .setContentTitle("My News")
+                .setContentText(textContent)
+                .setAutoCancel(true)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setStyle(inboxStyle)
+            // 5 - Add the Notification to the Notification Manager and show it.
+            val notificationManager = baseContext
+                .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            // 6 - Support Version >= Android 8
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val channelName: CharSequence = "Message provenant de MyNews"
+                val importance = NotificationManager.IMPORTANCE_HIGH
+                val mChannel =
+                    NotificationChannel(channelId, channelName, importance)
+                notificationManager.createNotificationChannel(mChannel)
+                // 7 - Show notification
+                notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
+            }
     }
 
     private fun returnToHome() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
-
-
 }

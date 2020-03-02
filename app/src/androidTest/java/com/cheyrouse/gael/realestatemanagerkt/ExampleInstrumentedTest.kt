@@ -1,8 +1,8 @@
 package com.cheyrouse.gael.realestatemanagerkt
 
-import androidx.test.InstrumentationRegistry
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
-
+import com.cheyrouse.gael.realestatemanagerkt.utils.Utils
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -18,7 +18,7 @@ class ExampleInstrumentedTest {
     @Test
     fun useAppContext() {
         // Context of the app under test.
-        val appContext = InstrumentationRegistry.getTargetContext()
-        assertEquals("com.cheyrouse.gael.realestatemanagerkt", appContext.packageName)
+        val appContext = InstrumentationRegistry.getInstrumentation()
+        assertEquals("com.cheyrouse.gael.realestatemanagerkt", appContext)
     }
 }

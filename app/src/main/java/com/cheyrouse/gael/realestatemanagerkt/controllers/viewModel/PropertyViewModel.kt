@@ -1,7 +1,9 @@
 package com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.cheyrouse.gael.realestatemanagerkt.controllers.repositories.AddressDataRepository
 import com.cheyrouse.gael.realestatemanagerkt.controllers.repositories.PictureDataRepository
 import com.cheyrouse.gael.realestatemanagerkt.controllers.repositories.PropertyDataRepository
@@ -9,6 +11,7 @@ import com.cheyrouse.gael.realestatemanagerkt.models.Address
 import com.cheyrouse.gael.realestatemanagerkt.models.Picture
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
 import java.util.concurrent.Executor
+import kotlin.collections.ArrayList
 
 
 class PropertyViewModel(private val mPropertyDataRepository: PropertyDataRepository,
@@ -16,7 +19,7 @@ class PropertyViewModel(private val mPropertyDataRepository: PropertyDataReposit
                         private val mPictureDataRepository: PictureDataRepository,
                         private val executor: Executor): ViewModel() {
 
-    ///// --- FOR PROPERTY --- /////
+    ///// --- PROPERTY --- /////
 
     // --- GET ---
     fun getAllProperty(): LiveData<List<Property>> {
@@ -37,7 +40,7 @@ class PropertyViewModel(private val mPropertyDataRepository: PropertyDataReposit
         executor.execute { mPropertyDataRepository.updateProperty(property) }
     }
 
-    ///// --- FOR PICTURE --- /////
+    ///// --- PICTURE --- /////
 
     // --- GET ---
     fun getAllPictures(propertyId: Long): LiveData<List<Picture>> {
@@ -60,7 +63,7 @@ class PropertyViewModel(private val mPropertyDataRepository: PropertyDataReposit
     }
 
 
-    ///// --- FOR ADDRESS --- /////
+    ///// --- ADDRESS --- /////
 
     // --- GET ---
     fun getAddressListDao(idProperty: Long): LiveData<List<Address>> {
@@ -85,4 +88,11 @@ class PropertyViewModel(private val mPropertyDataRepository: PropertyDataReposit
         mAddressDataRepository.updateAddressDao(address!!)
     }
 
+    //// --- SEARCH --- ////
+
+    fun getPropertyByArgs(queryString:String, args:ArrayList<Any>) : LiveData<List<Property>>{
+        val query = SimpleSQLiteQuery(queryString,args.toArray())
+        Log.e("get properties by args","Query : ${query.sql}")
+        return mPropertyDataRepository.getPropertyByArgs(query)
+    }
 }

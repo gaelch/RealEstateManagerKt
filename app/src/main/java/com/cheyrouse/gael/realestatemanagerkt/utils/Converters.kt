@@ -1,10 +1,13 @@
 package com.cheyrouse.gael.realestatemanagerkt.utils
 
-import android.net.Uri
+import android.R.attr
 import androidx.room.TypeConverter
+import com.cheyrouse.gael.realestatemanagerkt.models.Address
 import com.cheyrouse.gael.realestatemanagerkt.models.Picture
 import com.google.gson.Gson
+import com.google.gson.JsonElement
 import com.google.gson.reflect.TypeToken
+import org.json.JSONObject
 import java.lang.reflect.Type
 import java.util.*
 
@@ -39,5 +42,4 @@ class Converters {
     fun someObjectListToString(someObjects: List<Picture?>?): String? {
         return gson.toJson(someObjects)
     }
-
 }

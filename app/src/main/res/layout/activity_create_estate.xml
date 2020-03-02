@@ -7,8 +7,6 @@
         android:background="@color/light_grey"
         tools:context=".controllers.activities.CreateEstateActivity">
 
-    <!-- Importation de notre Toolbar -->
-
     <androidx.core.widget.NestedScrollView
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
@@ -91,18 +89,6 @@
                     app:layout_constraintTop_toBottomOf="@+id/line1" />
 
             <TextView
-                    android:id="@+id/tvSurfaceResult"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="120dp"
-                    android:hint="0"
-                    android:textColor="@color/orange_red"
-                    app:layout_constraintStart_toEndOf="@id/tvSurface"
-                    app:layout_constraintTop_toBottomOf="@+id/line1" />
-
-            <TextView
                     android:id="@+id/tvSurfaceM2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -111,7 +97,7 @@
                     android:layout_marginEnd="120dp"
                     android:text="@string/surface_m"
                     android:textColor="@android:color/black"
-                    app:layout_constraintStart_toEndOf="@id/tvSurfaceResult"
+                    app:layout_constraintStart_toEndOf="@id/tvSurface"
                     app:layout_constraintTop_toBottomOf="@+id/line1" />
 
             <EditText

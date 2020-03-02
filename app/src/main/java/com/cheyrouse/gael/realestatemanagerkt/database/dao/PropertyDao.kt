@@ -1,16 +1,15 @@
 package com.cheyrouse.gael.realestatemanagerkt.database.dao
 
+import android.database.Cursor
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
+import androidx.room.*
 import androidx.room.OnConflictStrategy.REPLACE
-import androidx.room.Query
-import androidx.room.Update
+import androidx.sqlite.db.SupportSQLiteQuery
+import com.cheyrouse.gael.realestatemanagerkt.models.Address
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
 
 @Dao
 interface PropertyDao {
-
 
     @Query("SELECT * from property")
     fun getAllProperties(): LiveData<List<Property>>
@@ -24,7 +23,18 @@ interface PropertyDao {
     @Update
     fun updateProperty(property: Property): Int
 
+
     @Query("DELETE FROM property WHERE id = :index")
     fun deleteProperty(index: Long)
 
+    @RawQuery(observedEntities = [Property::class, Address::class])
+    fun getPropertyByArgs(query: SupportSQLiteQuery) : LiveData<List<Property>>
+
+    //// ---- FOR CONTENT PROVIDER ---- ////
+
+    @Query("SELECT * FROM property WHERE id = :idProperty")
+    fun getPropertyWithCursor(idProperty: Long): Cursor
+
+    @Query("SELECT * FROM property")
+    fun getAllPropertyWithCursor(): Cursor
 }

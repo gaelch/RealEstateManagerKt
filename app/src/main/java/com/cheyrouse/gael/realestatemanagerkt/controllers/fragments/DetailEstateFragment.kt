@@ -20,16 +20,14 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.fragment_detail_estate.*
-import java.util.*
 
 
-class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener  {
+class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private lateinit var property: Property
     private var propertyId: Long = 0
@@ -87,22 +85,26 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
         text_location_num_street.text = property.address?.address
         text_location_additional.text = property.address?.additionalAddress
         text_location_town.text = property.address?.city
-        if(property.address?.apartmentNumber!=0){
-            text_location_num_type.text = "Apartment n°" + property.address?.apartmentNumber.toString()
-        }else{
+        if (property.address?.apartmentNumber != 0) {
+            text_location_num_type.text =
+                "Apartment n°" + property.address?.apartmentNumber.toString()
+        } else {
             text_location_num_type.visibility = View.GONE
         }
         text_location_country.text = property.address?.country
         text_location_cp.text = property.address?.postalCode
         configureRecyclerView()
         addMarkers()
+
     }
 
     @SuppressLint("WrongConstant")
     private fun configureRecyclerView() {
-        detail_picture_recycler_view.apply {
-            layoutManager = LinearLayoutManager(context, OrientationHelper.HORIZONTAL, false)
-            adapter = DetailPictureAdapter(property.pictures!!)
+        if(property!=null){
+            detail_picture_recycler_view.apply {
+                layoutManager = LinearLayoutManager(context, OrientationHelper.HORIZONTAL, false)
+                adapter = DetailPictureAdapter(property.pictures!!)
+            }
         }
     }
 
@@ -114,8 +116,10 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
 
 
     private fun updateAdapterWithDefaultValue(properties: List<Property>) {
-        property = properties[0]
-        configureRecyclerView()
+        if (properties.isNotEmpty()) {
+            property = properties[0]
+            configureRecyclerView()
+        }
     }
 
     override fun onMapReady(googleMap: GoogleMap?) {

@@ -13,7 +13,7 @@ class PropertyContentProvider : ContentProvider() {
     // FOR DATA
     val AUTHORITY = "com.gael.openclassrooms.realestatemanager.provider"
     val TABLE_NAME = Property::class.java.simpleName
-    var URI_PROPERTY = Uri.parse("content://$AUTHORITY/$TABLE_NAME")
+    val URI_PROPERTY = Uri.parse("content://$AUTHORITY/$TABLE_NAME")
 
 
     override fun insert(p0: Uri, p1: ContentValues?): Uri? {

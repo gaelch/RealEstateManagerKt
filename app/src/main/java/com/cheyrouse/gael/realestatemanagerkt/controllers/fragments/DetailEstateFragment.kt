@@ -119,6 +119,7 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
         if (properties.isNotEmpty()) {
             property = properties[0]
             configureRecyclerView()
+            initVars(property)
         }
     }
 

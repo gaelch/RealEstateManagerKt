@@ -28,7 +28,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
 
 
-//@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     EstateListFragment.OnFragmentInteractionListener, SearchFragment.OnSearchFragmentListener {
 
@@ -46,48 +45,28 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         initViewModel()
         configureNavDrawer()
         configureNavView()
-        configureAndShowFragmentList()
+        configureAndShowFragmentList(null)
     }
 
     private fun checkSelfPermissions() {
         val permissions: ArrayList<String> = ArrayList()
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         }
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_PHONE_STATE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             permissions.add(Manifest.permission.READ_PHONE_STATE)
         }
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION)
         }
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             permissions.add(Manifest.permission.ACCESS_FINE_LOCATION)
         }
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.CAMERA
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             permissions.add(Manifest.permission.CAMERA)
         }
         if (permissions.isNotEmpty()) {
-            val askPermissionsList: Array<String?>? = arrayOf()
+            val askPermissionsList: Array<String> = arrayOf()
             val array = arrayOfNulls<String>(permissions.size)
             askPermissionsList to array
             ActivityCompat.requestPermissions(
@@ -104,11 +83,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             DataInjection.Injection.provideViewModelFactory(this)
         ).get(PropertyViewModel::class.java)
         propertyViewModel.getAllProperty()
-            .observe(this, Observer<List<Property>> { createDefaultList(it!!) })
+            .observe(this, Observer { createDefaultList(it!!) })
     }
 
     private fun createDefaultList(properties: List<Property>) {
         propertiesList = properties
+        if(propertiesList.isEmpty()){
+           showAlertDialogWelcome()
+        }
+    }
+
+    private fun showAlertDialogWelcome() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Welcome to Real Estate Manager ! ")
+        builder.setMessage("To start using the app, please register a property")
+        builder.setPositiveButton(android.R.string.yes) { _, _ ->
+            val intent = Intent(this, CreateEstateActivity::class.java)
+            startActivity(intent)
+        }
+        builder.show()
     }
 
     private fun configureToolbar() {
@@ -184,20 +177,36 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun launchSearchFragment() {
         val searchFragment = SearchFragment.newInstance()
-        supportFragmentManager.beginTransaction()
-            .add(R.id.activity_main_frame_layout, searchFragment)
-            .addToBackStack("mapsFragment")
-            .commit()
+        if (activity_detail_frame_layout != null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.activity_main_100_frame_layout, searchFragment)
+                .addToBackStack("mapsFragment")
+                .commit()
+        }else{
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.activity_main_frame_layout, searchFragment)
+                .addToBackStack("mapsFragment")
+                .commit()
+        }
     }
 
     private fun checkIfLocationIsEnable() {
         if (Utils.isLocationEnabled(this)) {
             // Open search fragment
-            val mapsFragment = MapsFragment.newInstance()
-            supportFragmentManager.beginTransaction()
-                .add(R.id.activity_main_frame_layout, mapsFragment)
-                .addToBackStack("mapsFragment")
-                .commit()
+            if (activity_detail_frame_layout != null) {
+                val mapsFragment = MapsFragment.newInstance()
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.activity_main_100_frame_layout, mapsFragment)
+                    .addToBackStack("mapsFragment")
+                    .commit()
+            }else{
+                val mapsFragment = MapsFragment.newInstance()
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.activity_main_frame_layout, mapsFragment)
+                    .addToBackStack("mapsFragment")
+                    .commit()
+            }
+
         } else {
             showAlertDialogLocation()
         }
@@ -220,7 +229,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.activity_main_drawer_simulator -> {
                 val mortGageCalculatorFragment = MortGageCalculatorFragment.newInstance()
                 supportFragmentManager.beginTransaction()
-                    .add(R.id.activity_main_frame_layout, mortGageCalculatorFragment)
+                    .replace(R.id.activity_main_frame_layout, mortGageCalculatorFragment)
                     .addToBackStack("detailFragment")
                     .commit()
             }
@@ -261,17 +270,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         builder.show()
     }
 
-    private fun configureAndShowFragmentList() {
-        val listFragment = EstateListFragment.newInstance(null)
+    private fun configureAndShowFragmentList(it: List<Property>?) {
+        val listFragment = EstateListFragment.newInstance(it)
         supportFragmentManager.beginTransaction()
-            .add(R.id.activity_main_frame_layout, listFragment)
+            .replace(R.id.activity_main_frame_layout, listFragment)
             .addToBackStack("listFragment")
             .commit()
 
         if (activity_detail_frame_layout != null) {
             val detailFragment = DetailEstateFragment.newInstance(0)
             supportFragmentManager.beginTransaction()
-                .add(R.id.activity_detail_frame_layout, detailFragment)
+                .replace(R.id.activity_detail_frame_layout, detailFragment)
                 .addToBackStack("detailFragment")
                 .commit()
         }
@@ -287,7 +296,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val detailFragment = DetailEstateFragment.newInstance(property.id)
         if (activity_detail_frame_layout != null) {
             supportFragmentManager.beginTransaction()
-                .add(R.id.activity_detail_frame_layout, detailFragment)
+                .replace(R.id.activity_detail_frame_layout, detailFragment)
                 .addToBackStack("detailFragment")
                 .commit()
         } else {
@@ -298,11 +307,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onSearchInteraction(it: List<Property>) {
-        val listFragment = EstateListFragment.newInstance(it)
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.activity_main_frame_layout, listFragment)
-            .addToBackStack("listFragment")
-            .commit()
+        onBackPressed()
+        configureAndShowFragmentList(it)
+//        val listFragment = EstateListFragment.newInstance(it)
+//        if (activity_detail_frame_layout != null) {
+//            supportFragmentManager.beginTransaction()
+//                .replace(R.id.activity_main_100_frame_layout, listFragment)
+//                .addToBackStack("listFragment")
+//                .commit()
+//        }else{
+//            supportFragmentManager.beginTransaction()
+//                .replace(R.id.activity_main_frame_layout, listFragment)
+//                .addToBackStack("listFragment")
+//                .commit()
+//        }
     }
 }
 

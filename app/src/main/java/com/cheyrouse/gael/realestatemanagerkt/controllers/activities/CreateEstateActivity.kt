@@ -29,6 +29,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.OrientationHelper
+import com.cheyrouse.gael.realestatemanagerkt.BuildConfig
 import com.cheyrouse.gael.realestatemanagerkt.R
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.DataInjection
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.PropertyViewModel
@@ -709,7 +710,11 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
 
     private fun configureButtonValidate() {
         button_validate.setOnClickListener {
-            storeLocationToDatabase()
+            if(Utils.isInternetAvailable(this)){
+                storeLocationToDatabase()
+            }else{
+                showAlertDialog()
+            }
         }
     }
 
@@ -719,10 +724,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
                 address.address + "+" + city + postalCode /*+ "+" + property.address?.additionalAddress +"+"+ property.address?.apartmentNumber +" "+ property.address?.sector*/
             Log.e("test address", addressStr)
             val realEstateStream = RealEstateStream()
-            disposable = realEstateStream.streamFetchGeocodeInfo(
-                addressStr,
-                "AIzaSyCCjy4vvQ8_U_3qELz9v_W2hKApVg3Nbws"
-            )
+            disposable = realEstateStream.streamFetchGeocodeInfo(addressStr, BuildConfig.GoogleSecAPIKEY)
                 .subscribeWith(object : DisposableObserver<GeocodeInfo?>() {
                     override fun onNext(t: GeocodeInfo) {
                         geoLocation = t

@@ -36,7 +36,7 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         configureNavDrawer()
         configureNavView()
         getTheBundle()
-        configureAndShowFragmentList()
+        configureAndShowFragmentDetail()
     }
 
     private fun getTheBundle() {
@@ -75,7 +75,6 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 checkIfLocationIsEnable()
                 return true
             }
-
             R.id.menu_search -> {
                 // Open search fragment
                 Toast.makeText(this, "search", Toast.LENGTH_SHORT).show()
@@ -152,7 +151,7 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         }
     }
 
-    private fun configureAndShowFragmentList() {
+    private fun configureAndShowFragmentDetail() {
         val detailEstateFragment = DetailEstateFragment.newInstance(propertyId)
         supportFragmentManager.beginTransaction()
             .add(R.id.activity_detail_frame_layout, detailEstateFragment).commit()

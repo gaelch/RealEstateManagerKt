@@ -34,11 +34,13 @@ class EstateListViewHolder (inflater: LayoutInflater, parent: ViewGroup) :
         mTownView?.text = property.address?.city
         mPriceView?.text = SYMBOL + property.price.toString()
         //get image from storage
-        Log.e("test estate list vh", (property.pictures?.get(0)?.picturePath))
-        mImageView?.let {
-            glide.load(Uri.parse(property.pictures?.get(0)?.picturePath)).apply(RequestOptions().centerCrop()).into(
-                it
-            )
+        if(property .pictures!=null && property.pictures!!.isNotEmpty()){
+            Log.e("test estate list vh", (property.pictures?.get(0)?.picturePath))
+            mImageView?.let {
+                glide.load(Uri.parse(property.pictures?.get(0)?.picturePath)).apply(RequestOptions().centerCrop()).into(
+                    it
+                )
+            }
         }
 
         itemView.setOnClickListener {

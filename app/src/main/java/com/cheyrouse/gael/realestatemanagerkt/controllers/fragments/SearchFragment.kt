@@ -639,8 +639,8 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun getResult(it: List<Property>) {
-        mListener?.onSearchInteraction(it)
         Log.e(resources.getString(R.string.test_query), it.toString())
+        mListener?.onSearchInteraction(it)
     }
 
     interface OnSearchFragmentListener {

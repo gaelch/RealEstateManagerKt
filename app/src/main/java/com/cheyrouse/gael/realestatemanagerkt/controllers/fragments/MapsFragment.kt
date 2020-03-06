@@ -2,6 +2,7 @@ package com.cheyrouse.gael.realestatemanagerkt.controllers.fragments
 
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
@@ -10,9 +11,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.cheyrouse.gael.realestatemanagerkt.BuildConfig
 import com.cheyrouse.gael.realestatemanagerkt.R
 import com.cheyrouse.gael.realestatemanagerkt.controllers.activities.DetailActivity
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.DataInjection
@@ -20,6 +23,7 @@ import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.PropertyView
 import com.cheyrouse.gael.realestatemanagerkt.models.GeocodeInfo
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
 import com.cheyrouse.gael.realestatemanagerkt.utils.RealEstateStream
+import com.cheyrouse.gael.realestatemanagerkt.utils.Utils
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -96,7 +100,11 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
             if (p.address?.lat != 0.0 && p.address?.lng != 0.0) {
                 addMarker(p, p.address?.lat!!, p.address?.lng!!)
             } else {
-                executeRequestToGetAddresses(p)
+                if(Utils.isInternetAvailable(activity)){
+                    executeRequestToGetAddresses(p)
+                }else{
+                    Toast.makeText(activity, "Sorry but internet isn't available. We can't get addresses for properties.", Toast.LENGTH_LONG).show()
+                }
             }
         }
     }
@@ -106,10 +114,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
             property.address?.address + "+" + property.address?.city + property.address?.postalCode /*+ "+" + property.address?.additionalAddress +"+"+ property.address?.apartmentNumber +" "+ property.address?.sector*/
         Log.e("test address", addressStr)
         val realEstateStream = RealEstateStream()
-        disposable = realEstateStream.streamFetchGeocodeInfo(
-            addressStr,
-            "AIzaSyCCjy4vvQ8_U_3qELz9v_W2hKApVg3Nbws"
-        )
+        disposable = realEstateStream.streamFetchGeocodeInfo(addressStr, BuildConfig.GoogleSecAPIKEY)
             .subscribeWith(object : DisposableObserver<GeocodeInfo?>() {
                 override fun onNext(t: GeocodeInfo) {
                     geoLocation = t

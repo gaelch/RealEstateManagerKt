@@ -12,6 +12,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -40,6 +41,8 @@ import com.cheyrouse.gael.realestatemanagerkt.models.Property
 import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.CHANEL_ID
 import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.NOTIFICATION_ID
 import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.listOfTypes
+import com.cheyrouse.gael.realestatemanagerkt.utils.CreateEstateUtils
+import com.cheyrouse.gael.realestatemanagerkt.utils.NotificationClass
 import com.cheyrouse.gael.realestatemanagerkt.utils.RealEstateStream
 import com.cheyrouse.gael.realestatemanagerkt.utils.Utils
 import com.cheyrouse.gael.realestatemanagerkt.view.DetailPictureAdapter
@@ -53,6 +56,7 @@ import java.util.*
 class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     // 1 - FOR DATA
+    private var isEdit: Boolean = false
     private var propertyId: Long = 0
     private lateinit var disposable: Disposable
     private lateinit var geoLocation: GeocodeInfo
@@ -64,16 +68,16 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
     private var numberOfBath: Int = 0
     private var apartNumber: Int = 0
     private var address: Address = Address()
-    private lateinit var description: String
+    private var description: String = ""
     private var price: Double = 0.0
-    private lateinit var realtorName: String
+    private var realtorName: String = ""
     private var entryDate: String = ""
     private var soldDate: String = ""
     private val c = Calendar.getInstance()
     private val year = c.get(Calendar.YEAR)
     private val month = c.get(Calendar.MONTH)
     private val day = c.get(Calendar.DAY_OF_MONTH)
-    private var sold: Boolean = false
+    private var sold: Boolean = true
     private var pictures = arrayListOf<Picture>()
     private lateinit var property: Property
     private var airport: Boolean = false
@@ -89,11 +93,13 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
     private var additionalAddress: String = ""
     private var lat: Double = 0.0
     private var lng: Double = 0.0
+    private lateinit var alertDialog: AlertDialog
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_estate)
+        checkDeviceServices()
         initViewModelFactory()
         configureToolbar()
         getTheBundle()
@@ -118,6 +124,44 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         configureButtonValidate()
     }
 
+    private fun checkDeviceServices() {
+        if (!Utils.isInternetAvailable(this)) {
+            showAlertDialogDevice("internet")
+        }
+        if (!Utils.isLocationEnabled(this)) {
+            showAlertDialogDevice("location")
+        }
+    }
+
+    private fun showAlertDialogDevice(s: String) {
+        var title = ""
+        var text = ""
+        var intent = Intent()
+        lateinit var mAlertDialog: AlertDialog
+        when (s) {
+            "location" -> {
+                title = resources.getString(R.string.gps_title)
+                text = resources.getString(R.string.gps_text)
+                intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+            }
+            "internet" -> {
+                title = resources.getString(R.string.internet_title)
+                text = resources.getString(R.string.internet_text)
+                intent = Intent(Settings.ACTION_WIFI_SETTINGS)
+            }
+        }
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(title)
+        builder.setMessage(text)
+        builder.setPositiveButton(android.R.string.yes) { _, _ ->
+            startActivity(intent)
+        }
+        builder.setNegativeButton(android.R.string.no) { _, _ ->
+            mAlertDialog.dismiss()
+        }
+        mAlertDialog = builder.show()
+    }
+
     private fun initViewModelFactory() {
         this.propertyViewModel = ViewModelProviders.of(
             this,
@@ -129,8 +173,10 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         propertyId = intent.getLongExtra(DetailActivity.PROPERTY, 0)
         if (propertyId != 0L) {
             getSelectProperty()
+            isEdit = true
         } else {
             property = Property()
+            checkbox_available.isChecked = true
         }
     }
 
@@ -245,7 +291,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         create_picture_recycler_view.apply {
             layoutManager =
                 LinearLayoutManager(applicationContext, OrientationHelper.HORIZONTAL, false)
-            adapter = DetailPictureAdapter(pictures)
+            adapter = DetailPictureAdapter(pictures) { position: Int -> onItemClicked(position) }
         }
     }
 
@@ -257,6 +303,9 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
                     // Display Selected date in TextView
                     picker_sold_date.text = Utils.getStringDate(year, dayOfMonth, monthOfYear)
                     soldDate = picker_sold_date.text.toString()
+                    sold = false
+                    checkbox_available.isChecked = false
+                    checkbox_sold.isChecked = true
                 },
                 year,
                 month,
@@ -264,10 +313,16 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
             )
             dpd.show()
         }
+        picker_sold_date.setOnLongClickListener {
+            soldDate = ""
+            picker_sold_date.text = soldDate
+            true
+        }
     }
 
     private fun configureDatePickerEntry() {
-        picker_entry_date.text = Utils.initPickers()
+        entryDate = Utils.getStringDate(year, month, day)
+        picker_entry_date.text = Utils.getTodayDate()
         picker_entry_date.setOnClickListener {
             val dpd = DatePickerDialog(
                 this,
@@ -282,6 +337,12 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
             )
             dpd.show()
         }
+        picker_entry_date.setOnLongClickListener {
+            entryDate = ""
+            picker_entry_date.text = entryDate
+            true
+        }
+
     }
 
     private fun configureRealtorName() {
@@ -316,7 +377,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
                 before: Int, count: Int
             ) {
                 val priceStr: String = picker_price.text.toString()
-                price = priceStr.toDouble()
+                if (priceStr.isNotEmpty()) price = priceStr.toDouble()
             }
         })
     }
@@ -562,7 +623,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
     }
 
     override fun onNothingSelected(p0: AdapterView<*>?) {
-        //To change body of created functions use File | Settings | File Templates.
+        typeOfProperty = "Manor"
     }
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
@@ -578,15 +639,17 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
     }
 
     private fun configureCheckBoxClick() {
-        checkbox_airport.setOnClickListener { airport = true }
-        checkbox_school.setOnClickListener { school = true }
-        checkbox_shops.setOnClickListener { shops = true }
-        checkbox_subway.setOnClickListener { subway = true }
-        checkbox_train_station.setOnClickListener { trainStation = true }
-        checkbox_park.setOnClickListener { park = true }
+        checkbox_airport.setOnClickListener { airport = checkbox_airport.isChecked }
+        checkbox_school.setOnClickListener { school = checkbox_school.isChecked }
+        checkbox_shops.setOnClickListener { shops = checkbox_shops.isChecked }
+        checkbox_subway.setOnClickListener { subway = checkbox_subway.isChecked }
+        checkbox_train_station.setOnClickListener { trainStation = checkbox_train_station.isChecked }
+        checkbox_park.setOnClickListener { park = checkbox_park.isChecked }
         checkbox_available.setOnClickListener {
             sold = true
             checkbox_sold.isChecked = false
+            soldDate = ""
+            picker_sold_date.text = soldDate
         }
         checkbox_sold.setOnClickListener {
             sold = false
@@ -642,6 +705,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
     companion object {
         //image pick code
         private const val IMAGE_PICK_CODE = 1000
+
         //camera pick code
         private const val CAMERA_PICK_CODE = 100
     }
@@ -674,6 +738,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         }
     }
 
+    @SuppressLint("InflateParams")
     private fun showCustomDialog(image_uri: Uri) {
         var picture: Picture?
         //Inflate the dialog with custom view
@@ -690,7 +755,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
             mAlertDialog.dismiss()
             //get text from EditTexts of custom layout
             val name = mDialogView.dialogNameEt.text.toString()
-            picture = Picture(0, name, image_uri.toString(), propertyId)
+            picture = Picture(0, name, image_uri.toString())
             if (picture != null) {
                 this.pictures.add(picture!!)
             }
@@ -710,37 +775,64 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
 
     private fun configureButtonValidate() {
         button_validate.setOnClickListener {
-            if(Utils.isInternetAvailable(this)){
-                storeLocationToDatabase()
-            }else{
+            if (Utils.isInternetAvailable(this)) {
+                checkValues()
+            } else {
                 showAlertDialog()
             }
         }
     }
 
     private fun storeLocationToDatabase() {
+        progressBar_create.visibility = View.VISIBLE
         if (address.address?.isNotEmpty()!! && city.isNotEmpty() && postalCode.isNotEmpty()) {
             val addressStr =
                 address.address + "+" + city + postalCode /*+ "+" + property.address?.additionalAddress +"+"+ property.address?.apartmentNumber +" "+ property.address?.sector*/
             Log.e("test address", addressStr)
             val realEstateStream = RealEstateStream()
-            disposable = realEstateStream.streamFetchGeocodeInfo(addressStr, BuildConfig.GoogleSecAPIKEY)
-                .subscribeWith(object : DisposableObserver<GeocodeInfo?>() {
-                    override fun onNext(t: GeocodeInfo) {
-                        geoLocation = t
-                    }
+            disposable =
+                realEstateStream.streamFetchGeocodeInfo(addressStr, BuildConfig.GoogleSecAPIKEY)
+                    .subscribeWith(object : DisposableObserver<GeocodeInfo?>() {
+                        override fun onNext(t: GeocodeInfo) {
+                            geoLocation = t
+                        }
 
-                    override fun onError(e: Throwable) {
-                        showAlertDialog()
-                    }
+                        override fun onError(e: Throwable) {
+                            showAlertDialog()
+                            progressBar_create.visibility = View.GONE
+                        }
 
-                    override fun onComplete() {
-                        lat = geoLocation.results?.get(0)?.geometry?.location?.lat!!
-                        lng = geoLocation.results?.get(0)?.geometry?.location?.lng!!
-                        checkValues()
-                    }
-                })
+                        override fun onComplete() {
+                            setValuesInProperty()
+                        }
+                    })
         }
+    }
+
+    private fun setValuesInProperty() {
+        progressBar_create.visibility = View.GONE
+        lat = geoLocation.results?.get(0)?.geometry?.location?.lat!!
+        lng = geoLocation.results?.get(0)?.geometry?.location?.lng!!
+        if (additionalAddress.isNotEmpty()) property.address!!.additionalAddress =
+            additionalAddress
+        if (description.isNotEmpty()) property.description = description
+        if (pictures.size != 0) property.pictures = pictures
+        property.dateOfSale = soldDate
+        address.apartmentNumber = apartNumber
+        property.airport = airport
+        property.park = park
+        property.school = school
+        property.subway = subway
+        property.shops = shops
+        property.trainStation = trainStation
+        property.status = sold
+        property.dateOfEntry = entryDate
+        property.dateOfSale = soldDate
+        if (lat != 0.0) property.address!!.lat = lat
+        if (lng != 0.0) property.address!!.lng = lng
+        propertyViewModel.createProperty(property)
+        showNotification()
+        returnToHome()
     }
 
     private fun showAlertDialog() {
@@ -752,88 +844,44 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         builder.setIcon(android.R.drawable.ic_dialog_alert)
 
         //performing positive action
-        builder.setPositiveButton("Yes"){ _, _ ->
-           checkValues()
+        builder.setPositiveButton("Yes") { _, _ ->
+            checkValues()
         }
         //performing negative action
-        builder.setNegativeButton("No"){ _, _ ->
-          returnToHome()
+        builder.setNegativeButton("No") { _, _ ->
+            alertDialog.dismiss()
         }
         // Create the AlertDialog
-        val alertDialog: AlertDialog = builder.create()
+        alertDialog = builder.create()
         // Set other dialog properties
         alertDialog.setCancelable(false)
         alertDialog.show()
     }
 
     private fun checkValues() {
-        if (typeOfProperty.isNotEmpty()) property.type = typeOfProperty
-        if (description.isNotEmpty()) property.description = description
-        if (price != 0.0) property.price = price
-        if (numberOfRooms != 0) property.rooms = numberOfRooms
-        if (numberOfBed != 0) property.numOfBed = numberOfBed
-        if (numberOfBath != 0) property.numOfBath = numberOfBath
-        if (surface != 0) property.livingSpace = surface
-        address.apartmentNumber = apartNumber
-        property.airport = airport
-        property.park = park
-        property.school = school
-        property.subway = subway
-        property.shops = shops
-        property.trainStation = trainStation
-        property.status = sold
-        property.dateOfEntry = entryDate
-        property.dateOfSale = soldDate
-        if (realtorName.isNotEmpty()) property.realtor = realtorName
-        property.address = Address()
-        if (address.address?.isNotEmpty()!!) property.address = address
-        if (city.isNotEmpty()) property.address!!.city = city
-        if (postalCode.isNotEmpty()) property.address!!.postalCode = postalCode
-        if (country.isNotEmpty()) property.address!!.country = country
-        if (additionalAddress.isNotEmpty()) property.address!!.additionalAddress = additionalAddress
-        if (pictures.size != 0) property.pictures = pictures
-        if(lat!=0.0) property.address!!.lat = lat
-        if(lng!=0.0) property.address!!.lng = lng
-        if(entryDate!="")property.dateOfEntry = entryDate
-        if(soldDate!="")property.dateOfSale = soldDate
+        val checkClass = CreateEstateUtils()
+        if (checkClass.checkValueBeforeStoreProperty(
+                this, typeOfProperty, surface, numberOfRooms, numberOfBed,
+                numberOfBath, address, price, realtorName, entryDate, soldDate, sold, property,
+                city, postalCode, country).type == typeOfProperty
+        ) {
+            property = checkClass.checkValueBeforeStoreProperty(
+                this, typeOfProperty, surface, numberOfRooms, numberOfBed,
+                numberOfBath, address, price, realtorName, entryDate, soldDate, sold, property,
+                city, postalCode, country)
+            storeLocationToDatabase()
+        }
+    }
 
-        propertyViewModel.createProperty(property)
-        showNotification()
-        returnToHome()
+    private fun onItemClicked(position: Int) {
+        pictures.remove(pictures[position])
+        configureRecyclerView()
     }
 
     //To display notification
     private fun showNotification() {
-            val textContent: String = resources.getString(R.string.notification_text)
-            // 2 - Create a Style for the Notification
-            val inboxStyle: NotificationCompat.InboxStyle = NotificationCompat.InboxStyle()
-            inboxStyle.setBigContentTitle("Notification")
-            inboxStyle.addLine(textContent)
-            // 3 - Create a Channel (Android 8)
-            val channelId: String = CHANEL_ID
-            // 4 - Build a Notification object
-            val notificationBuilder: NotificationCompat.Builder = NotificationCompat.Builder(
-                baseContext,
-                channelId
-            ).setSmallIcon(R.drawable.ic_real_estate_m)
-                .setContentTitle("My News")
-                .setContentText(textContent)
-                .setAutoCancel(true)
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                .setStyle(inboxStyle)
-            // 5 - Add the Notification to the Notification Manager and show it.
-            val notificationManager = baseContext
-                .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            // 6 - Support Version >= Android 8
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val channelName: CharSequence = "Message provenant de MyNews"
-                val importance = NotificationManager.IMPORTANCE_HIGH
-                val mChannel =
-                    NotificationChannel(channelId, channelName, importance)
-                notificationManager.createNotificationChannel(mChannel)
-                // 7 - Show notification
-                notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
-            }
+        val notificationClass = NotificationClass()
+        notificationClass.showNotification(this, isEdit)
     }
 
     private fun returnToHome() {

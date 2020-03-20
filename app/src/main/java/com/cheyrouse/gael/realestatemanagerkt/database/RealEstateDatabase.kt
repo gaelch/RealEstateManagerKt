@@ -13,7 +13,7 @@ import com.cheyrouse.gael.realestatemanagerkt.models.Picture
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
 import com.cheyrouse.gael.realestatemanagerkt.utils.Converters
 
-@Database(entities = [(Property::class), (Picture::class), (Address::class)],version = 1, exportSchema = false)
+@Database(entities = [(Property::class), (Picture::class), (Address::class)],version = 2, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class RealEstateDatabase : RoomDatabase() {
 

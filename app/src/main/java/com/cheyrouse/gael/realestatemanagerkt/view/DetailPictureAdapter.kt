@@ -1,11 +1,13 @@
 package com.cheyrouse.gael.realestatemanagerkt.view
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.cheyrouse.gael.realestatemanagerkt.models.Picture
+import com.cheyrouse.gael.realestatemanagerkt.models.Property
 
-class DetailPictureAdapter (private val list: List<Picture>)
+class DetailPictureAdapter (private val list: List<Picture>, private val clickListener: (Int) -> Unit)
     : RecyclerView.Adapter<DetailPictureViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailPictureViewHolder {
@@ -15,7 +17,7 @@ class DetailPictureAdapter (private val list: List<Picture>)
 
     override fun onBindViewHolder(holder: DetailPictureViewHolder, position: Int) {
         val picture: Picture = list[position]
-        holder.bind(picture)
+        holder.bind(picture, clickListener)
     }
 
     override fun getItemCount(): Int = list.size

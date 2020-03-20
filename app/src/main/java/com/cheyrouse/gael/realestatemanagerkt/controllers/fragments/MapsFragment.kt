@@ -1,8 +1,6 @@
 package com.cheyrouse.gael.realestatemanagerkt.controllers.fragments
 
 
-import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
@@ -90,7 +88,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
             context?.let { DataInjection.Injection.provideViewModelFactory(it) }
         ).get(PropertyViewModel::class.java)
         propertyViewModel.getAllProperty()
-            .observe(this, Observer<List<Property>> { createDefaultList(it!!) })
+            .observe(this, Observer { createDefaultList(it!!) })
     }
 
     private fun createDefaultList(properties: List<Property>) {
@@ -140,16 +138,12 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
     }
 
     private fun addMarker(property: Property, lat: Double, lng: Double) {
-        //        val lat: Double? = geo.results?.get(0)?.geometry?.location?.lat
-//        val lng: Double? = geo.results?.get(0)?.geometry?.location?.lng
         val latLon = LatLng(lat, lng)
-        /*marker =  */map.addMarker(
+        map.addMarker(
             MarkerOptions().position(latLon).title(property.type)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
         )
-//        marker.showInfoWindow()
         map.moveCamera(CameraUpdateFactory.newLatLng(latLon))
-//        map.addMarker(MarkerOptions().position(myPlace).title("My Favorite City"))
         gotoMyLocation()
     }
 
@@ -170,21 +164,20 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
         val longitude: Double?
         latitude = location.latitude
         longitude = location.longitude
-        latLon = latitude.let { longitude.let { it1 -> LatLng(it, it1) } }
+        latLon = LatLng(latitude, longitude)
         marker = map.addMarker(latLon.let {
             MarkerOptions().position(it).title("My Favorite City").title("Me")
         })
         map.setOnMarkerClickListener(this)
         if(!initPosition){
             map.moveCamera(CameraUpdateFactory.newLatLng(latLon))
-            map.animateCamera(CameraUpdateFactory.zoomTo(15.0F), 2000, null)
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLon, 15.0F))
             map.uiSettings.isZoomControlsEnabled = true
             map.setOnMarkerClickListener(this)
             initPosition = true
         }
     }
 
-    @SuppressLint("MissingPermission")
     private fun requestNewLocationData() {
         if (progressBar!=null){
             progressBar.visibility = View.VISIBLE

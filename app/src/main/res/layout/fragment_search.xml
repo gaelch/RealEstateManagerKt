@@ -81,7 +81,7 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="120dp"
-                    android:hint="0"
+                    android:hint="@string/_0"
                     android:textColor="@color/orange_red"
                     app:layout_constraintStart_toEndOf="@id/tvSurfaceMin"
                     app:layout_constraintTop_toBottomOf="@+id/line1" />
@@ -103,11 +103,11 @@
                     android:id="@+id/tvSurfaceMax"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
                     android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
                     android:text="@string/surface_tv_max"
                     android:textColor="@android:color/black"
-                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    app:layout_constraintEnd_toStartOf="@+id/tvSurfaceResultMax"
                     app:layout_constraintTop_toBottomOf="@+id/line1" />
 
             <TextView
@@ -116,10 +116,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="20dp"
-                    android:layout_marginEnd="120dp"
-                    android:hint="0"
+                    android:hint="@string/_0"
                     android:textColor="@color/orange_red"
-                    app:layout_constraintStart_toEndOf="@id/tvSurfaceMax"
+                    app:layout_constraintEnd_toStartOf="@+id/tvSurfaceM2Max"
                     app:layout_constraintTop_toBottomOf="@+id/line1" />
 
             <TextView
@@ -127,9 +126,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
                     android:text="@string/surface_m"
                     android:textColor="@android:color/black"
-                    app:layout_constraintStart_toEndOf="@+id/tvSurfaceResultMax"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/line1" />
 
             <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
@@ -180,7 +180,7 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="120dp"
-                    android:hint="0"
+                    android:hint="@string/_0"
                     android:textColor="@color/orange_red"
                     app:layout_constraintStart_toEndOf="@id/tv_rooms"
                     app:layout_constraintTop_toBottomOf="@+id/seekBar_surface" />
@@ -189,23 +189,22 @@
                     android:id="@+id/tv_rooms_max"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
                     android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
                     android:text="@string/nbr_of_rooms_max"
                     android:textColor="@android:color/black"
-                    app:layout_constraintStart_toStartOf="@id/guideline"
+                    app:layout_constraintEnd_toStartOf="@+id/room_max"
                     app:layout_constraintTop_toBottomOf="@+id/seekBar_surface" />
 
             <TextView
                     android:id="@+id/room_max"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="20dp"
                     android:layout_marginTop="20dp"
-                    android:layout_marginEnd="120dp"
-                    android:hint="0"
+                    android:hint="@string/_0"
                     android:textColor="@color/orange_red"
-                    app:layout_constraintStart_toEndOf="@id/tv_rooms_max"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/seekBar_surface" />
 
             <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
@@ -247,6 +246,7 @@
                     android:layout_marginTop="20dp"
                     android:background="@android:color/white"
                     android:gravity="center"
+                    android:inputType="text"
                     android:hint="@string/city_example"
                     android:textColor="@android:color/black"
                     app:layout_constraintEnd_toStartOf="@+id/guideline"
@@ -273,6 +273,7 @@
                     android:background="@android:color/white"
                     android:gravity="center"
                     android:hint="@string/post_code_example"
+                    android:inputType="textPostalAddress"
                     android:textColor="@android:color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -298,6 +299,7 @@
                     android:background="@android:color/white"
                     android:gravity="center"
                     android:hint="@string/country_example"
+                    android:inputType="text"
                     android:textColor="@android:color/black"
                     app:layout_constraintEnd_toStartOf="@+id/guideline"
                     app:layout_constraintStart_toStartOf="parent"
@@ -474,7 +476,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="20dp"
-                    android:hint="0"
+                    android:hint="@string/_0"
                     android:textColor="@color/orange_red"
                     app:layout_constraintStart_toEndOf="@id/tv_price_min"
                     app:layout_constraintTop_toBottomOf="@+id/line8" />
@@ -484,21 +486,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:layout_marginStart="20dp"
                     android:text="@string/price_max"
                     android:textColor="@android:color/black"
-                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    app:layout_constraintEnd_toStartOf="@+id/price_max"
                     app:layout_constraintTop_toBottomOf="@+id/line8" />
 
             <TextView
                     android:id="@+id/price_max"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="20dp"
                     android:layout_marginTop="20dp"
-                    android:hint="0"
+                    android:hint="@string/_0"
                     android:textColor="@color/orange_red"
-                    app:layout_constraintStart_toEndOf="@id/tv_price_max"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/line8" />
 
             <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
@@ -540,7 +541,7 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="120dp"
-                    android:hint="0"
+                    android:hint="@string/_0"
                     android:textColor="@color/orange_red"
                     app:layout_constraintStart_toEndOf="@id/tv_nbr_bed"
                     app:layout_constraintTop_toBottomOf="@+id/seekBar_price" />
@@ -550,23 +551,22 @@
                     android:id="@+id/tv_nbr_bed_max"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
                     android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
                     android:text="@string/bedrooms_max"
                     android:textColor="@android:color/black"
-                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    app:layout_constraintEnd_toStartOf="@+id/bedroom_max"
                     app:layout_constraintTop_toBottomOf="@+id/seekBar_price" />
 
             <TextView
                     android:id="@+id/bedroom_max"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="20dp"
                     android:layout_marginTop="20dp"
-                    android:layout_marginEnd="120dp"
-                    android:hint="0"
+                    android:hint="@string/_0"
                     android:textColor="@color/orange_red"
-                    app:layout_constraintStart_toEndOf="@id/tv_nbr_bed_max"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/seekBar_price" />
 
             <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
@@ -626,7 +626,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
-                    android:text="@string/sold_date_tv"
+                    android:text="@string/max_date_tv"
                     android:textColor="@android:color/black"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
                     app:layout_constraintTop_toBottomOf="@+id/line9" />
@@ -638,7 +638,6 @@
                     android:layout_marginTop="20dp"
                     android:background="@android:color/white"
                     android:gravity="center"
-                    android:inputType="date"
                     android:textColor="@android:color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -672,6 +671,7 @@
                     android:layout_marginTop="20dp"
                     android:background="@android:color/white"
                     android:gravity="center"
+                    android:inputType="text"
                     android:hint="@string/name_example"
                     android:textColor="@android:color/black"
                     app:layout_constraintStart_toStartOf="parent"
@@ -695,7 +695,7 @@
                     android:layout_marginStart="50dp"
                     android:layout_marginTop="20dp"
                     android:background="@android:color/white"
-                    android:hint="0"
+                    android:hint="@string/_0"
                     android:inputType="number"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -710,6 +710,38 @@
                     android:layout_marginEnd="25dp"
                     app:layout_constraintTop_toBottomOf="@+id/edt_realtor" />
 
+            <TextView
+                    android:id="@+id/tv_nbr_images"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/images_min"
+                    android:textColor="@android:color/black"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/line11" />
+
+            <EditText
+                    android:id="@+id/edit_nbr_images"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@android:color/white"
+                    android:hint="@string/_0"
+                    android:inputType="number"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_nbr_images" />
+
+            <View
+                    android:id="@+id/line12"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="25dp"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_nbr_images" />
+
             <Button
                     android:id="@+id/button_search"
                     android:layout_width="wrap_content"
@@ -721,7 +753,7 @@
                     android:background="@color/colorPrimary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/line11" />
+                    app:layout_constraintTop_toTopOf="@+id/line12" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

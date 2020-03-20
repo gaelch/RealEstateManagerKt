@@ -14,12 +14,17 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.cheyrouse.gael.realestatemanagerkt.R
 import com.cheyrouse.gael.realestatemanagerkt.controllers.fragments.DetailEstateFragment
 import com.cheyrouse.gael.realestatemanagerkt.controllers.fragments.MapsFragment
+import com.cheyrouse.gael.realestatemanagerkt.controllers.fragments.MortGageCalculatorFragment
+import com.cheyrouse.gael.realestatemanagerkt.controllers.fragments.SearchFragment
+import com.cheyrouse.gael.realestatemanagerkt.models.Property
+import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.LIST_PROPERTY
 import com.cheyrouse.gael.realestatemanagerkt.utils.Utils
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.toolbar.*
 
-class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
+    SearchFragment.OnSearchFragmentListener {
 
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
@@ -49,7 +54,13 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
     private fun configureNavDrawer() {
         drawer = activity_detail_drawer_layout
-        toggle = ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        toggle = ActionBarDrawerToggle(
+            this,
+            drawer,
+            toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
         drawer.addDrawerListener(toggle)
         supportActionBar?.setHomeButtonEnabled(true)
         toggle.isDrawerIndicatorEnabled = true
@@ -71,41 +82,47 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle presses on the action bar menu items
         when (item.itemId) {
-            R.id.menu_map-> {
+            R.id.menu_map -> {
                 checkIfLocationIsEnable()
                 return true
             }
             R.id.menu_search -> {
                 // Open search fragment
-                Toast.makeText(this, "search", Toast.LENGTH_SHORT).show()
+                launchSearchFragment()
                 return true
             }
-            R.id.menu_edit-> {
+            R.id.menu_edit -> {
                 // Open edit fragment
-                val intent = Intent(this, CreateEstateActivity::class.java)
-                intent.putExtra(PROPERTY, propertyId)
-                startActivity(intent)
+                launchCreateActivity(propertyId)
                 return true
             }
             R.id.menu_create -> {
                 // Open create activity
-                val intent = Intent(this, CreateEstateActivity::class.java)
-                startActivity(intent)
+                launchCreateActivity(null)
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
+    private fun launchSearchFragment() {
+        val searchFragment = SearchFragment.newInstance()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.activity_detail_frame_layout, searchFragment)
+            .addToBackStack("searchFragment")
+            .commit()
+    }
+
+
     private fun checkIfLocationIsEnable() {
-        if(Utils.isLocationEnabled(this)){
+        if (Utils.isLocationEnabled(this)) {
             // Open search fragment
             val mapsFragment = MapsFragment.newInstance()
             supportFragmentManager.beginTransaction()
                 .add(R.id.activity_detail_frame_layout, mapsFragment)
                 .addToBackStack("mapsFragment")
                 .commit()
-        }else{
+        } else {
             showAlertDialog()
         }
     }
@@ -127,20 +144,48 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
             R.id.activity_main_drawer_simulator -> {
-                Toast.makeText(this, "simulator", Toast.LENGTH_SHORT).show()
+                launchMortGageSimulator()
             }
             R.id.activity_main_drawer_create -> {
-                Toast.makeText(this, "create", Toast.LENGTH_SHORT).show()
+                launchCreateActivity(null)
             }
             R.id.activity_main_drawer_edit -> {
-                Toast.makeText(this, "edit", Toast.LENGTH_SHORT).show()
+                launchCreateActivity(propertyId)
             }
             R.id.activity_main_drawer_search -> {
-                Toast.makeText(this, "search", Toast.LENGTH_SHORT).show()
+                launchSearchFragment()
+            }
+            R.id.activity_main_drawer_logout -> {
+                showAlertDialogCloseApp()
             }
         }
         activity_detail_drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    private fun showAlertDialogCloseApp() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Do you want to quit the app?")
+        builder.setPositiveButton(android.R.string.yes) { _, _ -> finish()
+            moveTaskToBack(true);}
+        builder.setNegativeButton(android.R.string.no) { _, _ -> }
+        builder.show()
+    }
+
+    private fun launchCreateActivity(id: Long?) {
+        val intent = Intent(this, CreateEstateActivity::class.java)
+        if (id != null) {
+            intent.putExtra(PROPERTY, propertyId)
+        }
+        startActivity(intent)
+    }
+
+    private fun launchMortGageSimulator() {
+        val mortGageCalculatorFragment = MortGageCalculatorFragment.newInstance()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.activity_detail_frame_layout, mortGageCalculatorFragment)
+            .addToBackStack("mortGageCalculatorFragment")
+            .commit()
     }
 
     override fun onBackPressed() {
@@ -155,5 +200,11 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         val detailEstateFragment = DetailEstateFragment.newInstance(propertyId)
         supportFragmentManager.beginTransaction()
             .add(R.id.activity_detail_frame_layout, detailEstateFragment).commit()
+    }
+
+    override fun onSearchInteraction(it: List<Property>) {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra(LIST_PROPERTY, it as ArrayList)
+        startActivity(intent)
     }
 }

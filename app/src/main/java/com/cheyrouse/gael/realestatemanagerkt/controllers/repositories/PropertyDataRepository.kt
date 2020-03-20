@@ -33,4 +33,8 @@ class PropertyDataRepository(private val propertyDao: PropertyDao) {
     fun getPropertyByArgs(query: SimpleSQLiteQuery) : LiveData<List<Property>>{
         return propertyDao.getPropertyByArgs(query)
     }
+    //Test
+    fun getPropertyBy() : LiveData<List<Property>>{
+        return propertyDao.getPropertyBy()
+    }
 }

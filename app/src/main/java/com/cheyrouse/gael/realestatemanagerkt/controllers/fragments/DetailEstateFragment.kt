@@ -3,6 +3,7 @@ package com.cheyrouse.gael.realestatemanagerkt.controllers.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.OrientationHelper
 import com.cheyrouse.gael.realestatemanagerkt.R
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.DataInjection
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.PropertyViewModel
+import com.cheyrouse.gael.realestatemanagerkt.models.Picture
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
 import com.cheyrouse.gael.realestatemanagerkt.view.DetailPictureAdapter
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -87,7 +89,7 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
         text_location_town.text = property.address?.city
         if (property.address?.apartmentNumber != 0) {
             text_location_num_type.text =
-                "Apartment n°" + property.address?.apartmentNumber.toString()
+                resources.getString(R.string.nbr_of_apart, property.address?.apartmentNumber.toString())
         } else {
             text_location_num_type.visibility = View.GONE
         }
@@ -100,18 +102,18 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
 
     @SuppressLint("WrongConstant")
     private fun configureRecyclerView() {
-        if(property!=null){
-            detail_picture_recycler_view.apply {
-                layoutManager = LinearLayoutManager(context, OrientationHelper.HORIZONTAL, false)
-                adapter = DetailPictureAdapter(property.pictures!!)
-            }
+        detail_picture_recycler_view.apply {
+            layoutManager = LinearLayoutManager(context, OrientationHelper.HORIZONTAL, false)
+            adapter = DetailPictureAdapter(property.pictures!!){position: Int -> onItemClicked(position)}
         }
+
     }
 
     private fun initViewModelFactory() {
         this.propertyViewModel = ViewModelProviders.of(this,
-            activity?.applicationContext?.let { DataInjection.Injection.provideViewModelFactory(it) })
-            .get(PropertyViewModel::class.java)
+                activity?.applicationContext?.let {
+                    DataInjection.Injection.provideViewModelFactory(
+                        it) }).get(PropertyViewModel::class.java)
     }
 
 
@@ -146,6 +148,10 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
 
     interface OnFragmentDetailListener {
         fun onDetailInteraction(property: Property)
+    }
+
+    private fun onItemClicked(position: Int) {
+        Log.d("test", position.toString())
     }
 
 }

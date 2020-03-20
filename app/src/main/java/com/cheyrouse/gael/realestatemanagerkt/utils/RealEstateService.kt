@@ -12,11 +12,13 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 
-public interface RealEstateService {
-
+interface RealEstateService {
 
     @GET("json?")
-    fun getGeocodeInfo(@Query("address") address: String, @Query("key") key: String): Observable<GeocodeInfo>
+    fun getGeocodeInfo(
+        @Query("address") address: String,
+        @Query("key") key: String
+    ): Observable<GeocodeInfo>
 
     companion object {
         fun create(): RealEstateService {

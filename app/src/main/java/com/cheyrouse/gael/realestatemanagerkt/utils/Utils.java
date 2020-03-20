@@ -6,11 +6,17 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.view.View;
+
+import com.cheyrouse.gael.realestatemanagerkt.models.Address;
+import com.cheyrouse.gael.realestatemanagerkt.models.Property;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import static com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.TEXT_DATE;
@@ -28,13 +34,13 @@ public class Utils {
      * @param dollars
      * @return
      */
-    public static int convertDollarToEuro(int dollars) {
-        return (int) Math.round(dollars * 0.812);
+    public static double convertDollarToEuro(double dollars) {
+        return Math.round(dollars * 0.812);
     }
 
     // Euros to dollars conversion
-    public static int convertEuroToDollar(int euros) {
-        return (int) Math.round(euros / 0.812);
+    public static double convertEuroToDollar(double euros) {
+        return Math.round(euros / 0.812);
     }
 
     /**
@@ -45,7 +51,7 @@ public class Utils {
      */
     // return today date
     public static String getTodayDate() {
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
+        DateFormat dateFormat = new SimpleDateFormat(TEXT_DATE, Locale.FRANCE);
         return dateFormat.format(new Date());
     }
 
@@ -77,7 +83,7 @@ public class Utils {
             }
             return locationMode != Settings.Secure.LOCATION_MODE_OFF;
         } else {
-            locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ALLOWED_GEOLOCATION_ORIGINS);
             return !TextUtils.isEmpty(locationProviders);
         }
     }
@@ -91,13 +97,9 @@ public class Utils {
         return sdf.format(date);
     }
 
-    public static String initPickers(){
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat(TEXT_DATE, Locale.getDefault());
-        return sdf.format(date);
-    }
 
-    public static int convertStringToInt(String price) {
-        return Integer.parseInt(price.replace(",", ""));
+    public static List<View> makeItemList(View itemView, List<View> itemViewList) {
+        itemViewList.add(itemView);
+        return itemViewList;
     }
 }

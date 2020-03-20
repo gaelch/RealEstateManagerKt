@@ -27,8 +27,12 @@ interface PropertyDao {
     @Query("DELETE FROM property WHERE id = :index")
     fun deleteProperty(index: Long)
 
-    @RawQuery(observedEntities = [Property::class, Address::class])
+    @RawQuery(observedEntities = [Property::class])
     fun getPropertyByArgs(query: SupportSQLiteQuery) : LiveData<List<Property>>
+
+    //Test
+    @Query("SELECT * FROM Property WHERE city = 'Livernon'")
+    fun getPropertyBy(): LiveData<List<Property>>
 
     //// ---- FOR CONTENT PROVIDER ---- ////
 

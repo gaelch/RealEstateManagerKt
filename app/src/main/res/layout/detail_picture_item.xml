@@ -6,17 +6,18 @@
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_goneMarginEnd="3dp"
         android:elevation="5dp"
-        tools:targetApi="lollipop">
+        tools:targetApi="p"
+        android:layout_marginEnd="5dp">
 
     <ImageView
             android:id="@+id/picture_detail"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginEnd="3dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:paddingEnd="3dp"
+            android:src="@drawable/no_image_original"
             tools:ignore="RtlSymmetry" />
 
     <TextView

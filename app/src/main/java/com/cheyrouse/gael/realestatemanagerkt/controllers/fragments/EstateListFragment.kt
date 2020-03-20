@@ -4,7 +4,6 @@ package com.cheyrouse.gael.realestatemanagerkt.controllers.fragments
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.os.Parcelable
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View

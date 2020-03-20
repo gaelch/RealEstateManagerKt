@@ -31,14 +31,15 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:elevation="2dp"
-            android:hint="Enter purchase price"
+            android:hint="@string/purchase_price"
             android:padding="10dp"
             app:layout_constraintBottom_toBottomOf="@+id/editTextPurchasePrice"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/editTextPurchasePrice"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintVertical_bias="1.0"
+            tools:targetApi="lollipop" />
 
     <EditText
             android:id="@+id/editTextDownPaymentAmount"
@@ -60,13 +61,14 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:elevation="2dp"
-            android:hint="Enter down payment amount"
+            android:hint="@string/Enter_contribution"
             android:padding="10dp"
             app:layout_constraintBottom_toBottomOf="@+id/editTextDownPaymentAmount"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/editTextDownPaymentAmount"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintVertical_bias="1.0"
+            tools:targetApi="lollipop" />
 
     <EditText
             android:id="@+id/editTextInterestRate"
@@ -87,12 +89,13 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:elevation="2dp"
-            android:hint="Enter interest rate"
+            android:hint="@string/interest_rate"
             android:padding="10dp"
             app:layout_constraintBottom_toBottomOf="@+id/editTextInterestRate"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/editTextInterestRate" />
+            app:layout_constraintTop_toTopOf="@+id/editTextInterestRate"
+            tools:targetApi="lollipop" />
 
 
     <TextView
@@ -100,7 +103,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:text="Duration (year) "
+            android:text="@string/duration"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextInterestRate" />
@@ -109,7 +112,7 @@
             android:id="@+id/textViewDuration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1"
+            android:text="@string/duration1"
             app:layout_constraintTop_toTopOf="@+id/duration"
             app:layout_constraintStart_toEndOf="@+id/duration" />
 
@@ -143,7 +146,7 @@
             android:layout_columnSpan="3"
             android:layout_gravity="fill_horizontal"
             android:background="@color/colorPrimary"
-            android:text="Calculate"
+            android:text="@string/calculate"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/loan_seekBar" />

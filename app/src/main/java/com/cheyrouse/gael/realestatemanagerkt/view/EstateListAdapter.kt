@@ -8,10 +8,10 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.cheyrouse.gael.realestatemanagerkt.R
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
+import kotlinx.android.synthetic.main.estate_list_item.view.*
 
 class EstateListAdapter (private val list: List<Property>, private val clickListener: (Property) -> Unit)
     : RecyclerView.Adapter<EstateListViewHolder>() {
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EstateListViewHolder {
         val inflater = LayoutInflater.from(parent.context)

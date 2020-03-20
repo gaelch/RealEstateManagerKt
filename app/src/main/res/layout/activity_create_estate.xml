@@ -11,7 +11,7 @@
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:layout_constraintTop_toBottomOf="@+id/include"
             tools:layout_editor_absoluteX="0dp">
 
 
@@ -70,7 +70,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:background="@android:color/white"
-                    android:hint="0"
+                    android:hint="@string/_0"
                     android:inputType="number"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -107,7 +107,7 @@
                     android:layout_marginStart="60dp"
                     android:layout_marginTop="12dp"
                     android:background="@android:color/white"
-                    android:hint="200"
+                    android:hint="@string/_200"
                     android:inputType="number"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvSurface"
@@ -141,7 +141,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:background="@android:color/white"
-                    android:hint="0"
+                    android:hint="@string/_0"
                     android:inputType="number"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -165,6 +165,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
+                    android:inputType="text"
                     android:background="@android:color/white"
                     android:hint="@string/address_tv_detail"
                     android:padding="10dp"
@@ -191,6 +192,7 @@
                     android:background="@android:color/white"
                     android:gravity="center"
                     android:hint="@string/city_example"
+                    android:inputType="text"
                     android:textColor="@android:color/black"
                     app:layout_constraintEnd_toStartOf="@+id/guideline"
                     app:layout_constraintStart_toStartOf="parent"
@@ -216,6 +218,7 @@
                     android:background="@android:color/white"
                     android:gravity="center"
                     android:hint="@string/post_code_example"
+                    android:inputType="textPostalAddress"
                     android:textColor="@android:color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -241,6 +244,7 @@
                     android:background="@android:color/white"
                     android:gravity="center"
                     android:hint="@string/country_example"
+                    android:inputType="text"
                     android:textColor="@android:color/black"
                     app:layout_constraintEnd_toStartOf="@+id/guideline"
                     app:layout_constraintStart_toStartOf="parent"
@@ -266,6 +270,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
+                    android:inputType="text"
                     android:background="@android:color/white"
                     android:hint="@string/additional_address_example"
                     android:padding="10dp"
@@ -439,6 +444,7 @@
                     android:layout_marginEnd="20dp"
                     android:background="@android:color/white"
                     android:hint="@string/description_example"
+                    android:inputType="text"
                     android:padding="10dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_description" />
@@ -558,7 +564,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:background="@android:color/white"
-                    android:hint="0"
+                    android:hint="@string/_0"
                     android:inputType="number"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -614,7 +620,6 @@
                     android:layout_marginTop="20dp"
                     android:background="@android:color/white"
                     android:gravity="center"
-                    android:inputType="date"
                     android:textColor="@android:color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -649,6 +654,7 @@
                     android:background="@android:color/white"
                     android:gravity="center"
                     android:hint="@string/name_example"
+                    android:inputType="textPersonName"
                     android:textColor="@android:color/black"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_realtor" />
@@ -671,7 +677,7 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginStart="50dp"
                     android:background="@android:color/white"
-                    android:hint="0"
+                    android:hint="@string/_0"
                     android:inputType="number"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -689,6 +695,19 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <ProgressBar
+            android:id="@+id/progressBar_create"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/colorPrimaryDark"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include"
+            tools:ignore="UnusedAttribute" />
 
     <Button
             android:id="@+id/button_validate"

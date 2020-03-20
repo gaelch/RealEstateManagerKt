@@ -8,6 +8,7 @@
     <string name="item_edit_title">Edit</string>
     <string name="item_create_title">Create</string>
     <string name="create_title">Create Property</string>
+    <string name="logout_title">Logout</string>
     <string name="map_title">Maps</string>
 
     <!--Navigation Drawer-->
@@ -16,6 +17,15 @@
     <!-- Used in NavigationDrawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!--Main-->
+    <string name="welcome_title">Welcome to Real Estate Manager !</string>
+    <string name="welcome_text">To start using the app, please register a property.</string>
+    <string name="gps_title">Location is not enable !</string>
+    <string name="gps_text">To start using the app, turn on location.</string>
+    <string name="internet_title">Internet is not available !</string>
+    <string name="internet_text">To have access to all the features of the application, an internet connection is necessary.
+Do you want to access the wifi settings?</string>
 
     <!--Detail fragment-->
     <string name="media_title">Media</string>
@@ -29,7 +39,11 @@
     <string name="nbr_of_bedrooms">Number of bedrooms</string>
     <string name="bedrooms_min">Bedrooms min</string>
     <string name="bedrooms_max">Bedrooms max</string>
-    <string name="nbr_of_apart">apart N°</string>
+    <string name="images_min">Min Number of Images</string>
+    <string name="nbr_of_apart">apart N°%1$s</string>
+
+    <!--Fragment list-->
+    <string name="sold_text">SOLD</string>
 
     <!--    Create Activity-->
     <string name="type_choice_tv">Choose a type</string>
@@ -63,6 +77,7 @@
     <string name="price">10 000 000$</string>
     <string name="entry_date_tv">Entry date</string>
     <string name="sold_date_tv">Sold date</string>
+    <string name="max_date_tv">Max date</string>
     <string name="realtor_tv">Realtor name</string>
     <string name="city_tv">City</string>
     <string name="post_code_tv">Postal Code</string>
@@ -75,10 +90,39 @@
     <string name="valid_search">SEARCHING</string>
     <string name="dialogTitle">Network not available!</string>
     <string name="dialog_not_internet_text">Sorry but the internet does not allow us to record the location of this property. Do you want to save the property anyway? Its location will be recorded from the map if the network allows it.</string>
-    <!--    SEARCH-->
+    <!--CreateActivity Toast text-->
+    <string name="type_text">You must choose a type</string>
+    <string name="price_text">You must enter a price</string>
+    <string name="room_text">You must enter a number of rooms</string>
+    <string name="numBed_text">You must enter a number of bedrooms</string>
+    <string name="bath_text">You must enter a number of bathrooms</string>
+    <string name="space_text">You must enter a livingSpace value</string>
+    <string name="realtor_text">You must enter a realtor name</string>
+    <string name="address_text">You must enter an address</string>
+    <string name="city_text">You must enter a city</string>
+    <string name="postal_text">You must enter a postal code</string>
+    <string name="country_text">You must enter a country</string>
+    <string name="entry_date_text">You must enter an entry date</string>
+    <string name="sold_date_text">You must enter an sold date</string>
+    <!--SEARCH-->
     <string name="result_is_empty">Sorry but no property matches your search</string>
     <string name="test_query">test query result</string>
-    <!-- Notification -->
-    <string name="notification_text">The new property has been successfully added !</string>
+    <!--Notification-->
+    <string name="notification_text_create">The new property has been successfully added !</string>
+    <string name="notification_text_edit">The property has been successfully edited !</string>
+    <!--Mortgage Calculator-->
+    <string name="purchase_price">Enter purchase price</string>
+    <string name="Enter_contribution">Enter your contribution</string>
+    <string name="interest_rate">Enter interest rate</string>
+    <string name="duration">Duration (year) </string>
+    <string name="duration1">1</string>
+    <string name="calculate">Calculate</string>
+    <string name="ok">OK</string>
+    <string name="convertEuro">Convert to €</string>
+    <string name="convertDollar">Convert to $</string>
+    <string name="total_payment">Total Payment</string>
+    <string name="_0">0</string>
+    <string name="_200">200</string>
+    <string name="monthly_payment">Monthly Payment</string>
 
 </resources>

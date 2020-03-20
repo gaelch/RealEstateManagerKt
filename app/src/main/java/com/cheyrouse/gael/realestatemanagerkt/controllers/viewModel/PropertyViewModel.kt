@@ -53,8 +53,8 @@ class PropertyViewModel(private val mPropertyDataRepository: PropertyDataReposit
     }
 
     // --- DELETE ---
-    fun deletePictureDao(id: Long) {
-        mPictureDataRepository.deletePictureDao(id)
+    fun deletePictureDao(path: String) {
+        mPictureDataRepository.deletePictureDao(path)
     }
 
     // --- UPDATE ---
@@ -90,9 +90,13 @@ class PropertyViewModel(private val mPropertyDataRepository: PropertyDataReposit
 
     //// --- SEARCH --- ////
 
-    fun getPropertyByArgs(queryString:String, args:ArrayList<Any>) : LiveData<List<Property>>{
-        val query = SimpleSQLiteQuery(queryString,args.toArray())
+    fun getPropertyByArgs(queryString:String/*, args:ArrayList<Any>*/) : LiveData<List<Property>>{
+        val query = SimpleSQLiteQuery(queryString/*,args.toArray()*/)
         Log.e("get properties by args","Query : ${query.sql}")
         return mPropertyDataRepository.getPropertyByArgs(query)
+    }
+
+    fun getPropertyBy() : LiveData<List<Property>>{
+        return mPropertyDataRepository.getPropertyBy()
     }
 }

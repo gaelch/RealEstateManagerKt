@@ -20,8 +20,8 @@ class PictureDataRepository(private val pictureDao: PictureDao) {
     }
 
     // --- DELETE ---
-    fun deletePictureDao(id: Long) {
-        pictureDao.deletePicture(id)
+    fun deletePictureDao(path: String) {
+        pictureDao.deletePicture(path)
     }
 
     // --- UPDATE ---

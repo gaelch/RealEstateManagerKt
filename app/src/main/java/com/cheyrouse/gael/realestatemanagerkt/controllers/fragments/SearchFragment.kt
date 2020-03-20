@@ -73,7 +73,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         if (context is OnSearchFragmentListener) {
             mListener = context
         } else {
-            throw RuntimeException("$context must implement OnFragmentInteractionListener")
+            throw RuntimeException("$context must implement OnSearchFragmentListener")
         }
     }
 
@@ -532,7 +532,6 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private fun getResult(it: List<Property>) {
         Log.e(resources.getString(R.string.test_query), it.toString())
-
         mListener?.onSearchInteraction(it)
     }
 

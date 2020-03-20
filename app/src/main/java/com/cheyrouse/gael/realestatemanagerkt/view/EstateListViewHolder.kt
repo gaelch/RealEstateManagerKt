@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.core.os.persistableBundleOf
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
@@ -32,15 +33,15 @@ class EstateListViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
     private var mSoldTextView = itemView.estate_sold
     private var constraint = itemView.constraint_item
     private val glide: RequestManager = Glide.with(itemView)
-    private var itemViewList: MutableList<View?>? = ArrayList()
-//    private val prefs: Prefs = Prefs.get(itemView.context)
+    private var index: Int = 0
 
     @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    fun bind(property: Property, clickListener: (Property) -> Unit) {
-        itemViewList = Utils.makeItemList(itemView, itemViewList)
-//        prefs.storeItemViewList(itemViewList)
+    fun bind(property: Property, clickListener: (Property) -> Unit, position: Int) {
+        val prefs: Prefs = Prefs.get(itemView.context)
+        index = prefs.lastItemClicked
         val price = property.price?.roundToInt()
+
         mTypeView?.text = property.type
         mTownView?.text = property.address?.city
         mPriceView?.text = SYMBOL + price.toString()
@@ -50,47 +51,43 @@ class EstateListViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
             mImageView?.let {
                 glide.load(Uri.parse(property.pictures?.get(0)?.picturePath))
                     .apply(RequestOptions().centerCrop()).into(
-                    it
-                )
+                        it
+                    )
             }
         }
         if (property.status == false) {
             mSoldTextView.visibility = View.VISIBLE
         }
-
         itemView.setOnClickListener {
+            if(index!=-1)prefs.storeLastItemClicked(position)
             clickListener(property)
-//            setItemColor()
         }
-
+        if(index!=-1)setItemColor(position)
     }
 
-    private fun setItemColor() {
-        for (tempItemView in itemViewList!!) {
-            if (itemView == tempItemView) {
-                constraint.setBackgroundColor(
-                    ContextCompat.getColor(
-                        itemView.context,
-                        R.color.colorAccent
-                    )
+    private fun setItemColor(position: Int) {
+        if (index == position) {
+            constraint.setBackgroundColor(
+                ContextCompat.getColor(
+                    itemView.context,
+                    R.color.colorAccent
                 )
-                mPriceView.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
-            } else {
-                constraint.setBackgroundColor(
-                    ContextCompat.getColor(
-                        itemView.context,
-                        R.color.white
-                    )
+            )
+            mPriceView.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
+        } else {
+            constraint.setBackgroundColor(
+                ContextCompat.getColor(
+                    itemView.context,
+                    R.color.white
                 )
-                mPriceView.setTextColor(
-                    ContextCompat.getColor(
-                        itemView.context,
-                        R.color.colorPrimaryDark
-                    )
+            )
+            mPriceView.setTextColor(
+                ContextCompat.getColor(
+                    itemView.context,
+                    R.color.colorPrimaryDark
                 )
-            }
+            )
         }
-
     }
 
 }

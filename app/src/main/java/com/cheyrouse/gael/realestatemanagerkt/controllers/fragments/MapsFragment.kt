@@ -1,6 +1,7 @@
 package com.cheyrouse.gael.realestatemanagerkt.controllers.fragments
 
 
+import android.content.Context
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
@@ -40,6 +41,7 @@ import kotlinx.android.synthetic.main.fragment_maps.*
  */
 class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
+    private var mListener: OnMapsFragmentListener? = null
     private lateinit var propertiesList: List<Property>
     private lateinit var propertyViewModel: PropertyViewModel
     private lateinit var disposable: Disposable
@@ -55,6 +57,15 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
     companion object {
         fun newInstance(): MapsFragment {
             return MapsFragment()
+        }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnMapsFragmentListener) {
+            mListener = context
+        } else {
+            throw RuntimeException("$context must implement OnMapsFragmentListener")
         }
     }
 
@@ -212,9 +223,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
             val latLng: LatLng =
                 p.address?.lat?.let { p.address!!.lng?.let { it1 -> LatLng(it, it1) } }!!
             if (marker.position == latLng) {
-                val intent = Intent(activity, DetailActivity::class.java)
-                intent.putExtra(DetailActivity.PROPERTY, p.id)
-                startActivity(intent)
+                mListener?.onMapsInteraction(p.id)
             }
         }
     }
@@ -225,5 +234,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
     }
     private fun stopLocationUpdates() {
         fusedLocationClient.removeLocationUpdates(mLocationCallback)
+    }
+
+    interface OnMapsFragmentListener {
+        fun onMapsInteraction(idProperty: Long)
     }
 }

@@ -1,15 +1,13 @@
 package com.cheyrouse.gael.realestatemanagerkt.controllers.activities
 
 import android.Manifest
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.FrameLayout
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -25,7 +23,9 @@ import com.cheyrouse.gael.realestatemanagerkt.controllers.fragments.*
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.DataInjection
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.PropertyViewModel
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
+import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.IS_DETAIL_CALLING_YOU
 import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.LIST_PROPERTY
+import com.cheyrouse.gael.realestatemanagerkt.utils.Prefs
 import com.cheyrouse.gael.realestatemanagerkt.utils.Utils
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -34,13 +34,16 @@ import kotlinx.android.synthetic.main.toolbar.*
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
-    EstateListFragment.OnFragmentInteractionListener, SearchFragment.OnSearchFragmentListener {
+    EstateListFragment.OnFragmentInteractionListener, SearchFragment.OnSearchFragmentListener,
+    MapsFragment.OnMapsFragmentListener {
 
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var propertiesList: List<Property>
     private var propertyId: Long = 0
+    private var isDetail: Boolean = false
     private var isTablet: Boolean = false
+    private lateinit var prefs: Prefs
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,34 +59,59 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun getTheBundle() {
-        if(this.intent.extras != null){
+        if (this.intent.extras != null) {
             propertiesList = intent.getParcelableArrayListExtra(LIST_PROPERTY)
             configureAndShowFragmentList(propertiesList)
-        } else{
+            isDetail = intent.getBooleanExtra(IS_DETAIL_CALLING_YOU, false)
+        } else {
             initViewModel()
             configureAndShowFragmentList(null)
         }
     }
 
     private fun defineIsTablet() {
-        if (activity_main_detail_frame_layout != null) isTablet = true
+        prefs = Prefs.get(this)
+        if (activity_main_detail_frame_layout != null) {
+            isTablet = true
+            prefs.storeLastItemClicked(0)
+        } else prefs.storeLastItemClicked(-1)
     }
 
     private fun checkSelfPermissions() {
         val permissions: ArrayList<String> = ArrayList()
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_PHONE_STATE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             permissions.add(Manifest.permission.READ_PHONE_STATE)
         }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION)
         }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             permissions.add(Manifest.permission.ACCESS_FINE_LOCATION)
         }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             permissions.add(Manifest.permission.CAMERA)
         }
         if (permissions.isNotEmpty()) {
@@ -99,10 +127,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun checkDeviceServices() {
-        if(!Utils.isInternetAvailable(this)){
+        if (!Utils.isInternetAvailable(this)) {
             showAlertDialog("internet")
         }
-        if(!Utils.isLocationEnabled(this)){
+        if (!Utils.isLocationEnabled(this)) {
             showAlertDialog("location")
         }
     }
@@ -118,12 +146,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun createDefaultList(properties: List<Property>) {
         propertiesList = properties
-        if(propertiesList.isEmpty()){
-           showAlertDialog("data")
+        if (propertiesList.isEmpty()) {
+            showAlertDialog("data")
         }
     }
 
-    private fun showAlertDialog(type:String) {
+    private fun showAlertDialog(type: String) {
         var title = ""
         var text = ""
         var intent = Intent()
@@ -235,7 +263,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .replace(R.id.activity_main_100_frame_layout, searchFragment)
                 .addToBackStack("searchFragment")
                 .commit()
-        }else{
+        } else {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.activity_main_frame_layout, searchFragment)
                 .addToBackStack("searchFragment")
@@ -252,7 +280,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .replace(R.id.activity_main_100_frame_layout, mapsFragment)
                     .addToBackStack("mapsFragment")
                     .commit()
-            }else{
+            } else {
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.activity_main_frame_layout, mapsFragment)
                     .addToBackStack("mapsFragment")
@@ -279,7 +307,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
             R.id.activity_main_drawer_simulator -> {
-               launchMortGageSimulator()
+                launchMortGageSimulator()
             }
             R.id.activity_main_drawer_create -> {
                 // Open create activity
@@ -310,15 +338,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (activity_main_drawer_layout.isDrawerOpen(GravityCompat.START)) {
             activity_main_drawer_layout.closeDrawer(GravityCompat.START)
         } else {
-            if (isTablet){
-                checkBackStack(2)
-            } else {
-                checkBackStack(1)
-            }
+            if (isTablet) {
+                if (isDetail) {
+                    isDetail = false
+                    finish()
+                } else checkBackStack(2)
+
+            } else checkBackStack(1)
         }
     }
 
-    private fun checkBackStack(i:Int) {
+    private fun checkBackStack(i: Int) {
         if (supportFragmentManager.backStackEntryCount <= i) {
             showAlertDialogCloseApp()
         } else {
@@ -329,20 +359,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun showAlertDialogCloseApp() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Do you want to quit the app?")
-        builder.setPositiveButton(android.R.string.yes) { _, _ -> finish() }
+        builder.setPositiveButton(android.R.string.yes) { _, _ ->
+            prefs.storeLastItemClicked(0)
+            finishAffinity()
+        }
         builder.setNegativeButton(android.R.string.no) { _, _ -> }
         builder.show()
     }
 
     private fun configureAndShowFragmentList(it: List<Property>?) {
-        var id:Long = 0
+        var id: Long = 0
         val listFragment = EstateListFragment.newInstance(it)
         supportFragmentManager.beginTransaction()
             .replace(R.id.activity_main_frame_layout, listFragment)
             .addToBackStack("listFragment")
             .commit()
         if (isTablet) {
-            if(it!=null){ id = it[0].id }
+            if (it != null) {
+                id = it[0].id
+            }
             val detailFragment = DetailEstateFragment.newInstance(id)
             supportFragmentManager.beginTransaction()
                 .replace(R.id.activity_main_detail_frame_layout, detailFragment)
@@ -351,7 +386,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    override fun onFragmentInteraction(property: Property) {
+    override fun onFragmentListInteraction(property: Property) {
         this.propertyId = property.id
         configureAndShowFragmentDetail(property)
     }
@@ -369,16 +404,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    private fun launchFragment(fragment: Fragment, tagStr: String) {
+    private fun launchFragment(fragment: Fragment, str: String) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.activity_main_frame_layout, fragment)
-            .addToBackStack(tagStr)
+            .addToBackStack(str)
             .commit()
     }
 
     override fun onSearchInteraction(it: List<Property>) {
         onBackPressed()
         configureAndShowFragmentList(it)
+    }
+
+    override fun onMapsInteraction(idProperty: Long) {
+        val intent = Intent(this, DetailActivity::class.java)
+        intent.putExtra(DetailActivity.PROPERTY, idProperty)
+        startActivity(intent)
+        Handler().postDelayed({
+            onBackPressed()
+        }, 400)
     }
 }
 

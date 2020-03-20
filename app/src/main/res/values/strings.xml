@@ -40,7 +40,7 @@ Do you want to access the wifi settings?</string>
     <string name="bedrooms_min">Bedrooms min</string>
     <string name="bedrooms_max">Bedrooms max</string>
     <string name="images_min">Min Number of Images</string>
-    <string name="nbr_of_apart">apart N°%1$s</string>
+    <string name="nbr_of_apart">apart N°</string>
 
     <!--Fragment list-->
     <string name="sold_text">SOLD</string>

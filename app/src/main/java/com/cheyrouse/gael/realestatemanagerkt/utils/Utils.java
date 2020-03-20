@@ -96,10 +96,4 @@ public class Utils {
         SimpleDateFormat sdf = new SimpleDateFormat(TEXT_DATE, Locale.getDefault());
         return sdf.format(date);
     }
-
-
-    public static List<View> makeItemList(View itemView, List<View> itemViewList) {
-        itemViewList.add(itemView);
-        return itemViewList;
-    }
 }

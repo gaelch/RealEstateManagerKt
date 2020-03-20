@@ -358,7 +358,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
                 s: CharSequence, start: Int,
                 before: Int, count: Int
             ) {
-                realtorName = edit_realtor.text.toString()
+                realtorName = edit_realtor.text.toString().replace(" ", "")
             }
         })
     }
@@ -432,7 +432,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
                 s: CharSequence, start: Int,
                 before: Int, count: Int
             ) {
-                city = edit_city.text.toString()
+                city = edit_city.text.toString().replace(" ", "")
             }
         })
     }
@@ -450,7 +450,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
                 s: CharSequence, start: Int,
                 before: Int, count: Int
             ) {
-                postalCode = edit_postal_code.text.toString()
+                postalCode = edit_postal_code.text.toString().replace(" ", "")
             }
         })
     }
@@ -468,7 +468,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
                 s: CharSequence, start: Int,
                 before: Int, count: Int
             ) {
-                country = edit_country.text.toString()
+                country = edit_country.text.toString().replace(" ", "")
             }
         })
     }

@@ -35,27 +35,14 @@ public class Prefs {
         return instance;
     }
 
-    public void storeItemViewList(List<View> views) {
+    public void storeLastItemClicked(int item){
         SharedPreferences.Editor editor = prefs.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(views);
-        editor.putString("itemView", json);
+        editor.putInt("item", item);
         editor.apply();
     }
 
-    public ArrayList<View> getViewList() {
-        Gson gson = new Gson();
-        String json = prefs.getString("itemView", "");
-        ArrayList<View> viewList;
-        if (json.length() < 1) {
-            viewList = new ArrayList<>();
-        } else {
-            Type type = new TypeToken<ArrayList<View>>() {
-            }.getType();
-            viewList = gson.fromJson(json, type);
-        }
-        //return the value that was stored under the key
-        return viewList;
+    public int getLastItemClicked(){
+        return prefs.getInt("item", 0);
     }
 
 }

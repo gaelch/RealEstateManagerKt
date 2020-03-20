@@ -10,7 +10,7 @@ import com.cheyrouse.gael.realestatemanagerkt.R
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
 import kotlinx.android.synthetic.main.estate_list_item.view.*
 
-class EstateListAdapter (private val list: List<Property>, private val clickListener: (Property) -> Unit)
+class EstateListAdapter(private val list: List<Property>, private val clickListener: (Property) -> Unit)
     : RecyclerView.Adapter<EstateListViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EstateListViewHolder {
@@ -21,7 +21,8 @@ class EstateListAdapter (private val list: List<Property>, private val clickList
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onBindViewHolder(holder: EstateListViewHolder, position: Int) {
         val property: Property = list[position]
-        holder.bind(property, clickListener)
+        holder.bind(property, clickListener, position)
+//        notifyAdapter()
     }
 
     override fun getItemCount(): Int = list.size

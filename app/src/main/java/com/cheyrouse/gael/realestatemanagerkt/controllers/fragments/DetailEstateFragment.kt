@@ -77,6 +77,7 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun initVars(property: Property) {
         this.property = property
         tv_description_text.text = property.description
@@ -89,7 +90,7 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
         text_location_town.text = property.address?.city
         if (property.address?.apartmentNumber != 0) {
             text_location_num_type.text =
-                resources.getString(R.string.nbr_of_apart, property.address?.apartmentNumber.toString())
+                resources.getString(R.string.nbr_of_apart) + property.address?.apartmentNumber.toString()
         } else {
             text_location_num_type.visibility = View.GONE
         }

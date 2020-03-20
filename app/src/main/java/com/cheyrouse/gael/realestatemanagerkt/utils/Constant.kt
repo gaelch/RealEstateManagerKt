@@ -13,6 +13,7 @@ class Constant {
         const val NOTIFICATION_ID = 7
         const val FORMAT_TO_TWO_DEC = "%.2f"
         const val LIST_PROPERTY = "properties"
+        const val IS_DETAIL_CALLING_YOU = "detail_call"
     }
 
 }

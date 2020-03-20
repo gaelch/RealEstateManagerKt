@@ -1,8 +1,10 @@
 package com.cheyrouse.gael.realestatemanagerkt.controllers.activities
 
+import android.app.PendingIntent.getActivity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
@@ -11,20 +13,24 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.cheyrouse.gael.realestatemanagerkt.R
 import com.cheyrouse.gael.realestatemanagerkt.controllers.fragments.DetailEstateFragment
 import com.cheyrouse.gael.realestatemanagerkt.controllers.fragments.MapsFragment
 import com.cheyrouse.gael.realestatemanagerkt.controllers.fragments.MortGageCalculatorFragment
 import com.cheyrouse.gael.realestatemanagerkt.controllers.fragments.SearchFragment
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
+import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.IS_DETAIL_CALLING_YOU
 import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.LIST_PROPERTY
+import com.cheyrouse.gael.realestatemanagerkt.utils.Prefs
 import com.cheyrouse.gael.realestatemanagerkt.utils.Utils
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.toolbar.*
 
 class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
-    SearchFragment.OnSearchFragmentListener {
+    SearchFragment.OnSearchFragmentListener, MapsFragment.OnMapsFragmentListener {
 
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
@@ -120,7 +126,7 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             val mapsFragment = MapsFragment.newInstance()
             supportFragmentManager.beginTransaction()
                 .add(R.id.activity_detail_frame_layout, mapsFragment)
-                .addToBackStack("mapsFragment")
+//                .addToBackStack("mapsFragment")
                 .commit()
         } else {
             showAlertDialog()
@@ -131,11 +137,11 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Location Alert")
         builder.setMessage("To open map, enable location please.")
-        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+        builder.setPositiveButton(android.R.string.yes) { _, _ ->
             val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
             startActivity(intent)
         }
-        builder.setNegativeButton(android.R.string.no) { dialog, which ->
+        builder.setNegativeButton(android.R.string.no) { _, _ ->
 
         }
         builder.show()
@@ -166,7 +172,10 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     private fun showAlertDialogCloseApp() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Do you want to quit the app?")
-        builder.setPositiveButton(android.R.string.yes) { _, _ -> finish()
+        builder.setPositiveButton(android.R.string.yes) { _, _ ->
+            val prefs: Prefs = Prefs.get(this)
+            prefs.storeLastItemClicked(0)
+            finish()
             moveTaskToBack(true);}
         builder.setNegativeButton(android.R.string.no) { _, _ -> }
         builder.show()
@@ -184,7 +193,7 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         val mortGageCalculatorFragment = MortGageCalculatorFragment.newInstance()
         supportFragmentManager.beginTransaction()
             .replace(R.id.activity_detail_frame_layout, mortGageCalculatorFragment)
-            .addToBackStack("mortGageCalculatorFragment")
+//            .addToBackStack("mortGageCalculatorFragment")
             .commit()
     }
 
@@ -192,7 +201,11 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         if (activity_detail_drawer_layout.isDrawerOpen(GravityCompat.START)) {
             activity_detail_drawer_layout.closeDrawer(GravityCompat.START)
         } else {
-            super.onBackPressed()
+            if (supportFragmentManager.backStackEntryCount <= 1) {
+                finish()
+            } else {
+                super.onBackPressed()
+            }
         }
     }
 
@@ -205,6 +218,16 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     override fun onSearchInteraction(it: List<Property>) {
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra(LIST_PROPERTY, it as ArrayList)
+        intent.putExtra(IS_DETAIL_CALLING_YOU, true)
         startActivity(intent)
+    }
+
+    override fun onMapsInteraction(idProperty: Long) {
+        val intent = Intent(this, DetailActivity::class.java)
+        intent.putExtra(PROPERTY, idProperty)
+        startActivity(intent)
+        Handler().postDelayed({
+            onBackPressed()
+        }, 400)
     }
 }

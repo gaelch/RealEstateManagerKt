@@ -1,7 +1,6 @@
 package com.cheyrouse.gael.realestatemanagerkt.utils
 
 import com.cheyrouse.gael.realestatemanagerkt.models.GeocodeInfo
-import com.cheyrouse.gael.realestatemanagerkt.models.GeocodeLocation
 import io.reactivex.Observable
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

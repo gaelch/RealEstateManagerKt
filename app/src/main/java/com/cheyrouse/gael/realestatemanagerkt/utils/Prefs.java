@@ -2,15 +2,7 @@ package com.cheyrouse.gael.realestatemanagerkt.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
-import android.view.View;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -43,6 +35,16 @@ public class Prefs {
 
     public int getLastItemClicked(){
         return prefs.getInt("item", 0);
+    }
+
+    public void storeIsSearch(boolean isSearch){
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean("isSearch", isSearch);
+        editor.apply();
+    }
+
+    public boolean isSearch(){
+        return prefs.getBoolean("isSearch", false);
     }
 
 }

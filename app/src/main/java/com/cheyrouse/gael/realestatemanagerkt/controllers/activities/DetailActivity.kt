@@ -1,20 +1,17 @@
 package com.cheyrouse.gael.realestatemanagerkt.controllers.activities
 
-import android.app.PendingIntent.getActivity
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import com.cheyrouse.gael.realestatemanagerkt.R
 import com.cheyrouse.gael.realestatemanagerkt.controllers.fragments.DetailEstateFragment
 import com.cheyrouse.gael.realestatemanagerkt.controllers.fragments.MapsFragment
@@ -43,11 +40,18 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
+        checkScreenOrientation()
         configureToolbar()
         configureNavDrawer()
         configureNavView()
         getTheBundle()
         configureAndShowFragmentDetail()
+    }
+
+    private fun checkScreenOrientation() {
+        if (resources.getBoolean(R.bool.portrait_only)) {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
     }
 
     private fun getTheBundle() {
@@ -56,6 +60,7 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
     private fun configureToolbar() {
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun configureNavDrawer() {
@@ -129,21 +134,40 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 //                .addToBackStack("mapsFragment")
                 .commit()
         } else {
-            showAlertDialog()
+            showAlertDialog("location")
         }
     }
 
-    private fun showAlertDialog() {
+    private fun showAlertDialog(s: String) {
+        var title = ""
+        var text = ""
+        when (s) {
+            "location" -> {
+                title = resources.getString(R.string.gps_title)
+                text = resources.getString(R.string.gps_text)
+            }
+            "closeApp" -> {
+                title = resources.getString(R.string.close_app_title)
+            }
+        }
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("Location Alert")
-        builder.setMessage("To open map, enable location please.")
+        builder.setTitle(title)
+        builder.setMessage(text)
         builder.setPositiveButton(android.R.string.yes) { _, _ ->
-            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-            startActivity(intent)
+            when (s) {
+                "location" -> {
+                    val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                    startActivity(intent)
+                }
+                "closeApp" -> {
+                    val prefs: Prefs = Prefs.get(this)
+                    prefs.storeLastItemClicked(0)
+                    finish()
+                    moveTaskToBack(true)
+                }
+            }
         }
-        builder.setNegativeButton(android.R.string.no) { _, _ ->
-
-        }
+        builder.setNegativeButton(android.R.string.no) { _, _ -> }
         builder.show()
     }
 
@@ -162,23 +186,11 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 launchSearchFragment()
             }
             R.id.activity_main_drawer_logout -> {
-                showAlertDialogCloseApp()
+                showAlertDialog("closeApp")
             }
         }
         activity_detail_drawer_layout.closeDrawer(GravityCompat.START)
         return true
-    }
-
-    private fun showAlertDialogCloseApp() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Do you want to quit the app?")
-        builder.setPositiveButton(android.R.string.yes) { _, _ ->
-            val prefs: Prefs = Prefs.get(this)
-            prefs.storeLastItemClicked(0)
-            finish()
-            moveTaskToBack(true);}
-        builder.setNegativeButton(android.R.string.no) { _, _ -> }
-        builder.show()
     }
 
     private fun launchCreateActivity(id: Long?) {
@@ -202,7 +214,7 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             activity_detail_drawer_layout.closeDrawer(GravityCompat.START)
         } else {
             if (supportFragmentManager.backStackEntryCount <= 1) {
-                finish()
+                this.finish()
             } else {
                 super.onBackPressed()
             }

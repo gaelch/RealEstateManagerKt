@@ -4,12 +4,10 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.*
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
-import android.media.RingtoneManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
@@ -21,9 +19,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -38,19 +34,14 @@ import com.cheyrouse.gael.realestatemanagerkt.models.Address
 import com.cheyrouse.gael.realestatemanagerkt.models.GeocodeInfo
 import com.cheyrouse.gael.realestatemanagerkt.models.Picture
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
-import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.CHANEL_ID
-import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.NOTIFICATION_ID
+import com.cheyrouse.gael.realestatemanagerkt.utils.*
 import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.listOfTypes
-import com.cheyrouse.gael.realestatemanagerkt.utils.CreateEstateUtils
-import com.cheyrouse.gael.realestatemanagerkt.utils.NotificationClass
-import com.cheyrouse.gael.realestatemanagerkt.utils.RealEstateStream
-import com.cheyrouse.gael.realestatemanagerkt.utils.Utils
 import com.cheyrouse.gael.realestatemanagerkt.view.DetailPictureAdapter
 import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableObserver
 import kotlinx.android.synthetic.main.activity_create_estate.*
 import kotlinx.android.synthetic.main.picture_title_dialogue.view.*
-import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.toolbar.toolbar
 import java.util.*
 
 class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
@@ -94,15 +85,17 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
     private var lat: Double = 0.0
     private var lng: Double = 0.0
     private lateinit var alertDialog: AlertDialog
+    private val checkClass = CreateEstateUtils()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_estate)
+        checkScreenOrientation()
         checkDeviceServices()
         initViewModelFactory()
-        configureToolbar()
         getTheBundle()
+        configureToolbar()
         configureSpinner()
         configureSurface()
         configureNumRooms()
@@ -113,7 +106,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         configureCity()
         configurePostalCode()
         configureCountry()
-        configureAdditAddress()
+        configureEditAddress()
         configureDescription()
         configurePrice()
         configureRealtorName()
@@ -122,6 +115,12 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         configureCheckBoxClick()
         configureButtons()
         configureButtonValidate()
+    }
+
+    private fun checkScreenOrientation() {
+        if (resources.getBoolean(R.bool.portrait_only)) {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
     }
 
     private fun checkDeviceServices() {
@@ -206,12 +205,6 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         if (property.trainStation != null) this.trainStation = property.trainStation!!
         if (property.park != null) this.park = property.park!!
         if (property.pictures != null) this.pictures = property.pictures as ArrayList<Picture>
-        if (property.address?.apartmentNumber != 0) {
-            this.apartNumber = property.address?.apartmentNumber!!
-            apart_number.isVisible = true
-            edit_apart_nbr.isVisible = true
-            edit_apart_nbr.setText(apartNumber.toString())
-        }
         if (property.address!!.city != null) city = property.address!!.city.toString()
         if (property.address!!.postalCode != null) postalCode =
             property.address!!.postalCode.toString()
@@ -220,6 +213,12 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
             property.address!!.additionalAddress.toString()
         if (property.address!!.lat != null) lat = property.address!!.lat!!
         if (property.address!!.lng != null) lng = property.address!!.lng!!
+        if (property.address?.apartmentNumber != 0) {
+            this.apartNumber = property.address?.apartmentNumber!!
+            apart_number.isVisible = true
+            edit_apart_nbr.isVisible = true
+            edit_apart_nbr.setText(apartNumber.toString())
+        }
         initWidgets()
     }
 
@@ -473,7 +472,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         })
     }
 
-    private fun configureAdditAddress() {
+    private fun configureEditAddress() {
         edit_additional_address.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(
@@ -606,10 +605,12 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         })
     }
 
-
     private fun configureToolbar() {
         setSupportActionBar(toolbar)
-//        toolbar.title = resources.getString(R.string.create_title)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        if (isEdit) {
+            toolbar_create.title = resources.getString(R.string.edit_title)
+        }
     }
 
     private fun configureSpinner() {
@@ -643,7 +644,9 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         checkbox_school.setOnClickListener { school = checkbox_school.isChecked }
         checkbox_shops.setOnClickListener { shops = checkbox_shops.isChecked }
         checkbox_subway.setOnClickListener { subway = checkbox_subway.isChecked }
-        checkbox_train_station.setOnClickListener { trainStation = checkbox_train_station.isChecked }
+        checkbox_train_station.setOnClickListener {
+            trainStation = checkbox_train_station.isChecked
+        }
         checkbox_park.setOnClickListener { park = checkbox_park.isChecked }
         checkbox_available.setOnClickListener {
             sold = true
@@ -724,16 +727,12 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
             if (data != null) {
                 imageUri = data.data
                 imageUri?.let { showCustomDialog(it) }
-                Log.e("test path uri", data.data.toString())
             }
         }
         if (resultCode == Activity.RESULT_OK && requestCode == CAMERA_PICK_CODE) {
             Log.e("test path uri", imageUri.toString())
-//            imagetest.setImageURI(image_uri)
-//            takePicture()
             if (imageUri != null) {
                 imageUri?.let { showCustomDialog(it) }
-                Log.e("test path uri", imageUri.toString())
             }
         }
     }
@@ -785,10 +784,8 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
 
     private fun storeLocationToDatabase() {
         progressBar_create.visibility = View.VISIBLE
-        if (address.address?.isNotEmpty()!! && city.isNotEmpty() && postalCode.isNotEmpty()) {
-            val addressStr =
-                address.address + "+" + city + postalCode /*+ "+" + property.address?.additionalAddress +"+"+ property.address?.apartmentNumber +" "+ property.address?.sector*/
-            Log.e("test address", addressStr)
+        val addressStr = checkClass.checksAddressElements(address, city, postalCode)
+        if (addressStr.isNotEmpty()) {
             val realEstateStream = RealEstateStream()
             disposable =
                 realEstateStream.streamFetchGeocodeInfo(addressStr, BuildConfig.GoogleSecAPIKEY)
@@ -813,23 +810,10 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         progressBar_create.visibility = View.GONE
         lat = geoLocation.results?.get(0)?.geometry?.location?.lat!!
         lng = geoLocation.results?.get(0)?.geometry?.location?.lng!!
-        if (additionalAddress.isNotEmpty()) property.address!!.additionalAddress =
-            additionalAddress
-        if (description.isNotEmpty()) property.description = description
-        if (pictures.size != 0) property.pictures = pictures
-        property.dateOfSale = soldDate
-        address.apartmentNumber = apartNumber
-        property.airport = airport
-        property.park = park
-        property.school = school
-        property.subway = subway
-        property.shops = shops
-        property.trainStation = trainStation
-        property.status = sold
-        property.dateOfEntry = entryDate
-        property.dateOfSale = soldDate
-        if (lat != 0.0) property.address!!.lat = lat
-        if (lng != 0.0) property.address!!.lng = lng
+        property = checkClass.setValuesInProperty(
+            lat, lng, airport, school, subway, shops, trainStation, park, additionalAddress,
+            pictures, address, description, entryDate, apartNumber, sold, soldDate, property
+        )
         propertyViewModel.createProperty(property)
         showNotification()
         returnToHome()
@@ -859,16 +843,17 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
     }
 
     private fun checkValues() {
-        val checkClass = CreateEstateUtils()
         if (checkClass.checkValueBeforeStoreProperty(
                 this, typeOfProperty, surface, numberOfRooms, numberOfBed,
                 numberOfBath, address, price, realtorName, entryDate, soldDate, sold, property,
-                city, postalCode, country).type == typeOfProperty
+                city, postalCode, country
+            ).type == typeOfProperty
         ) {
             property = checkClass.checkValueBeforeStoreProperty(
                 this, typeOfProperty, surface, numberOfRooms, numberOfBed,
                 numberOfBath, address, price, realtorName, entryDate, soldDate, sold, property,
-                city, postalCode, country)
+                city, postalCode, country
+            )
             storeLocationToDatabase()
         }
     }
@@ -885,6 +870,10 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
     }
 
     private fun returnToHome() {
+        val prefs: Prefs = Prefs.get(this)
+        if(!isEdit){
+            prefs.storeLastItemClicked(-2)
+        }
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }

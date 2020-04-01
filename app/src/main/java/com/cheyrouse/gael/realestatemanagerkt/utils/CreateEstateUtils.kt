@@ -1,14 +1,15 @@
 package com.cheyrouse.gael.realestatemanagerkt.utils
 
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.widget.Toast
-import androidx.core.view.isVisible
 import com.cheyrouse.gael.realestatemanagerkt.R
 import com.cheyrouse.gael.realestatemanagerkt.models.Address
 import com.cheyrouse.gael.realestatemanagerkt.models.Picture
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
-import kotlinx.android.synthetic.main.activity_create_estate.*
-import java.util.ArrayList
+
 
 class CreateEstateUtils {
 
@@ -133,5 +134,53 @@ class CreateEstateUtils {
 
     private fun showToast(context: Context, text: String) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+    }
+
+    fun setValuesInProperty(
+        lat: Double,
+        lng: Double,
+        airport: Boolean,
+        school: Boolean,
+        subway: Boolean,
+        shops: Boolean,
+        trainStation: Boolean,
+        park: Boolean,
+        additionalAddress: String,
+        pictures: List<Picture>,
+        address: Address,
+        description: String,
+        entryDate: String,
+        apartNumber: Int,
+        sold: Boolean,
+        soldDate: String,
+        property: Property
+    ): Property {
+
+        if (additionalAddress.isNotEmpty()) property.address!!.additionalAddress =
+            additionalAddress
+        if (description.isNotEmpty()) property.description = description
+        if (pictures.isNotEmpty()) property.pictures = pictures
+        property.dateOfSale = soldDate
+        address.apartmentNumber = apartNumber
+        property.airport = airport
+        property.park = park
+        property.school = school
+        property.subway = subway
+        property.shops = shops
+        property.trainStation = trainStation
+        property.status = sold
+        property.dateOfEntry = entryDate
+        property.dateOfSale = soldDate
+        if (lat != 0.0) property.address!!.lat = lat
+        if (lng != 0.0) property.address!!.lng = lng
+        return property
+    }
+
+    fun checksAddressElements(address: Address, city: String, postalCode: String): String {
+        var addressStr = ""
+        if (address.address?.isNotEmpty()!! && city.isNotEmpty() && postalCode.isNotEmpty()) {
+            addressStr = address.address + "+" + city + postalCode
+        }
+        return addressStr
     }
 }

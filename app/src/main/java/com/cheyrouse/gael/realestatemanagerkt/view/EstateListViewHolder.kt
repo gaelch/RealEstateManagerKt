@@ -9,18 +9,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import androidx.core.os.persistableBundleOf
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.cheyrouse.gael.realestatemanagerkt.R
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
-import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.SYMBOL
 import com.cheyrouse.gael.realestatemanagerkt.utils.Prefs
-import com.cheyrouse.gael.realestatemanagerkt.utils.Utils
 import kotlinx.android.synthetic.main.estate_list_item.view.*
-import kotlin.math.roundToInt
+import java.text.NumberFormat
+import java.util.*
+
 
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -34,17 +33,17 @@ class EstateListViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
     private var constraint = itemView.constraint_item
     private val glide: RequestManager = Glide.with(itemView)
     private var index: Int = 0
+    private val currencyFormat: NumberFormat = NumberFormat.getCurrencyInstance(Locale.US)
 
     @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun bind(property: Property, clickListener: (Property) -> Unit, position: Int) {
         val prefs: Prefs = Prefs.get(itemView.context)
+        currencyFormat.maximumFractionDigits = 0
         index = prefs.lastItemClicked
-        val price = property.price?.roundToInt()
-
         mTypeView?.text = property.type
         mTownView?.text = property.address?.city
-        mPriceView?.text = SYMBOL + price.toString()
+        mPriceView?.text = currencyFormat.format(property.price)
         //get image from storage
         if (property.pictures != null && property.pictures!!.isNotEmpty()) {
             Log.e("test estate list vh", (property.pictures?.get(0)?.picturePath))
@@ -70,7 +69,7 @@ class EstateListViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
             constraint.setBackgroundColor(
                 ContextCompat.getColor(
                     itemView.context,
-                    R.color.colorAccent
+                    R.color.colorRed
                 )
             )
             mPriceView.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))

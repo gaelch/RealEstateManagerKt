@@ -10,9 +10,7 @@
     <androidx.core.widget.NestedScrollView
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout_editor_absoluteX="37dp">
-
+            android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraint_detail"
@@ -142,8 +140,8 @@
                     app:steps="5"
                     app:bar_color="@color/colorPrimary"
                     app:bar_highlight_color="@color/orange_red"
-                    app:right_thumb_color="@color/colorAccent"
-                    app:left_thumb_color="@color/colorAccent"
+                    app:right_thumb_color="@color/colorRed"
+                    app:left_thumb_color="@color/colorRed"
                     app:left_thumb_color_pressed="#4C2D1A"
                     android:layout_marginTop="12dp"
                     android:layout_marginStart="25dp"
@@ -216,8 +214,8 @@
                     app:max_value="40"
                     app:bar_color="@color/colorPrimary"
                     app:bar_highlight_color="@color/orange_red"
-                    app:right_thumb_color="@color/colorAccent"
-                    app:left_thumb_color="@color/colorAccent"
+                    app:right_thumb_color="@color/colorRed"
+                    app:left_thumb_color="@color/colorRed"
                     app:left_thumb_color_pressed="#4C2D1A"
                     android:layout_marginTop="12dp"
                     android:layout_marginStart="25dp"
@@ -246,13 +244,14 @@
                     android:layout_marginTop="20dp"
                     android:background="@android:color/white"
                     android:gravity="center"
-                    android:inputType="text"
+                    android:inputType="textCapWords"
                     android:hint="@string/city_example"
                     android:textColor="@android:color/black"
                     app:layout_constraintEnd_toStartOf="@+id/guideline"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_city"
-                    app:layout_constraintWidth_percent="0.4" />
+                    app:layout_constraintWidth_percent="0.4"
+                    android:importantForAutofill="no" />
 
             <TextView
                     android:id="@+id/tv_postal_code"
@@ -278,7 +277,8 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
                     app:layout_constraintTop_toBottomOf="@+id/tv_postal_code"
-                    app:layout_constraintWidth_percent="0.4" />
+                    app:layout_constraintWidth_percent="0.4"
+                    android:importantForAutofill="no" />
 
             <TextView
                     android:id="@+id/tv_country"
@@ -299,12 +299,13 @@
                     android:background="@android:color/white"
                     android:gravity="center"
                     android:hint="@string/country_example"
-                    android:inputType="text"
+                    android:inputType="textCapWords"
                     android:textColor="@android:color/black"
                     app:layout_constraintEnd_toStartOf="@+id/guideline"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_country"
-                    app:layout_constraintWidth_percent="0.4" />
+                    app:layout_constraintWidth_percent="0.4"
+                    android:importantForAutofill="no" />
 
 
             <View
@@ -512,8 +513,8 @@
                     app:steps="1000"
                     app:bar_color="@color/colorPrimary"
                     app:bar_highlight_color="@color/orange_red"
-                    app:left_thumb_color="@color/colorAccent"
-                    app:right_thumb_color="@color/colorAccent"
+                    app:left_thumb_color="@color/colorRed"
+                    app:right_thumb_color="@color/colorRed"
                     app:left_thumb_color_pressed="#4C2D1A"
                     android:layout_marginTop="12dp"
                     android:layout_marginStart="25dp"
@@ -578,8 +579,8 @@
                     app:max_value="20"
                     app:bar_color="@color/colorPrimary"
                     app:bar_highlight_color="@color/orange_red"
-                    app:left_thumb_color="@color/colorAccent"
-                    app:right_thumb_color="@color/colorAccent"
+                    app:left_thumb_color="@color/colorRed"
+                    app:right_thumb_color="@color/colorRed"
                     app:left_thumb_color_pressed="#4C2D1A"
                     android:layout_marginTop="12dp"
                     android:layout_marginStart="25dp"
@@ -671,11 +672,12 @@
                     android:layout_marginTop="20dp"
                     android:background="@android:color/white"
                     android:gravity="center"
-                    android:inputType="text"
+                    android:inputType="textPersonName"
                     android:hint="@string/name_example"
                     android:textColor="@android:color/black"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_realtor" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_realtor"
+                    android:importantForAutofill="no" />
 
             <TextView
                     android:id="@+id/tv_nbr_bath"
@@ -699,7 +701,8 @@
                     android:inputType="number"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_nbr_bath" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_nbr_bath"
+                    android:importantForAutofill="no" />
 
             <View
                     android:id="@+id/line11"
@@ -731,7 +734,8 @@
                     android:inputType="number"
                     app:layout_constraintEnd_toStartOf="@+id/guideline"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_nbr_images" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_nbr_images"
+                    android:importantForAutofill="no" />
 
             <View
                     android:id="@+id/line12"
@@ -744,13 +748,13 @@
 
             <Button
                     android:id="@+id/button_search"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="15dp"
                     android:padding="3dp"
                     android:text="@string/valid_search"
+                    android:background="@drawable/selector_button_color"
                     android:textColor="@android:color/white"
-                    android:background="@color/colorPrimary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/line12" />

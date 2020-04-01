@@ -11,7 +11,7 @@
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintTop_toBottomOf="@+id/include"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_create"
             tools:layout_editor_absoluteX="0dp">
 
 
@@ -75,7 +75,8 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
                     app:layout_constraintTop_toBottomOf="@+id/apart_number"
-                    android:visibility="gone"/>
+                    android:visibility="gone"
+                    android:importantForAutofill="no" />
 
             <TextView
                     android:id="@+id/tvSurface"
@@ -112,7 +113,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvSurface"
                     tools:targetApi="lollipop"
-                    android:autofillHints="edit_surface" />
+                    android:importantForAutofill="no" />
 
             <View
                     android:id="@+id/line2"
@@ -145,7 +146,8 @@
                     android:inputType="number"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_rooms" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_rooms"
+                    android:importantForAutofill="no" />
 
             <TextView
                     android:id="@+id/tv_address"
@@ -170,7 +172,8 @@
                     android:hint="@string/address_tv_detail"
                     android:padding="10dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_address" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_address"
+                    android:importantForAutofill="no" />
 
 
             <TextView
@@ -192,12 +195,13 @@
                     android:background="@android:color/white"
                     android:gravity="center"
                     android:hint="@string/city_example"
-                    android:inputType="text"
+                    android:inputType="textCapWords"
                     android:textColor="@android:color/black"
                     app:layout_constraintEnd_toStartOf="@+id/guideline"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_city"
-                    app:layout_constraintWidth_percent="0.4" />
+                    app:layout_constraintWidth_percent="0.4"
+                    android:importantForAutofill="no" />
 
             <TextView
                     android:id="@+id/tv_postal_code"
@@ -223,7 +227,8 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
                     app:layout_constraintTop_toBottomOf="@+id/tv_postal_code"
-                    app:layout_constraintWidth_percent="0.4" />
+                    app:layout_constraintWidth_percent="0.4"
+                    android:importantForAutofill="no" />
 
             <TextView
                     android:id="@+id/tv_country"
@@ -244,12 +249,13 @@
                     android:background="@android:color/white"
                     android:gravity="center"
                     android:hint="@string/country_example"
-                    android:inputType="text"
+                    android:inputType="textCapWords"
                     android:textColor="@android:color/black"
                     app:layout_constraintEnd_toStartOf="@+id/guideline"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_country"
-                    app:layout_constraintWidth_percent="0.4" />
+                    app:layout_constraintWidth_percent="0.4"
+                    android:importantForAutofill="no" />
 
 
             <TextView
@@ -275,7 +281,8 @@
                     android:hint="@string/additional_address_example"
                     android:padding="10dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_additional_address" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_additional_address"
+                    android:importantForAutofill="no" />
 
 
             <View
@@ -447,7 +454,8 @@
                     android:inputType="text"
                     android:padding="10dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_description" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_description"
+                    android:importantForAutofill="no" />
 
             <View
                     android:id="@+id/line7"
@@ -490,7 +498,8 @@
                     android:text="@string/pictures_gallery"
                     app:layout_constraintEnd_toStartOf="@+id/guideline"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/create_picture_recycler_view" />
+                    app:layout_constraintTop_toBottomOf="@id/create_picture_recycler_view"
+                    android:contentDescription="@string/image" />
 
             <ImageButton
                     android:id="@+id/button_take_picture"
@@ -503,6 +512,7 @@
                     android:text="@string/pictures_camera"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
+                    android:contentDescription="@string/image"
                     app:layout_constraintTop_toBottomOf="@id/create_picture_recycler_view" />
 
             <View
@@ -545,7 +555,8 @@
                     android:textColor="@android:color/black"
                     app:layout_constraintEnd_toStartOf="@+id/guideline"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_price" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_price"
+                    android:importantForAutofill="no" />
 
             <TextView
                     android:id="@+id/tv_nbr_bed"
@@ -568,7 +579,8 @@
                     android:inputType="number"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_nbr_bed" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_nbr_bed"
+                    android:importantForAutofill="no" />
 
             <View
                     android:id="@+id/line9"
@@ -657,7 +669,8 @@
                     android:inputType="textPersonName"
                     android:textColor="@android:color/black"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_realtor" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_realtor"
+                    android:importantForAutofill="no" />
 
             <TextView
                     android:id="@+id/tv_nbr_bath"
@@ -681,7 +694,8 @@
                     android:inputType="number"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_nbr_bath" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_nbr_bath"
+                    android:importantForAutofill="no" />
 
             <View
                     android:id="@+id/line11"
@@ -706,7 +720,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/include"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_create"
             tools:ignore="UnusedAttribute" />
 
     <Button
@@ -718,14 +732,19 @@
             android:text="@string/validate"
             android:textColor="@android:color/white"
             android:background="@color/colorPrimary"
-            app:layout_constraintBottom_toBottomOf="@+id/include"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar_create"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/scrollView" />
 
-    <include
-            android:id="@+id/include"
-            layout="@layout/toolbar_create"
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_create"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/ToolbarTheme"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="@string/create_title"
+            app:titleTextColor="@android:color/white" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

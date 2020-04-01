@@ -4,10 +4,7 @@ package com.cheyrouse.gael.realestatemanagerkt.controllers.activities
 import android.view.View
 import android.view.ViewGroup
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.scrollTo
-import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
@@ -44,6 +41,16 @@ class EspressoTest {
 
     @Test
     fun espressoTest() {
+        // Added a sleep statement to match the app's execution delay.
+        // The recommended way to handle such scenarios is to use Espresso idling resources:
+        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
+        Thread.sleep(800)
+
+        // Added a sleep statement to match the app's execution delay.
+        // The recommended way to handle such scenarios is to use Espresso idling resources:
+        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
+        Thread.sleep(700)
+
         val appCompatButton = onView(
             allOf(
                 withId(android.R.id.button1), withText("OK"),
@@ -58,70 +65,100 @@ class EspressoTest {
         )
         appCompatButton.perform(scrollTo(), click())
 
-        pressBack()
+        // Added a sleep statement to match the app's execution delay.
+        // The recommended way to handle such scenarios is to use Espresso idling resources:
+        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
+        Thread.sleep(700)
 
-        val appCompatImageButton = onView(
+        val appCompatEditText = onView(
             allOf(
-                withContentDescription("Open navigation drawer"),
+                withId(R.id.edit_surface),
                 childAtPosition(
                     allOf(
-                        withId(R.id.toolbar),
+                        withId(R.id.constraint_detail),
                         childAtPosition(
-                            withClassName(`is`("androidx.constraintlayout.widget.ConstraintLayout")),
+                            withId(R.id.scrollView),
                             0
                         )
                     ),
-                    1
+                    7
                 ),
                 isDisplayed()
             )
         )
-        appCompatImageButton.perform(click())
+        appCompatEditText.perform(replaceText("500"), closeSoftKeyboard())
 
-        val checkedTextView = onView(
+        val appCompatEditText2 = onView(
             allOf(
-                withId(R.id.design_menu_item_text),
+                withId(R.id.edit_nbr_rooms),
                 childAtPosition(
-                    childAtPosition(
-                        withId(R.id.design_navigation_view),
-                        1
+                    allOf(
+                        withId(R.id.constraint_detail),
+                        childAtPosition(
+                            withId(R.id.scrollView),
+                            0
+                        )
                     ),
-                    0
+                    9
                 ),
                 isDisplayed()
             )
         )
-        checkedTextView.check(matches(isDisplayed()))
+        appCompatEditText2.perform(replaceText("10"), closeSoftKeyboard())
 
-        val textView = onView(
+        val appCompatEditText3 = onView(
             allOf(
-                withId(R.id.menu_search), withContentDescription("Search"),
+                withId(R.id.edit_nbr_bed),
                 childAtPosition(
-                    childAtPosition(
-                        withId(R.id.toolbar),
-                        2
+                    allOf(
+                        withId(R.id.constraint_detail),
+                        childAtPosition(
+                            withId(R.id.scrollView),
+                            0
+                        )
                     ),
-                    3
+                    11
                 ),
                 isDisplayed()
             )
         )
-        textView.check(matches(withText("")))
+        appCompatEditText3.perform(replaceText("8"), closeSoftKeyboard())
 
-        val actionMenuItemView = onView(
+        val appCompatEditText4 = onView(
             allOf(
-                withId(R.id.menu_search), withContentDescription("Search"),
+                withId(R.id.edit_nbr_bath),
                 childAtPosition(
-                    childAtPosition(
-                        withId(R.id.toolbar),
-                        2
+                    allOf(
+                        withId(R.id.constraint_detail),
+                        childAtPosition(
+                            withId(R.id.scrollView),
+                            0
+                        )
                     ),
-                    3
+                    13
                 ),
                 isDisplayed()
             )
         )
-        actionMenuItemView.perform(click())
+        appCompatEditText4.perform(replaceText("5"), closeSoftKeyboard())
+
+        val appCompatTextView = onView(
+            allOf(
+                withId(R.id.picker_entry_date), withText("01-04-2020"),
+                childAtPosition(
+                    allOf(
+                        withId(R.id.constraint_detail),
+                        childAtPosition(
+                            withId(R.id.scrollView),
+                            0
+                        )
+                    ),
+                    49
+                ),
+                isDisplayed()
+            )
+        )
+        appCompatTextView.perform(click())
     }
 
     private fun childAtPosition(

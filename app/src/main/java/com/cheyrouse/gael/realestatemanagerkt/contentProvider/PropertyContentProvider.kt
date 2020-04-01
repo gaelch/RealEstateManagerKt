@@ -1,7 +1,6 @@
 package com.cheyrouse.gael.realestatemanagerkt.contentProvider
 
 import android.content.ContentProvider
-import android.content.ContentUris
 import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
@@ -11,9 +10,8 @@ import com.cheyrouse.gael.realestatemanagerkt.models.Property
 
 class PropertyContentProvider : ContentProvider() {
     // FOR DATA
-    val AUTHORITY = "com.gael.openclassrooms.realestatemanager.provider"
-    val TABLE_NAME = Property::class.java.simpleName
-    val URI_PROPERTY = Uri.parse("content://$AUTHORITY/$TABLE_NAME")
+    private val authority = "com.gael.openclassrooms.realestatemanager.provider"
+    private val tableName = Property::class.java.simpleName
 
 
     override fun insert(p0: Uri, p1: ContentValues?): Uri? {
@@ -48,7 +46,7 @@ class PropertyContentProvider : ContentProvider() {
     }
 
     override fun getType(p0: Uri): String? {
-        return "vnd.android.cursor.item/$AUTHORITY.$TABLE_NAME"
+        return "vnd.android.cursor.item/$authority.$tableName"
     }
 
 }

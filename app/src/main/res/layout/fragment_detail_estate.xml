@@ -70,7 +70,6 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="8dp"
-                        android:text="Unique ! Magnifique maison de maître de 350m² habitables"
                         android:textSize="18sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -96,7 +95,8 @@
                         android:layout_marginTop="20dp"
                         android:src="@drawable/ic_surface_black"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:contentDescription="@string/image"/>
 
                 <TextView
                         android:id="@+id/tv_surface"
@@ -105,7 +105,7 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="-2dp"
                         android:text="@string/surface"
-                        android:textSize="13dp"
+                        android:textSize="13sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toEndOf="@id/icon_surface"
                         app:layout_constraintTop_toTopOf="@+id/icon_surface" />
@@ -116,8 +116,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="4dp"
-                        android:text="detail surface"
-                        android:textSize="13dp"
+                        android:text="@string/detail_surface"
+                        android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="@id/tv_surface"
                         app:layout_constraintTop_toBottomOf="@id/tv_surface" />
 
@@ -130,6 +130,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="20dp"
                         android:src="@drawable/ic_home_black"
+                        android:contentDescription="@string/image"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/text_surface" />
 
@@ -140,7 +141,7 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="-2dp"
                         android:text="@string/nbr_of_rooms"
-                        android:textSize="13dp"
+                        android:textSize="13sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toEndOf="@id/icon_nbr_of_rooms"
                         app:layout_constraintTop_toTopOf="@+id/icon_nbr_of_rooms" />
@@ -151,8 +152,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="4dp"
-                        android:text="4"
-                        android:textSize="13dp"
+                        android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="@id/tv_surface"
                         app:layout_constraintTop_toBottomOf="@+id/tv_nbr_of_rooms" />
 
@@ -164,6 +164,7 @@
                         android:layout_height="24dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="20dp"
+                        android:contentDescription="@string/image"
                         android:src="@drawable/ic_bathtub_black"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/text_nbr_of_rooms" />
@@ -175,7 +176,7 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="-2dp"
                         android:text="@string/nbr_of_bathrooms"
-                        android:textSize="13dp"
+                        android:textSize="13sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toEndOf="@id/icon_nbr_bathrooms"
                         app:layout_constraintTop_toTopOf="@+id/icon_nbr_bathrooms" />
@@ -186,8 +187,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="4dp"
-                        android:text="3"
-                        android:textSize="13dp"
+                        android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="@id/tv_surface"
                         app:layout_constraintTop_toBottomOf="@+id/tv_nbr_bathrooms" />
 
@@ -201,6 +201,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="20dp"
                         android:src="@drawable/ic_bed_black"
+                        android:contentDescription="@string/image"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/text_nbr_bathrooms" />
 
@@ -211,7 +212,7 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="-2dp"
                         android:text="@string/nbr_of_bedrooms"
-                        android:textSize="13dp"
+                        android:textSize="13sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toEndOf="@id/icon_nbr_bedrooms"
                         app:layout_constraintTop_toTopOf="@+id/icon_nbr_bedrooms" />
@@ -222,8 +223,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="4dp"
-                        android:text="3"
-                        android:textSize="13dp"
+                        android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="@id/tv_surface"
                         app:layout_constraintTop_toBottomOf="@+id/tv_nbr_bedrooms" />
 
@@ -235,6 +235,7 @@
                         android:layout_height="24dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginEnd="16dp"
+                        android:contentDescription="@string/image"
                         android:src="@drawable/ic_place_black"
                         app:layout_constraintEnd_toStartOf="@+id/tv_location"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -244,7 +245,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/location"
-                        android:textSize="13dp"
+                        android:textSize="13sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="@+id/text_location_num_street"
                         app:layout_constraintHorizontal_bias="0.0"
@@ -257,8 +258,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:layout_marginEnd="48dp"
-                        android:text="750 av de la République"
-                        android:textSize="13dp"
+                        android:textSize="13sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_location" />
 
@@ -267,8 +267,7 @@
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="48dp"
-                        android:text="route de PAris"
-                        android:textSize="13dp"
+                        android:textSize="13sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/text_location_num_street" />
 
@@ -277,8 +276,7 @@
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="60dp"
-                        android:text="apt 6"
-                        android:textSize="13dp"
+                        android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="@id/text_location_num_street"
                         app:layout_constraintTop_toBottomOf="@id/text_location_additional" />
 
@@ -287,8 +285,7 @@
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="60dp"
-                        android:text="Figeac"
-                        android:textSize="13dp"
+                        android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="@id/text_location_num_type"
                         app:layout_constraintTop_toBottomOf="@id/text_location_num_type" />
 
@@ -297,8 +294,7 @@
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="60dp"
-                        android:text="46100"
-                        android:textSize="13dp"
+                        android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="@id/text_location_town"
                         app:layout_constraintTop_toBottomOf="@id/text_location_town" />
 
@@ -307,9 +303,8 @@
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="60dp"
-                        android:text="FRANCE"
                         android:textAllCaps="true"
-                        android:textSize="13dp"
+                        android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="@id/text_location_cp"
                         app:layout_constraintTop_toBottomOf="@id/text_location_cp" />
 
@@ -324,8 +319,8 @@
                 <com.google.android.gms.maps.MapView
                         android:id="@+id/detail_lite_map"
                         android:name="com.google.android.gms.maps.MapFragment"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
+                        android:layout_width="@dimen/small_map_size"
+                        android:layout_height="@dimen/small_map_size"
                         android:layout_marginEnd="20dp"
                         android:layout_marginBottom="40dp"
                         android:clickable="true"

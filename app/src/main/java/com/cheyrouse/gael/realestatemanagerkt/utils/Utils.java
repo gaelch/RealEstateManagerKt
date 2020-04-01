@@ -1,19 +1,14 @@
 package com.cheyrouse.gael.realestatemanagerkt.utils;
 
 import android.content.Context;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.Build;
-import android.provider.Settings;
-import android.text.TextUtils;
-import android.view.View;
-
-import com.cheyrouse.gael.realestatemanagerkt.models.Address;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import com.cheyrouse.gael.realestatemanagerkt.models.Property;
-
+import org.jetbrains.annotations.NotNull;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -31,8 +26,7 @@ public class Utils {
      * Conversion d'un prix d'un bien immobilier (Dollars vers Euros)
      * NOTE : NE PAS SUPPRIMER, A MONTRER DURANT LA SOUTENANCE
      *
-     * @param dollars
-     * @return
+     * @param dollars <-- to convert dollar to euro
      */
     public static double convertDollarToEuro(double dollars) {
         return Math.round(dollars * 0.812);
@@ -46,10 +40,9 @@ public class Utils {
     /**
      * Conversion de la date d'aujourd'hui en un format plus approprié
      * NOTE : NE PAS SUPPRIMER, A MONTRER DURANT LA SOUTENANCE
-     *
-     * @return
      */
     // return today date
+    @NotNull
     public static String getTodayDate() {
         DateFormat dateFormat = new SimpleDateFormat(TEXT_DATE, Locale.FRANCE);
         return dateFormat.format(new Date());
@@ -58,36 +51,36 @@ public class Utils {
     /**
      * Vérification de la connexion réseau
      * NOTE : NE PAS SUPPRIMER, A MONTRER DURANT LA SOUTENANCE
-     *
-     * @param context
-     * @return
      */
+
     // return true if network is connected
-    public static Boolean isInternetAvailable(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        assert cm != null;
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork != null && activeNetwork.isConnected();
+    @NotNull
+    public static Boolean isInternetAvailable(@NotNull Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        Network network;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            assert connectivityManager != null;
+            network = connectivityManager.getActiveNetwork();
+        } else
+            return true;
+        NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(network);
+        return capabilities != null && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED);
     }
 
     public static boolean isLocationEnabled(Context context) {
-        int locationMode = 0;
-        String locationProviders;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            try {
-                locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
-
-            } catch (Settings.SettingNotFoundException e) {
-                e.printStackTrace();
-                return false;
-            }
-            return locationMode != Settings.Secure.LOCATION_MODE_OFF;
-        } else {
-            locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ALLOWED_GEOLOCATION_ORIGINS);
-            return !TextUtils.isEmpty(locationProviders);
+        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        boolean gps_enabled = false;
+//        boolean network_enabled = false;
+        try {
+            assert lm != null;
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return gps_enabled;
     }
 
+    @NotNull
     public static String getStringDate(int year, int dayOfMonth, int monthOfYear) {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(0);
@@ -95,5 +88,32 @@ public class Utils {
         Date date = cal.getTime();
         SimpleDateFormat sdf = new SimpleDateFormat(TEXT_DATE, Locale.getDefault());
         return sdf.format(date);
+    }
+
+    public static Long getPropertyId(Context ctx, List<Property> propertiesList) {
+        int propId;
+        Prefs prefs = Prefs.get(ctx);
+        int id = prefs.getLastItemClicked();
+        if (id == -2) {
+            propId = propertiesList.size();
+        } else {
+            propId = id + 1;
+        }
+        return (long) propId;
+    }
+
+    public static int getPropertyPosition(Context ctx, List<Property> propertiesList) {
+        int propPosition;
+        Prefs prefs = Prefs.get(ctx);
+        int position = prefs.getLastItemClicked();
+        if (position == -2) {
+            propPosition = propertiesList.size() - 1;
+            prefs.storeLastItemClicked(propPosition);
+        } else if (position == -1) {
+            propPosition = 0;
+        } else {
+            propPosition = position;
+        }
+        return propPosition;
     }
 }

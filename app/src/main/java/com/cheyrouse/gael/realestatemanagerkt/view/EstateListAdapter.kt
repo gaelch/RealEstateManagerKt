@@ -1,14 +1,12 @@
 package com.cheyrouse.gael.realestatemanagerkt.view
 
-import android.content.Context
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
-import com.cheyrouse.gael.realestatemanagerkt.R
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
-import kotlinx.android.synthetic.main.estate_list_item.view.*
+
 
 class EstateListAdapter(private val list: List<Property>, private val clickListener: (Property) -> Unit)
     : RecyclerView.Adapter<EstateListViewHolder>() {

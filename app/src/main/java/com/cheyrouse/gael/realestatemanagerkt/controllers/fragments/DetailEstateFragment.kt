@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.OrientationHelper
 import com.cheyrouse.gael.realestatemanagerkt.R
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.DataInjection
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.PropertyViewModel
-import com.cheyrouse.gael.realestatemanagerkt.models.Picture
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
 import com.cheyrouse.gael.realestatemanagerkt.view.DetailPictureAdapter
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -34,7 +33,6 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
     private lateinit var property: Property
     private var propertyId: Long = 0
     private lateinit var propertyViewModel: PropertyViewModel
-    private lateinit var adapter: DetailPictureAdapter
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var mListener: OnFragmentDetailListener? = null
@@ -72,7 +70,7 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
                 })
             } else {
                 propertyViewModel.getAllProperty()
-                    .observe(this, Observer<List<Property>> { updateAdapterWithDefaultValue(it!!) })
+                    .observe(this, Observer { updateAdapterWithDefaultValue(it!!) })
             }
         }
     }
@@ -86,19 +84,22 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
         text_nbr_bathrooms.text = property.numOfBath.toString()
         text_nbr_bedrooms.text = property.numOfBed.toString()
         text_location_num_street.text = property.address?.address
-        text_location_additional.text = property.address?.additionalAddress
         text_location_town.text = property.address?.city
+        text_location_country.text = property.address?.country
+        text_location_cp.text = property.address?.postalCode
         if (property.address?.apartmentNumber != 0) {
             text_location_num_type.text =
                 resources.getString(R.string.nbr_of_apart) + property.address?.apartmentNumber.toString()
         } else {
             text_location_num_type.visibility = View.GONE
         }
-        text_location_country.text = property.address?.country
-        text_location_cp.text = property.address?.postalCode
+        if(property.address?.additionalAddress?.isNotEmpty()!!){
+            text_location_additional.text = property.address?.additionalAddress
+        }else{
+            text_location_additional.visibility = View.GONE
+        }
         configureRecyclerView()
         addMarkers()
-
     }
 
     @SuppressLint("WrongConstant")
@@ -107,7 +108,6 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
             layoutManager = LinearLayoutManager(context, OrientationHelper.HORIZONTAL, false)
             adapter = DetailPictureAdapter(property.pictures!!){position: Int -> onItemClicked(position)}
         }
-
     }
 
     private fun initViewModelFactory() {

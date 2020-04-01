@@ -19,6 +19,7 @@ import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.SYMBOL_
 import com.cheyrouse.gael.realestatemanagerkt.utils.Utils
 import kotlinx.android.synthetic.main.fragment_mort_gage_calculator.*
 import java.text.NumberFormat
+import java.util.*
 import kotlin.math.pow
 
 /**
@@ -26,7 +27,7 @@ import kotlin.math.pow
  */
 class MortGageCalculatorFragment : Fragment() {
 
-    private val currencyFormat: NumberFormat = NumberFormat.getCurrencyInstance()
+    private val currencyFormat: NumberFormat = NumberFormat.getCurrencyInstance(Locale.US)
 
     private var purchaseAmount = 0.0
     private var contribution = 0.0

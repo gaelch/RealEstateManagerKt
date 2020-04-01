@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <!-- Importation de notre Toolbar -->
+        <!--Toolbar -->
         <include
                 layout="@layout/toolbar"
                 android:layout_width="match_parent"

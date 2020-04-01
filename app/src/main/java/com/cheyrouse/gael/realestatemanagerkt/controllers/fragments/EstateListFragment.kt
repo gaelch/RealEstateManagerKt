@@ -15,7 +15,6 @@ import com.cheyrouse.gael.realestatemanagerkt.R
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.DataInjection
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.PropertyViewModel
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
-import com.cheyrouse.gael.realestatemanagerkt.utils.Constant
 import com.cheyrouse.gael.realestatemanagerkt.utils.Prefs
 import com.cheyrouse.gael.realestatemanagerkt.utils.Utils
 import com.cheyrouse.gael.realestatemanagerkt.view.EstateListAdapter

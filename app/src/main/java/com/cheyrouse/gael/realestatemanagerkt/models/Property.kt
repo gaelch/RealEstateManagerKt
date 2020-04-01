@@ -1,11 +1,11 @@
 package com.cheyrouse.gael.realestatemanagerkt.models
-import android.content.ContentValues
 import android.os.Parcelable
 import androidx.room.*
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 @Entity
+@SuppressWarnings(RoomWarnings.PRIMARY_KEY_FROM_EMBEDDED_IS_DROPPED)
 data class Property(
     @PrimaryKey(autoGenerate = true)
     var id: Long,

@@ -2,7 +2,6 @@ package com.cheyrouse.gael.realestatemanagerkt.controllers.fragments
 
 
 import android.content.Context
-import android.content.Intent
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
@@ -16,7 +15,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.cheyrouse.gael.realestatemanagerkt.BuildConfig
 import com.cheyrouse.gael.realestatemanagerkt.R
-import com.cheyrouse.gael.realestatemanagerkt.controllers.activities.DetailActivity
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.DataInjection
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.PropertyViewModel
 import com.cheyrouse.gael.realestatemanagerkt.models.GeocodeInfo
@@ -109,7 +107,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
             if (p.address?.lat != 0.0 && p.address?.lng != 0.0) {
                 addMarker(p, p.address?.lat!!, p.address?.lng!!)
             } else {
-                if(Utils.isInternetAvailable(activity)){
+                if(activity?.let { Utils.isInternetAvailable(it) }!!){
                     executeRequestToGetAddresses(p)
                 }else{
                     Toast.makeText(activity, "Sorry but internet isn't available. We can't get addresses for properties.", Toast.LENGTH_LONG).show()
@@ -177,7 +175,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
         longitude = location.longitude
         latLon = LatLng(latitude, longitude)
         marker = map.addMarker(latLon.let {
-            MarkerOptions().position(it).title("My Favorite City").title("Me")
+            MarkerOptions().position(it).title("Me")
         })
         map.setOnMarkerClickListener(this)
         if(!initPosition){
@@ -215,7 +213,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
 
     override fun onMarkerClick(p0: Marker?): Boolean {
         p0?.let { getPropertyId(it) }
-        return false
+        return true
     }
 
     private fun getPropertyId(marker: Marker) {

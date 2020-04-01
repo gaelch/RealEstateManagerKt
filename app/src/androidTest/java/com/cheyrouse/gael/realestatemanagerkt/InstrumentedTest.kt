@@ -12,11 +12,9 @@ import com.cheyrouse.gael.realestatemanagerkt.database.RealEstateDatabase
 import com.cheyrouse.gael.realestatemanagerkt.models.Address
 import com.cheyrouse.gael.realestatemanagerkt.models.GeocodeInfo
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
-import com.cheyrouse.gael.realestatemanagerkt.utils.CreateEstateUtils
-import com.cheyrouse.gael.realestatemanagerkt.utils.RealEstateStream
-import com.cheyrouse.gael.realestatemanagerkt.utils.Utils
+import com.cheyrouse.gael.realestatemanagerkt.utils.*
 import io.reactivex.observers.TestObserver
-import junit.framework.Assert.assertEquals
+import junit.framework.TestCase.assertEquals
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.notNullValue
 import org.junit.Assert
@@ -41,7 +39,7 @@ class InstrumentedTest {
     private val uriProperty: Uri = Uri.parse("content://$authority/$tableName")
 
     // DATA SET FOR TEST
-    private val USER_ID: Long = 1
+    private val userId: Long = 1
 
     @Before
     fun setUp() {
@@ -57,7 +55,7 @@ class InstrumentedTest {
     @Test
     fun getItemsWhenNoItemInserted() {
         val cursor: Cursor? = mContentResolver!!.query(
-            ContentUris.withAppendedId(uriProperty, USER_ID), null, null, null, null
+            ContentUris.withAppendedId(uriProperty, userId), null, null, null, null
         ).also {
             assertThat(it, notNullValue())
         }
@@ -71,8 +69,7 @@ class InstrumentedTest {
     }
 
     private val apiKey = BuildConfig.GoogleSecAPIKEY
-    private val address = "21 Avenue Jean Jaurès, 46100 Figeac France"
-
+    private val address = "4 Avenue Jean Jaurès, 46100 Figeac France"
 
     @Test
     fun streamGeocodeInfoTest(){
@@ -112,10 +109,22 @@ class InstrumentedTest {
         )
 
         val checkClass = CreateEstateUtils()
-        val propertyToreturn: Property
-        propertyToreturn = checkClass.checkValueBeforeStoreProperty(InstrumentationRegistry.getInstrumentation().context, "Manor", 300,
+        val propertyToReturn: Property
+        propertyToReturn = checkClass.checkValueBeforeStoreProperty(InstrumentationRegistry.getInstrumentation().context, "Manor", 300,
             9, 4, 2, address,   200000.0,"Julien",
             "16-03-2020","", true, propertyToSend, "NEW YORK","NY 10007", "United States")
-        Assert.assertEquals(propertyToSend, propertyToreturn)
+        Assert.assertEquals(propertyToSend, propertyToReturn)
+    }
+
+    @Test
+    fun getPropertyIdTest(){
+        val propertyList = arrayListOf<Property>()
+        Assert.assertNotNull(Utils.getPropertyId(InstrumentationRegistry.getInstrumentation().context, propertyList))
+    }
+
+    @Test
+    fun getPropertyPositionTest(){
+        val propertyList = arrayListOf<Property>()
+        Assert.assertNotNull(Utils.getPropertyPosition(InstrumentationRegistry.getInstrumentation().context, propertyList))
     }
 }

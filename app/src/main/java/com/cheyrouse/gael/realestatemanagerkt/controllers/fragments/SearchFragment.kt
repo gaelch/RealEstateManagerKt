@@ -20,6 +20,8 @@ import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.DataInjectio
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.PropertyViewModel
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
 import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.listOfSearchTypes
+import com.cheyrouse.gael.realestatemanagerkt.utils.Prefs
+import com.cheyrouse.gael.realestatemanagerkt.utils.SearchUtils
 import com.cheyrouse.gael.realestatemanagerkt.utils.Utils
 import kotlinx.android.synthetic.main.fragment_search.*
 import java.util.*
@@ -60,7 +62,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private var park: Boolean = false
     private var numberOfBath: Int = 0
     private var realtorName: String = ""
-    private var numberofImages: Int = 0
+    private var numberOfImages: Int = 0
 
     companion object {
         fun newInstance(): SearchFragment {
@@ -301,7 +303,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
             ) {
                 val nbrImgStr: String = edit_nbr_images.text.toString()
                 if (nbrImgStr.isNotEmpty()) {
-                    numberofImages = nbrImgStr.toInt()
+                    numberOfImages = nbrImgStr.toInt()
                 }
             }
         })
@@ -348,174 +350,18 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         priceMax = price_max.text.toString().toDouble()
         bedRoomsMin = Integer.decode(bedroom_min.text.toString())
         bedRoomsMax = Integer.decode(bedroom_max.text.toString())
-
         makeSearchQuery()
-//        propertyViewModel.getPropertyBy().observe(this, Observer<List<Property>> {
-//            if (it!!.isNotEmpty()) {
-//                getResult(it)
-//            } else {
-//                Toast.makeText(
-//                    this.context!!,
-//                    resources.getString(R.string.result_is_empty),
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//            }
-//
-//        })
     }
 
     // --- Make Search -- //
     private fun makeSearchQuery() {
-        var query = "SELECT * FROM Property"
-        val args = arrayListOf<Any>()
-        var containsAnd = false
+        val searchUtils = SearchUtils()
+        val query = searchUtils.makeQuery(typeOfProperty,surfaceMin, surfaceMax,
+        roomMin, roomMax, city, postalCode, country, shops, airport, park, subway, school, trainStation,
+        sold, available, priceMin, priceMax, bedRoomsMin, bedRoomsMax, entryDate, maxDate, realtorName,
+        numberOfBath, numberOfImages)
 
-        //Type
-        if (typeOfProperty.isNotEmpty() && typeOfProperty != "ALL") {
-            query += " WHERE type = '$typeOfProperty'"
-            args.add(typeOfProperty)
-            containsAnd = true
-        }
-        //LivingSpace min
-        if (surfaceMin != 0){
-            query += if (containsAnd) " AND " else " WHERE "; containsAnd = true
-            query += "livingSpace >= $surfaceMin"
-            args.add(surfaceMin)
-        }
-        //LivingSpace max
-        if (surfaceMax != 0){
-            query += if (containsAnd) " AND " else " WHERE "; containsAnd = true
-            query += "livingSpace <= $surfaceMax"
-            args.add(surfaceMax)
-        }
-        //Number of min Rooms
-        if (roomMin != 0){
-            query += if (containsAnd) " AND " else " WHERE "; containsAnd = true
-            query +=  "rooms >= $roomMin"
-            args.add(roomMin)
-        }
-        //Number of max Rooms
-        if (roomMax != 0){
-            query += if (containsAnd) " AND " else " WHERE "; containsAnd = true
-            query +="rooms <= $roomMax"
-            args.add(roomMax)
-        }
-        //City
-        if (city != ""){
-            query += if (containsAnd) " AND " else " WHERE "; containsAnd = true
-            query += "city = '$city'"
-            args.add(city)
-        }
-        //Postal code
-        if (postalCode != ""){
-            query += if (containsAnd) " AND " else " WHERE "; containsAnd = true
-            query += "postalCode = '$postalCode'"
-            args.add(postalCode)
-        }
-        //Country
-        if (country != ""){
-            query += if (containsAnd) " AND " else " WHERE "; containsAnd = true
-            query += "country = '$country'"
-            args.add(country)
-        }
-        //Points of interest
-        if ((shops)){
-            query += if (containsAnd) " AND " else " WHERE "; containsAnd = true
-            query += "shops = 1"
-            args.add(shops)
-        }
-        if ((airport)){
-            query += if (containsAnd) " AND " else " WHERE "; containsAnd = true
-            query +=  "airport = 1"
-            args.add(airport)
-        }
-        if ((park)){
-            query += if (containsAnd) " AND " else " WHERE "; containsAnd = true
-            query += "park = 1"
-            args.add(park)
-        }
-        if ((subway)){
-            query += if (containsAnd) " AND " else " WHERE "; containsAnd = true
-            query += "subway = 1"
-            args.add(subway)
-        }
-        if ((school)){
-            query += if (containsAnd) " AND " else " WHERE "; containsAnd = true
-            query += "school = 1"
-            args.add(school)
-        }
-        if ((trainStation)){
-            query += if (containsAnd) " AND " else " WHERE "; containsAnd = true
-            query += "trainStation = 1"
-            args.add(trainStation)
-        }
-        //Status
-        if ((sold)){
-            query += if (containsAnd) " AND " else " WHERE "; containsAnd = true
-            query +=  "status = 0"
-            args.add(sold)
-        }
-        if ((available)){
-            query += if (containsAnd) " AND " else " WHERE "; containsAnd = true
-            query +=  "status = 1"
-            args.add(available)
-        }
-        //Price min
-        if (priceMin != 0.0){
-            query += if (containsAnd) " AND " else " WHERE "; containsAnd = true
-            query += "price >= ${priceMin.toInt()}"
-
-            args.add(priceMin.toInt())
-        }
-        //Price max
-        if (priceMax < 20000000){
-            query += if (containsAnd) " AND " else " WHERE "; containsAnd = true
-            query += "price <= ${priceMax.toInt()}"
-            args.add(priceMax.toInt())
-        }
-        //Number of min Bedrooms
-        if (bedRoomsMin != 0){
-            query += if (containsAnd) " AND " else " WHERE "; containsAnd = true
-            query += "numOfBed >= $bedRoomsMin"
-            args.add(bedRoomsMin)
-        }
-        //Number of max Bedrooms
-        if (bedRoomsMax != 0){
-            query += if (containsAnd) " AND " else " WHERE "; containsAnd = true
-            query += "numOfBed <= $bedRoomsMax"
-            args.add(bedRoomsMax)
-        }
-        //Entry date
-        if (entryDate.isNotEmpty()){
-            query += if (containsAnd) " AND " else " WHERE "; containsAnd = true
-            query += "dateOfEntry >= '$entryDate'"
-            args.add(entryDate)
-        }
-        //Sold date
-        if (maxDate.isNotEmpty()){
-            query += if (containsAnd) " AND " else " WHERE "; containsAnd = true
-            query += "dateOfEntry <= '$maxDate'"
-            args.add(maxDate)
-        }
-        //Realtor name
-        if (realtorName != ""){
-            query += if (containsAnd) " AND " else " WHERE "; containsAnd = true
-            query += "realtor = '$realtorName'"
-            args.add(realtorName)
-        }
-        //Number of Bathrooms
-        if (numberOfBath != 0){
-            query += if (containsAnd) " AND " else " WHERE "
-            query +="numOfBath = $numberOfBath"
-            args.add(numberOfBath)
-        }
-        //Minimum number of Images
-        if (numberofImages != 0){
-            query += if (containsAnd) " AND " else " WHERE "
-            query +="(LENGTH(pictures) - LENGTH(REPLACE(pictures, '{', ''))) >= $numberofImages"
-            args.add(numberofImages)
-        }
-        Log.e("***test args: ", args.toString())
+        Log.e("***test args: ", query)
         propertyViewModel.getPropertyByArgs(query).observe(this, Observer {
             if (it!!.isNotEmpty()) {
                 getResult(it)
@@ -531,7 +377,8 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun getResult(it: List<Property>) {
-        Log.e(resources.getString(R.string.test_query), it.toString())
+        val prefs: Prefs = Prefs.get(activity)
+        prefs.storeIsSearch(true)
         mListener?.onSearchInteraction(it)
     }
 

@@ -5,8 +5,6 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.cheyrouse.gael.realestatemanagerkt.database.dao.AddressDao
-import com.cheyrouse.gael.realestatemanagerkt.database.dao.PictureDao
 import com.cheyrouse.gael.realestatemanagerkt.database.dao.PropertyDao
 import com.cheyrouse.gael.realestatemanagerkt.models.Address
 import com.cheyrouse.gael.realestatemanagerkt.models.Picture
@@ -18,8 +16,6 @@ import com.cheyrouse.gael.realestatemanagerkt.utils.Converters
 abstract class RealEstateDatabase : RoomDatabase() {
 
     abstract fun propertyDao(): PropertyDao
-    abstract fun pictureDao(): PictureDao
-    abstract fun addressDao(): AddressDao
 
     companion object {
         private var INSTANCE: RealEstateDatabase? = null
@@ -31,10 +27,6 @@ abstract class RealEstateDatabase : RoomDatabase() {
                 }
             }
             return INSTANCE as RealEstateDatabase
-        }
-
-        fun destroyInstance(){
-            INSTANCE = null
         }
     }
 }

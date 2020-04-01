@@ -13,11 +13,12 @@
 
     <ImageView
             android:id="@+id/picture_detail"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="@dimen/pictures_detail_size"
+            android:layout_height="@dimen/pictures_detail_size"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:src="@drawable/no_image_original"
+            android:contentDescription="@string/image"
             tools:ignore="RtlSymmetry" />
 
     <TextView

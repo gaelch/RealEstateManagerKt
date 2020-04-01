@@ -2,19 +2,16 @@ package com.cheyrouse.gael.realestatemanagerkt.view
 
 
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.Canvas
-import android.graphics.Rect
 import android.graphics.drawable.Drawable
-import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.cheyrouse.gael.realestatemanagerkt.R
 
 class ListPaddingDecoration(
     context: Context,
-    val paddingLeft: Float,
-    val paddingRight: Int
+    private val paddingLeft: Float,
+    private val paddingRight: Int
 ) : RecyclerView.ItemDecoration() {
 
     private var mDivider: Drawable? = null

@@ -2,6 +2,7 @@ package com.cheyrouse.gael.realestatemanagerkt.controllers.activities
 
 import android.Manifest
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
@@ -16,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.cheyrouse.gael.realestatemanagerkt.R
@@ -23,8 +25,17 @@ import com.cheyrouse.gael.realestatemanagerkt.controllers.fragments.*
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.DataInjection
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.PropertyViewModel
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
+import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.DATA
+import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.FRAGMENT_DETAIL
+import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.FRAGMENT_LIST
+import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.FRAGMENT_MAP
+import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.FRAGMENT_MORT_GAGE
+import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.FRAGMENT_SEARCH
+import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.INTERNET
 import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.IS_DETAIL_CALLING_YOU
 import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.LIST_PROPERTY
+import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.LOCATION
+import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.OPEN_MAPS
 import com.cheyrouse.gael.realestatemanagerkt.utils.Prefs
 import com.cheyrouse.gael.realestatemanagerkt.utils.Utils
 import com.google.android.material.navigation.NavigationView
@@ -32,7 +43,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
 
 
-@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     EstateListFragment.OnFragmentInteractionListener, SearchFragment.OnSearchFragmentListener,
     MapsFragment.OnMapsFragmentListener {
@@ -44,11 +54,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var isDetail: Boolean = false
     private var isTablet: Boolean = false
     private lateinit var prefs: Prefs
+    private var refreshCount: Int = 0
+    private var isDisplaySearch = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        checkScreenOrientation()
         checkSelfPermissions()
         checkDeviceServices()
         configureToolbar()
@@ -58,6 +71,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         getTheBundle()
     }
 
+    // Check if screen is on portrait or landscape
+    private fun checkScreenOrientation() {
+        if (resources.getBoolean(R.bool.portrait_only)) {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
+    }
+
+    //Get intent bundle
+    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     private fun getTheBundle() {
         if (this.intent.extras != null) {
             propertiesList = intent.getParcelableArrayListExtra(LIST_PROPERTY)
@@ -65,18 +87,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             isDetail = intent.getBooleanExtra(IS_DETAIL_CALLING_YOU, false)
         } else {
             initViewModel()
-            configureAndShowFragmentList(null)
         }
     }
 
+    // Check if device is a tablet
     private fun defineIsTablet() {
         prefs = Prefs.get(this)
         if (activity_main_detail_frame_layout != null) {
             isTablet = true
-            prefs.storeLastItemClicked(0)
         } else prefs.storeLastItemClicked(-1)
     }
 
+    // Check permissions
     private fun checkSelfPermissions() {
         val permissions: ArrayList<String> = ArrayList()
         if (ContextCompat.checkSelfPermission(
@@ -120,21 +142,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             askPermissionsList to array
             ActivityCompat.requestPermissions(
                 this,
-                permissions.toArray<String>(askPermissionsList),
+                permissions.toArray(askPermissionsList),
                 1
             )
         }
     }
 
+    // To show alert dialog
     private fun checkDeviceServices() {
         if (!Utils.isInternetAvailable(this)) {
-            showAlertDialog("internet")
+            showAlertDialog(INTERNET)
         }
+
         if (!Utils.isLocationEnabled(this)) {
-            showAlertDialog("location")
+            showAlertDialog(LOCATION)
         }
     }
 
+    // View model initialisation
     private fun initViewModel() {
         val propertyViewModel: PropertyViewModel = ViewModelProviders.of(
             this,
@@ -144,33 +169,41 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .observe(this, Observer { createDefaultList(it!!) })
     }
 
+    // To init list of properties
     private fun createDefaultList(properties: List<Property>) {
         propertiesList = properties
+        configureAndShowFragmentList(null)
         if (propertiesList.isEmpty()) {
-            showAlertDialog("data")
+            showAlertDialog(DATA)
         }
     }
 
+    // Alert dialog dispatch and display
     private fun showAlertDialog(type: String) {
         var title = ""
         var text = ""
         var intent = Intent()
         lateinit var mAlertDialog: AlertDialog
         when (type) {
-            "location" -> {
+            LOCATION -> {
                 title = resources.getString(R.string.gps_title)
                 text = resources.getString(R.string.gps_text)
                 intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
             }
-            "internet" -> {
+            INTERNET -> {
                 title = resources.getString(R.string.internet_title)
                 text = resources.getString(R.string.internet_text)
                 intent = Intent(Settings.ACTION_WIFI_SETTINGS)
             }
-            "data" -> {
+            DATA -> {
                 title = resources.getString(R.string.welcome_title)
                 text = resources.getString(R.string.welcome_text)
                 intent = Intent(this, CreateEstateActivity::class.java)
+            }
+            OPEN_MAPS -> {
+                title = resources.getString(R.string.open_maps_title)
+                text = resources.getString(R.string.open_maps_text)
+                intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
             }
         }
         val builder = AlertDialog.Builder(this)
@@ -185,10 +218,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mAlertDialog = builder.show()
     }
 
+    // Toolbar configuration
     private fun configureToolbar() {
         setSupportActionBar(toolbar)
     }
 
+    // Navigation drawer configuration
     private fun configureNavDrawer() {
         drawer = activity_main_drawer_layout
         toggle = ActionBarDrawerToggle(
@@ -204,11 +239,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
     }
 
+    // Navigation view configuration
     private fun configureNavView() {
         val navigationView: NavigationView = nav_view
         navigationView.setNavigationItemSelectedListener(this)
     }
 
+    // Toolbar menu
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu to use in the action bar
         val inflater = menuInflater
@@ -216,6 +253,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return super.onCreateOptionsMenu(menu)
     }
 
+    // Toolbar menu items
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle presses on the action bar menu items
         when (item.itemId) {
@@ -242,6 +280,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return super.onOptionsItemSelected(item)
     }
 
+    // To open EditFragment
     private fun openEditFragment() {
         val intent = Intent(this, CreateEstateActivity::class.java)
         if (propertyId == 0L) {
@@ -251,59 +290,44 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         startActivity(intent)
     }
 
+    // To launch CreateActivity
     private fun launchCreateActivity() {
         val intent = Intent(this, CreateEstateActivity::class.java)
         startActivity(intent)
     }
 
+    // To launch Search
     private fun launchSearchFragment() {
-        val searchFragment = SearchFragment.newInstance()
-        if (isTablet) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.activity_main_100_frame_layout, searchFragment)
-                .addToBackStack("searchFragment")
-                .commit()
-        } else {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.activity_main_frame_layout, searchFragment)
-                .addToBackStack("searchFragment")
-                .commit()
+        if (!isDisplaySearch) {
+            if (isTablet) {
+                launchFragment(FRAGMENT_SEARCH, 0, R.id.activity_main_100_frame_layout, null)
+            } else {
+                launchFragment(FRAGMENT_SEARCH, 0, R.id.activity_main_frame_layout, null)
+            }
+            isDisplaySearch = true
         }
     }
 
+    // Check if device location is enable
     private fun checkIfLocationIsEnable() {
         if (Utils.isLocationEnabled(this)) {
             // Open search fragment
-            val mapsFragment = MapsFragment.newInstance()
             if (isTablet) {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.activity_main_100_frame_layout, mapsFragment)
-                    .addToBackStack("mapsFragment")
-                    .commit()
+                launchFragment(FRAGMENT_MAP, 0, R.id.activity_main_100_frame_layout, null)
             } else {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.activity_main_frame_layout, mapsFragment)
-                    .addToBackStack("mapsFragment")
-                    .commit()
+                launchFragment(FRAGMENT_MAP, 0, R.id.activity_main_frame_layout, null)
             }
-
         } else {
             showAlertDialogLocation()
         }
     }
 
+    // To display alert dialog location
     private fun showAlertDialogLocation() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Location Alert")
-        builder.setMessage("To open map, enable location please.")
-        builder.setPositiveButton(android.R.string.yes) { _, _ ->
-            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-            startActivity(intent)
-        }
-        builder.setNegativeButton(android.R.string.no) { _, _ -> }
-        builder.show()
+        showAlertDialog(OPEN_MAPS)
     }
 
+    // Navigation drawer menu
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
             R.id.activity_main_drawer_simulator -> {
@@ -329,11 +353,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
+    // To launch Loan Simulator
     private fun launchMortGageSimulator() {
-        val mortGageCalculatorFragment = MortGageCalculatorFragment.newInstance()
-        launchFragment(mortGageCalculatorFragment, "mortGageCalculatorFragment")
+        launchFragment(FRAGMENT_MORT_GAGE, 0, R.id.activity_main_frame_layout, null)
     }
 
+    // OnBackPressed function
     override fun onBackPressed() {
         if (activity_main_drawer_layout.isDrawerOpen(GravityCompat.START)) {
             activity_main_drawer_layout.closeDrawer(GravityCompat.START)
@@ -346,16 +371,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             } else checkBackStack(1)
         }
+        isDisplaySearch = false
     }
 
+    // To manage fragment back stack
     private fun checkBackStack(i: Int) {
         if (supportFragmentManager.backStackEntryCount <= i) {
             showAlertDialogCloseApp()
         } else {
-            super.onBackPressed()
+            if (refreshCount > 0) {
+                while (supportFragmentManager.backStackEntryCount > 2) {
+                    supportFragmentManager.popBackStackImmediate(
+                        supportFragmentManager.backStackEntryCount - 1,
+                        FragmentManager.POP_BACK_STACK_INCLUSIVE
+                    )
+                }
+                refreshCount = 0
+            } else {
+                super.onBackPressed()
+            }
         }
     }
 
+    // Display alert dialog to quit app
     private fun showAlertDialogCloseApp() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Do you want to quit the app?")
@@ -367,30 +405,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         builder.show()
     }
 
+    // Show List on phone or list and detail on tablet
     private fun configureAndShowFragmentList(it: List<Property>?) {
-        var id: Long = 0
-        val listFragment = EstateListFragment.newInstance(it)
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.activity_main_frame_layout, listFragment)
-            .addToBackStack("listFragment")
-            .commit()
+        val id: Long
+        launchFragment(FRAGMENT_LIST, 0, R.id.activity_main_frame_layout, it)
         if (isTablet) {
             if (it != null) {
                 id = it[0].id
+                refreshCount = +1
+            } else {
+                id = Utils.getPropertyId(this, propertiesList)
             }
-            val detailFragment = DetailEstateFragment.newInstance(id)
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.activity_main_detail_frame_layout, detailFragment)
-                .addToBackStack("DetailEstateFragment")
-                .commit()
+            launchFragment(FRAGMENT_DETAIL, id, R.id.activity_main_detail_frame_layout, it)
         }
     }
 
-    override fun onFragmentListInteraction(property: Property) {
-        this.propertyId = property.id
-        configureAndShowFragmentDetail(property)
-    }
-
+    // Show detail
     private fun configureAndShowFragmentDetail(property: Property) {
         if (isTablet) {
             val detailFragment = DetailEstateFragment.newInstance(property.id)
@@ -404,18 +434,40 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    private fun launchFragment(fragment: Fragment, str: String) {
+    private fun launchFragment(
+        tag: String,
+        propId: Long,
+        frameLayout: Int,
+        it: List<Property>?
+    ) {
+        lateinit var fragment: Fragment
+        when (tag) {
+            FRAGMENT_LIST -> fragment = EstateListFragment.newInstance(it)
+            FRAGMENT_SEARCH -> fragment = SearchFragment.newInstance()
+            FRAGMENT_MAP -> fragment = MapsFragment.newInstance()
+            FRAGMENT_DETAIL -> fragment = DetailEstateFragment.newInstance(propId)
+            FRAGMENT_MORT_GAGE -> fragment = MortGageCalculatorFragment.newInstance()
+        }
         supportFragmentManager.beginTransaction()
-            .replace(R.id.activity_main_frame_layout, fragment)
-            .addToBackStack(str)
+            .replace(frameLayout, fragment)
+            .addToBackStack(tag)
             .commit()
     }
 
+    // ListFragment interface
+    override fun onFragmentListInteraction(property: Property) {
+        this.propertyId = property.id
+        configureAndShowFragmentDetail(property)
+    }
+
+    // SearchFragment interface
     override fun onSearchInteraction(it: List<Property>) {
         onBackPressed()
         configureAndShowFragmentList(it)
+        isDisplaySearch = false
     }
 
+    // MapsFragment interface
     override fun onMapsInteraction(idProperty: Long) {
         val intent = Intent(this, DetailActivity::class.java)
         intent.putExtra(DetailActivity.PROPERTY, idProperty)

@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import androidx.room.OnConflictStrategy.REPLACE
 import androidx.sqlite.db.SupportSQLiteQuery
-import com.cheyrouse.gael.realestatemanagerkt.models.Address
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
 
 @Dao
@@ -29,10 +28,6 @@ interface PropertyDao {
 
     @RawQuery(observedEntities = [Property::class])
     fun getPropertyByArgs(query: SupportSQLiteQuery) : LiveData<List<Property>>
-
-    //Test
-    @Query("SELECT * FROM Property WHERE city = 'Livernon'")
-    fun getPropertyBy(): LiveData<List<Property>>
 
     //// ---- FOR CONTENT PROVIDER ---- ////
 

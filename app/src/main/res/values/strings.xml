@@ -2,12 +2,14 @@
     <!--App-->
     <string name="app_name">Real Estate Manager Kt</string>
     <string name="app_title">Real Estate Manager</string>
+    <string name="image">image</string>
 
     <!--Toolbar-->
     <string name="item_search_title">Search</string>
     <string name="item_edit_title">Edit</string>
     <string name="item_create_title">Create</string>
     <string name="create_title">Create Property</string>
+    <string name="edit_title">Edit Property</string>
     <string name="logout_title">Logout</string>
     <string name="map_title">Maps</string>
 
@@ -24,8 +26,11 @@
     <string name="gps_title">Location is not enable !</string>
     <string name="gps_text">To start using the app, turn on location.</string>
     <string name="internet_title">Internet is not available !</string>
+    <string name="close_app_title">Do you want to quit the app ?</string>
     <string name="internet_text">To have access to all the features of the application, an internet connection is necessary.
 Do you want to access the wifi settings?</string>
+    <string name="open_maps_title">Location Alert</string>
+    <string name="open_maps_text">To open map, enable location please.</string>
 
     <!--Detail fragment-->
     <string name="media_title">Media</string>
@@ -60,7 +65,6 @@ Do you want to access the wifi settings?</string>
     <string name="subway">Subway</string>
     <string name="parc">Park</string>
     <string name="train_station">Train station</string>
-    <string name="subway_station">Subway station</string>
     <string name="airport">Airport</string>
     <string name="status">Status</string>
     <string name="available">Available</string>
@@ -106,7 +110,6 @@ Do you want to access the wifi settings?</string>
     <string name="sold_date_text">You must enter an sold date</string>
     <!--SEARCH-->
     <string name="result_is_empty">Sorry but no property matches your search</string>
-    <string name="test_query">test query result</string>
     <!--Notification-->
     <string name="notification_text_create">The new property has been successfully added !</string>
     <string name="notification_text_edit">The property has been successfully edited !</string>
@@ -124,5 +127,8 @@ Do you want to access the wifi settings?</string>
     <string name="_0">0</string>
     <string name="_200">200</string>
     <string name="monthly_payment">Monthly Payment</string>
+    <string name="detail_surface">detail surface</string>
+    <string name="enter_name">Enter Name</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

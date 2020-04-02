@@ -62,6 +62,11 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
         detail_lite_map.onCreate(savedInstanceState)
         detail_lite_map.getMapAsync(this)
         initViewModelFactory()
+        getTheBundle()
+    }
+
+    // Get intent data
+    private fun getTheBundle() {
         if (arguments != null) {
             propertyId = arguments?.getLong(ARG_PARAM)!!
             if (propertyId != 0L) {
@@ -75,6 +80,7 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
         }
     }
 
+    // To set data in views
     @SuppressLint("SetTextI18n")
     private fun initVars(property: Property) {
         this.property = property
@@ -102,6 +108,7 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
         addMarkers()
     }
 
+    // To configure recyclerView
     @SuppressLint("WrongConstant")
     private fun configureRecyclerView() {
         detail_picture_recycler_view.apply {
@@ -110,6 +117,7 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
         }
     }
 
+    // ViewModel initialisation
     private fun initViewModelFactory() {
         this.propertyViewModel = ViewModelProviders.of(this,
                 activity?.applicationContext?.let {
@@ -117,7 +125,7 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
                         it) }).get(PropertyViewModel::class.java)
     }
 
-
+   // Update adapter with default value
     private fun updateAdapterWithDefaultValue(properties: List<Property>) {
         if (properties.isNotEmpty()) {
             property = properties[0]
@@ -126,12 +134,14 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
         }
     }
 
+    // Map configuration
     override fun onMapReady(googleMap: GoogleMap?) {
         if (googleMap != null) {
             map = googleMap
         }
     }
 
+    // Add marker on map
     private fun addMarkers() {
         fusedLocationClient = context?.let { LocationServices.getFusedLocationProviderClient(it) }!!
         map.uiSettings.isZoomControlsEnabled = true
@@ -142,11 +152,13 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
         map.moveCamera(CameraUpdateFactory.newLatLng(myPlace))
     }
 
+    // Markers listener
     override fun onMarkerClick(p0: Marker?): Boolean {
         mListener?.onDetailInteraction(property)
         return true
     }
 
+    // DetailFragment Callback
     interface OnFragmentDetailListener {
         fun onDetailInteraction(property: Property)
     }

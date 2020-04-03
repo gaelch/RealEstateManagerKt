@@ -109,7 +109,7 @@
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="60dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="20dp"
                     android:background="@android:color/white"
                     android:hint="@string/_200"
                     android:inputType="number"
@@ -575,28 +575,26 @@
                     android:id="@+id/tv_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
                     android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
                     android:text="@string/price_tv"
                     android:textColor="@android:color/black"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
                     app:layout_constraintTop_toBottomOf="@+id/line4" />
 
+
             <EditText
                     android:id="@+id/picker_price"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_width="160dp"
+                    android:layout_height="30dp"
                     android:background="@android:color/white"
                     android:gravity="center"
                     android:hint="@string/price"
+                    android:importantForAutofill="no"
                     android:inputType="number"
                     android:textColor="@android:color/black"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/guideline"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_price"
-                    android:importantForAutofill="no" />
-
+                    app:layout_constraintStart_toStartOf="@+id/edit_realtor"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_price" />
 
             <TextView
                     android:id="@+id/tv_entry_date"
@@ -614,7 +612,7 @@
                     android:id="@+id/picker_entry_date"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="20dp"
                     android:layout_marginEnd="240dp"
                     android:background="@android:color/white"
                     android:gravity="center"
@@ -649,6 +647,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
+                    android:layout_marginTop="25dp"
                     android:text="@string/realtor_tv"
                     android:textColor="@android:color/black"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -658,16 +657,15 @@
                     android:id="@+id/edit_realtor"
                     android:layout_width="250dp"
                     android:layout_height="30dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="20dp"
                     android:background="@android:color/white"
                     android:gravity="center"
                     android:hint="@string/name_example"
+                    android:importantForAutofill="no"
                     android:inputType="textPersonName"
                     android:textColor="@android:color/black"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/guideline"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_realtor"
-                    android:importantForAutofill="no" />
+                    app:layout_constraintStart_toEndOf="@+id/tv_realtor"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_realtor" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

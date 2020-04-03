@@ -10,11 +10,16 @@ import com.cheyrouse.gael.realestatemanagerkt.models.Property
 @Dao
 interface PropertyDao {
 
+    //// ---- FOR PROPERTIES ---- ////
+
     @Query("SELECT * from property")
     fun getAllProperties(): LiveData<List<Property>>
 
     @Query("SELECT * from property WHERE id = :propertyId")
     fun getProperty(propertyId:Long): LiveData<Property>
+
+    @RawQuery(observedEntities = [Property::class])
+    fun getPropertyByArgs(query: SupportSQLiteQuery) : LiveData<List<Property>>
 
     @Insert(onConflict = REPLACE)
     fun insertProperty(property: Property)
@@ -22,12 +27,8 @@ interface PropertyDao {
     @Update
     fun updateProperty(property: Property): Int
 
-
     @Query("DELETE FROM property WHERE id = :index")
     fun deleteProperty(index: Long)
-
-    @RawQuery(observedEntities = [Property::class])
-    fun getPropertyByArgs(query: SupportSQLiteQuery) : LiveData<List<Property>>
 
     //// ---- FOR CONTENT PROVIDER ---- ////
 

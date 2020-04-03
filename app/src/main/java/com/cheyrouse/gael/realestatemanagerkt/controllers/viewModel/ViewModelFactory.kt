@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.cheyrouse.gael.realestatemanagerkt.controllers.repositories.PropertyDataRepository
 import java.util.concurrent.Executor
 
+// ViewModelFactory
 class ViewModelFactory(
     private val propertyDataRepository: PropertyDataRepository,
     private val executor: Executor

@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.cheyrouse.gael.realestatemanagerkt.R
+import com.cheyrouse.gael.realestatemanagerkt.RealEstateManagerApplication
 import com.cheyrouse.gael.realestatemanagerkt.controllers.fragments.*
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.DataInjection
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.PropertyViewModel
@@ -36,7 +37,6 @@ import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.IS_DETA
 import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.LIST_PROPERTY
 import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.LOCATION
 import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.OPEN_MAPS
-import com.cheyrouse.gael.realestatemanagerkt.utils.Prefs
 import com.cheyrouse.gael.realestatemanagerkt.utils.Utils
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -53,7 +53,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var propertyId: Long = 0
     private var isDetail: Boolean = false
     private var isTablet: Boolean = false
-    private lateinit var prefs: Prefs
     private var refreshCount: Int = 0
     private var isDisplaySearch = false
 
@@ -92,10 +91,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     // Check if device is a tablet
     private fun defineIsTablet() {
-        prefs = Prefs.get(this)
         if (activity_main_detail_frame_layout != null) {
             isTablet = true
-        } else prefs.storeLastItemClicked(-1)
+        } else RealEstateManagerApplication.setLastItemClicked(-1)
     }
 
     // Check permissions
@@ -398,7 +396,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Do you want to quit the app?")
         builder.setPositiveButton(android.R.string.yes) { _, _ ->
-            prefs.storeLastItemClicked(0)
+            RealEstateManagerApplication.setLastItemClicked(0)
             finishAffinity()
         }
         builder.setNegativeButton(android.R.string.no) { _, _ -> }
@@ -414,7 +412,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 id = it[0].id
                 refreshCount = +1
             } else {
-                id = Utils.getPropertyId(this, propertiesList)
+                id = Utils.getPropertyId(propertiesList)
             }
             launchFragment(FRAGMENT_DETAIL, id, R.id.activity_main_detail_frame_layout, it)
         }

@@ -13,6 +13,7 @@ import retrofit2.http.Query
 
 interface RealEstateService {
 
+    // Http service configuration
     @GET("json?")
     fun getGeocodeInfo(
         @Query("address") address: String,

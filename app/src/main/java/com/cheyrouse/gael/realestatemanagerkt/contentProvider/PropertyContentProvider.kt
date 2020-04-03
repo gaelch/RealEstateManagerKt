@@ -18,6 +18,7 @@ class PropertyContentProvider : ContentProvider() {
         throw IllegalArgumentException("You can't insert row into $p0")
     }
 
+    // For request data
     override fun query(
         p0: Uri,
         p1: Array<out String>?,

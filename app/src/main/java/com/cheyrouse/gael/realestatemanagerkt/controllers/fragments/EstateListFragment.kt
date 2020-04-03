@@ -12,10 +12,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cheyrouse.gael.realestatemanagerkt.R
+import com.cheyrouse.gael.realestatemanagerkt.RealEstateManagerApplication
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.DataInjection
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.PropertyViewModel
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
-import com.cheyrouse.gael.realestatemanagerkt.utils.Prefs
 import com.cheyrouse.gael.realestatemanagerkt.utils.Utils
 import com.cheyrouse.gael.realestatemanagerkt.view.EstateListAdapter
 import com.cheyrouse.gael.realestatemanagerkt.view.ListPaddingDecoration
@@ -30,7 +30,6 @@ class EstateListFragment : Fragment() {
     private var mListener: OnFragmentInteractionListener? = null
     private lateinit var estateListAdapter: EstateListAdapter
     private var listProperty: List<Property>? = null
-    private val prefs: Prefs = Prefs.get(activity)
 
 
     companion object {
@@ -75,6 +74,7 @@ class EstateListFragment : Fragment() {
         getTheBundleIfExist()
     }
 
+    // Get intent data
     private fun getTheBundleIfExist() {
         if (arguments != null) {
             listProperty = Gson().fromJson(
@@ -93,6 +93,7 @@ class EstateListFragment : Fragment() {
         }
     }
 
+    // Configure recycler view
     private fun setListInRecyclerView() {
         estate_picture_recycler_view.apply {
             layoutManager = LinearLayoutManager(activity)
@@ -106,13 +107,14 @@ class EstateListFragment : Fragment() {
         addItemDecoration()
     }
 
+    // Get properties
     private fun getPropertiesAndConfigureRecyclerView() {
         // Observe the model
-        propertyViewModel.getAllProperty().observe(this, Observer { createList(it!!)})
+        propertyViewModel.getAllProperty().observe(this, Observer { displayList(it!!)})
     }
 
-    // To init list of properties
-    private fun createList(properties: List<Property>) {
+    // To set list of properties in recyclerView
+    private fun displayList(properties: List<Property>) {
         listProperty = properties
         // Data bind the recycler view
         estate_picture_recycler_view.apply {
@@ -122,15 +124,16 @@ class EstateListFragment : Fragment() {
             estateListAdapter = adapter as EstateListAdapter
         }
         addItemDecoration()
-        if(!prefs.isSearch){
+        if(!RealEstateManagerApplication.isSearch()){
             estate_picture_recycler_view.post {
-                estate_picture_recycler_view.scrollToPosition(Utils.getPropertyPosition(activity, listProperty))
+                estate_picture_recycler_view.scrollToPosition(Utils.getPropertyPosition(listProperty))
             }
         }else{
-            prefs.storeIsSearch(false)
+            RealEstateManagerApplication.setSearchCalls(false)
         }
     }
 
+    // To add decorations to recyclerView items
     private fun addItemDecoration() {
         estate_picture_recycler_view.addItemDecoration(
             ListPaddingDecoration(
@@ -141,6 +144,7 @@ class EstateListFragment : Fragment() {
         )
     }
 
+    //Init viewModel
     private fun initViewModelFactory() {
         this.propertyViewModel = ViewModelProviders.of(this,
                 activity?.applicationContext?.let {
@@ -151,14 +155,15 @@ class EstateListFragment : Fragment() {
             .get(PropertyViewModel::class.java)
     }
 
-
+    // Items listener
     private fun onItemClicked(property: Property) {
         mListener?.onFragmentListInteraction(property)
-        if (prefs.lastItemClicked != -1) {
+        if (RealEstateManagerApplication.getLastItemClicked()!= -1) {
             estateListAdapter.notifyAdapter()
         }
     }
 
+    // ListFragment callback
     interface OnFragmentInteractionListener {
         fun onFragmentListInteraction(property: Property)
     }

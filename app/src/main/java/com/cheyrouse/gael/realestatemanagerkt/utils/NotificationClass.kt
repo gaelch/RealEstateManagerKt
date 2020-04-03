@@ -11,6 +11,7 @@ import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.NOTIFIC
 
 class NotificationClass {
 
+    // To launch notification when edit or create property is successful
     fun showNotification(context: Context, isEdit: Boolean) {
         val textContent: String = if (isEdit) {
             context.resources.getString(R.string.notification_text_edit)

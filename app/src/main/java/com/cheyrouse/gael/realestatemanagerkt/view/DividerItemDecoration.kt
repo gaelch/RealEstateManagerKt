@@ -16,10 +16,12 @@ class ListPaddingDecoration(
 
     private var mDivider: Drawable? = null
 
+    // init divider
     init {
         mDivider = ContextCompat.getDrawable(context, R.drawable.divider_medium)
     }
 
+    // Draw function
     override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
 
         val left = parent.paddingLeft + paddingLeft

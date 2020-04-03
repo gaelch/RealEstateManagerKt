@@ -9,6 +9,7 @@ import com.cheyrouse.gael.realestatemanagerkt.utils.Converters
 import com.cheyrouse.gael.realestatemanagerkt.utils.CreateEstateUtils
 import com.cheyrouse.gael.realestatemanagerkt.utils.SearchUtils
 import com.cheyrouse.gael.realestatemanagerkt.utils.Utils
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.text.DateFormat
@@ -181,5 +182,17 @@ class UnitTest {
             numberOfBath = 0,
             numberOfImages = 0
         ))
+    }
+
+    @Test
+    fun getPropertyIdTest(){
+        val propertyList = arrayListOf<Property>()
+        Assert.assertNotNull(Utils.getPropertyId(propertyList))
+    }
+
+    @Test
+    fun getPropertyPositionTest(){
+        val propertyList = arrayListOf<Property>()
+        Assert.assertNotNull(Utils.getPropertyPosition(propertyList))
     }
 }

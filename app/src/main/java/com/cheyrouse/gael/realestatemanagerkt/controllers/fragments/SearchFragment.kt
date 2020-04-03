@@ -10,17 +10,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import androidx.lifecycle.Observer
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.cheyrouse.gael.realestatemanagerkt.R
+import com.cheyrouse.gael.realestatemanagerkt.RealEstateManagerApplication
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.DataInjection
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.PropertyViewModel
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
 import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.listOfSearchTypes
-import com.cheyrouse.gael.realestatemanagerkt.utils.Prefs
 import com.cheyrouse.gael.realestatemanagerkt.utils.SearchUtils
 import com.cheyrouse.gael.realestatemanagerkt.utils.Utils
 import kotlinx.android.synthetic.main.fragment_search.*
@@ -108,6 +108,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         configureButtonSearch()
     }
 
+    // ViewModel initialisation
     private fun initViewModel() {
         propertyViewModel = ViewModelProviders.of(
             this,
@@ -115,6 +116,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         ).get(PropertyViewModel::class.java)
     }
 
+    // To configure asked surface
     private fun configureSeekBarSurface() {
         seekBar_surface.setOnRangeSeekbarChangeListener { minValue, maxValue ->
             tvSurfaceResultMin.text = minValue.toString()
@@ -123,6 +125,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     }
 
+    // To configure asked bathrooms number
     private fun configureNbrBathrooms() {
         edit_bath.addTextChangedListener(object : TextWatcher {
 
@@ -146,6 +149,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         })
     }
 
+    // To configure asked realtor name
     private fun configureRealtorName() {
         edt_realtor.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
@@ -164,6 +168,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         })
     }
 
+    // To configure asked sold date
     private fun configureDateSold() {
         picker_sold.setOnClickListener {
             val dpd = context?.let { it1 ->
@@ -183,6 +188,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
+    // To configure asked entry date
     private fun configureDateEntry() {
         picker_entry.text = Utils.getTodayDate()
         picker_entry.setOnClickListener {
@@ -203,6 +209,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
+    // To configure asked bed number
     private fun configureSeekBarBeds() {
         seekBar_nbr_bed.setOnRangeSeekbarChangeListener { minValue, maxValue ->
             bedroom_min.text = minValue.toString()
@@ -210,6 +217,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
+    // To configure asked CheckBox
     private fun configureCheckBox() {
         check_airport.setOnClickListener { airport = true }
         check_school.setOnClickListener { school = true }
@@ -227,6 +235,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
+    // To configure country editText
     private fun configureCountry() {
         edt_country.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
@@ -245,6 +254,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         })
     }
 
+    // To configure postal code editText
     private fun configurePostalCode() {
         edit_postl_code.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
@@ -263,6 +273,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         })
     }
 
+    // To configure Price SeekBar
     private fun configureSeekBarPrice() {
         seekBar_price.setOnRangeSeekbarChangeListener { minValue, maxValue ->
             price_min.text = minValue.toString()
@@ -270,6 +281,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
+    // To configure town editText
     private fun configureEditTown() {
         edit_town.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
@@ -288,6 +300,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         })
     }
 
+    // To configure images number editText
     private fun configureNbrOfImages() {
         edit_nbr_images.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
@@ -309,6 +322,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         })
     }
 
+    // To configure rooms SeekBar
     private fun configureSeekBarNumbRooms() {
         seekBar_nbr_rooms.setOnRangeSeekbarChangeListener { minValue, maxValue ->
             room_min.text = minValue.toString()
@@ -316,6 +330,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
+    // To configure spinner Types
     private fun configureTypes() {
         type_spinner!!.onItemSelectedListener = this
         // Create an ArrayAdapter using a simple spinner layout and languages array
@@ -327,6 +342,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         type_spinner!!.adapter = aa
     }
 
+    // Items listener
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
         typeOfProperty = listOfSearchTypes[position]
     }
@@ -335,12 +351,14 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
 //        typeOfProperty = listOfItems[0]
     }
 
+    // Search Button config
     private fun configureButtonSearch() {
         button_search.setOnClickListener {
             getEntryValues()
         }
     }
 
+    // get values
     private fun getEntryValues() {
         surfaceMin = Integer.decode(tvSurfaceResultMin.text.toString())
         surfaceMax = Integer.decode(tvSurfaceResultMax.text.toString())
@@ -376,12 +394,13 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         })
     }
 
+    // Get search result
     private fun getResult(it: List<Property>) {
-        val prefs: Prefs = Prefs.get(activity)
-        prefs.storeIsSearch(true)
+        RealEstateManagerApplication.setSearchCalls(true)
         mListener?.onSearchInteraction(it)
     }
 
+    // Search interface
     interface OnSearchFragmentListener {
         fun onSearchInteraction(it: List<Property>)
     }

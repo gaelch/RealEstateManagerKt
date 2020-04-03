@@ -41,6 +41,7 @@ class InstrumentedTest {
     // DATA SET FOR TEST
     private val userId: Long = 1
 
+    //Root test
     @Before
     fun setUp() {
         Room.inMemoryDatabaseBuilder(
@@ -52,6 +53,7 @@ class InstrumentedTest {
         mContentResolver = InstrumentationRegistry.getInstrumentation().context.contentResolver
     }
 
+    // Check ContentProvider
     @Test
     fun getItemsWhenNoItemInserted() {
         val cursor: Cursor? = mContentResolver!!.query(
@@ -63,11 +65,13 @@ class InstrumentedTest {
         cursor?.close()
     }
 
+    // Check if internet is available
     @Test
     fun checkIfInternetIsAvailable() {
         assertEquals(true, Utils.isInternetAvailable(InstrumentationRegistry.getInstrumentation().context))
     }
 
+    // Http test
     private val apiKey = BuildConfig.GoogleSecAPIKEY
     private val address = "4 Avenue Jean Jaurès, 46100 Figeac France"
 
@@ -83,6 +87,7 @@ class InstrumentedTest {
         assertEquals("OK", geocodeInfo.status)
     }
 
+    // Check property values
     @Test
     fun checkValueBeforeStorePropertyTest(){
         val address = Address(0, "75 PARK PLACE 8TH FLOOR   ", "",
@@ -114,17 +119,5 @@ class InstrumentedTest {
             9, 4, 2, address,   200000.0,"Julien",
             "16-03-2020","", true, propertyToSend, "NEW YORK","NY 10007", "United States")
         Assert.assertEquals(propertyToSend, propertyToReturn)
-    }
-
-    @Test
-    fun getPropertyIdTest(){
-        val propertyList = arrayListOf<Property>()
-        Assert.assertNotNull(Utils.getPropertyId(InstrumentationRegistry.getInstrumentation().context, propertyList))
-    }
-
-    @Test
-    fun getPropertyPositionTest(){
-        val propertyList = arrayListOf<Property>()
-        Assert.assertNotNull(Utils.getPropertyPosition(InstrumentationRegistry.getInstrumentation().context, propertyList))
     }
 }

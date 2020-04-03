@@ -5,6 +5,8 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
+
+import com.cheyrouse.gael.realestatemanagerkt.RealEstateManagerApplication;
 import com.cheyrouse.gael.realestatemanagerkt.models.Property;
 import org.jetbrains.annotations.NotNull;
 import java.text.DateFormat;
@@ -67,6 +69,7 @@ public class Utils {
         return capabilities != null && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED);
     }
 
+    //To check if location is enable
     public static boolean isLocationEnabled(Context context) {
         LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         boolean gps_enabled = false;
@@ -80,6 +83,7 @@ public class Utils {
         return gps_enabled;
     }
 
+    // Convert date to string
     @NotNull
     public static String getStringDate(int year, int dayOfMonth, int monthOfYear) {
         Calendar cal = Calendar.getInstance();
@@ -90,10 +94,10 @@ public class Utils {
         return sdf.format(date);
     }
 
-    public static Long getPropertyId(Context ctx, List<Property> propertiesList) {
+    // To define last item clicked id
+    public static Long getPropertyId(List<Property> propertiesList) {
         int propId;
-        Prefs prefs = Prefs.get(ctx);
-        int id = prefs.getLastItemClicked();
+        int id = RealEstateManagerApplication.getLastItemClicked();
         if (id == -2) {
             propId = propertiesList.size();
         } else {
@@ -102,13 +106,13 @@ public class Utils {
         return (long) propId;
     }
 
-    public static int getPropertyPosition(Context ctx, List<Property> propertiesList) {
+    // To define last item clicked position
+    public static int getPropertyPosition(List<Property> propertiesList) {
         int propPosition;
-        Prefs prefs = Prefs.get(ctx);
-        int position = prefs.getLastItemClicked();
+        int position = RealEstateManagerApplication.getLastItemClicked();
         if (position == -2) {
             propPosition = propertiesList.size() - 1;
-            prefs.storeLastItemClicked(propPosition);
+            RealEstateManagerApplication.setLastItemClicked(propPosition);
         } else if (position == -1) {
             propPosition = 0;
         } else {

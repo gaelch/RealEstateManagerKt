@@ -8,9 +8,10 @@ import java.util.concurrent.TimeUnit
 
 class RealEstateStream {
 
-        fun streamFetchGeocodeInfo(address:String,key:String):Observable<GeocodeInfo> =
-            RealEstateService.create().getGeocodeInfo(address, key)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .timeout(10,TimeUnit.SECONDS)
-    }
+    // Stream function
+    fun streamFetchGeocodeInfo(address: String, key: String): Observable<GeocodeInfo> =
+        RealEstateService.create().getGeocodeInfo(address, key)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .timeout(10, TimeUnit.SECONDS)
+}

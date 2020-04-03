@@ -7,10 +7,10 @@ import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 import java.util.*
 
-
+// To convert complex data for Room database
 class Converters {
 
-    var gson = Gson()
+    private var gson = Gson()
 
     @TypeConverter
     fun stringToSomeObjectList(data: String?): List<Picture?>? {

@@ -86,66 +86,77 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
         initViewModel()
     }
 
+    // Request user location
     private fun getLocationClient() {
         fusedLocationClient =
             activity?.let { LocationServices.getFusedLocationProviderClient(it) }!!
     }
 
+    // Init ViewModel
     private fun initViewModel() {
         propertyViewModel = ViewModelProviders.of(
             this,
             context?.let { DataInjection.Injection.provideViewModelFactory(it) }
         ).get(PropertyViewModel::class.java)
         propertyViewModel.getAllProperty()
-            .observe(this, Observer { createDefaultList(it!!) })
+            .observe(this, Observer { displayList(it!!) })
     }
 
-    private fun createDefaultList(properties: List<Property>) {
+    // To display items on map
+    private fun displayList(properties: List<Property>) {
         geoCodeList = arrayListOf()
         propertiesList = properties
         for (p: Property in properties) {
             if (p.address?.lat != 0.0 && p.address?.lng != 0.0) {
                 addMarker(p, p.address?.lat!!, p.address?.lng!!)
             } else {
-                if(activity?.let { Utils.isInternetAvailable(it) }!!){
+                if (activity?.let { Utils.isInternetAvailable(it) }!!) {
                     executeRequestToGetAddresses(p)
-                }else{
-                    Toast.makeText(activity, "Sorry but internet isn't available. We can't get addresses for properties.", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(
+                        activity,
+                        "Sorry but internet isn't available. We can't get addresses for properties.",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         }
     }
 
+    // To request location if not exist in database
     private fun executeRequestToGetAddresses(property: Property) {
         val addressStr =
             property.address?.address + "+" + property.address?.city + property.address?.postalCode /*+ "+" + property.address?.additionalAddress +"+"+ property.address?.apartmentNumber +" "+ property.address?.sector*/
         Log.e("test address", addressStr)
         val realEstateStream = RealEstateStream()
-        disposable = realEstateStream.streamFetchGeocodeInfo(addressStr, BuildConfig.GoogleSecAPIKEY)
-            .subscribeWith(object : DisposableObserver<GeocodeInfo?>() {
-                override fun onNext(t: GeocodeInfo) {
-                    geoLocation = t
-                }
+        disposable =
+            realEstateStream.streamFetchGeocodeInfo(addressStr, BuildConfig.GoogleSecAPIKEY)
+                .subscribeWith(object : DisposableObserver<GeocodeInfo?>() {
+                    override fun onNext(t: GeocodeInfo) {
+                        geoLocation = t
+                    }
 
-                override fun onError(e: Throwable) {
-                }
+                    override fun onError(e: Throwable) {
+                    }
 
-                override fun onComplete() {
-                    geoCodeList.add(geoLocation)
-                    val lat: Double = geoLocation.results?.get(0)?.geometry?.location?.lat!!
-                    val lng: Double = geoLocation.results?.get(0)?.geometry?.location?.lng!!
-                    addMarker(property, lat, lng)
-                    storeLocation(property, lat, lng)
-                }
-            })
+                    override fun onComplete() {
+                        geoCodeList.add(geoLocation)
+                        val lat: Double = geoLocation.results?.get(0)?.geometry?.location?.lat!!
+                        val lng: Double = geoLocation.results?.get(0)?.geometry?.location?.lng!!
+                        addMarker(property, lat, lng)
+                        storeLocation(property, lat, lng)
+                    }
+                })
     }
 
+    // Store location in database
     private fun storeLocation(property: Property, lat: Double, lng: Double) {
         property.address?.lat = lat
         property.address?.lng = lng
         propertyViewModel.updateProperty(property)
     }
 
+    // To add markers on map
     private fun addMarker(property: Property, lat: Double, lng: Double) {
         val latLon = LatLng(lat, lng)
         map.addMarker(
@@ -156,18 +167,21 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
         gotoMyLocation()
     }
 
+    // Map root
     override fun onMapReady(googleMap: GoogleMap?) {
         if (googleMap != null) {
             map = googleMap
         }
     }
 
+    // For refresh location
     private fun gotoMyLocation() {
         requestNewLocationData()
     }
 
+    // To refresh map
     private fun getLocation(location: Location) {
-        if(initPosition)marker.remove()
+        if (initPosition) marker.remove()
         val latLon: LatLng
         val latitude: Double?
         val longitude: Double?
@@ -178,7 +192,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
             MarkerOptions().position(it).title("Me")
         })
         map.setOnMarkerClickListener(this)
-        if(!initPosition){
+        if (!initPosition) {
             map.moveCamera(CameraUpdateFactory.newLatLng(latLon))
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLon, 15.0F))
             map.uiSettings.isZoomControlsEnabled = true
@@ -187,8 +201,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
         }
     }
 
+    // Request new location
     private fun requestNewLocationData() {
-        if (progressBar!=null){
+        if (progressBar != null) {
             progressBar.visibility = View.VISIBLE
         }
         mLocationCallback = object : LocationCallback() {
@@ -196,7 +211,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
                 locationResult ?: return
                 for (location in locationResult.locations) {
                     getLocation(location)
-                    if(progressBar!=null){
+                    if (progressBar != null) {
                         progressBar.visibility = View.GONE
                     }
                 }
@@ -211,12 +226,15 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
         )
     }
 
+    // Markers listener
     override fun onMarkerClick(p0: Marker?): Boolean {
         p0?.let { getPropertyId(it) }
         return true
     }
 
     private fun getPropertyId(marker: Marker) {
+        marker.showInfoWindow()
+        map.moveCamera(CameraUpdateFactory.newLatLng(marker.position))
         for (p: Property in propertiesList) {
             val latLng: LatLng =
                 p.address?.lat?.let { p.address!!.lng?.let { it1 -> LatLng(it, it1) } }!!
@@ -230,10 +248,13 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
         super.onStop()
         stopLocationUpdates()
     }
+
+    // To stop locations callback
     private fun stopLocationUpdates() {
         fusedLocationClient.removeLocationUpdates(mLocationCallback)
     }
 
+    // Maps interface
     interface OnMapsFragmentListener {
         fun onMapsInteraction(idProperty: Long)
     }

@@ -1,9 +1,6 @@
 package com.cheyrouse.gael.realestatemanagerkt.utils
 
 import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
 import android.widget.Toast
 import com.cheyrouse.gael.realestatemanagerkt.R
 import com.cheyrouse.gael.realestatemanagerkt.models.Address
@@ -13,6 +10,7 @@ import com.cheyrouse.gael.realestatemanagerkt.models.Property
 
 class CreateEstateUtils {
 
+    // To check values before storage
     fun checkValueBeforeStoreProperty(
         context: Context,
         typeOfProperty: String,
@@ -136,6 +134,7 @@ class CreateEstateUtils {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
 
+    // Set values in property
     fun setValuesInProperty(
         lat: Double,
         lng: Double,
@@ -176,6 +175,7 @@ class CreateEstateUtils {
         return property
     }
 
+    // To make address
     fun checksAddressElements(address: Address, city: String, postalCode: String): String {
         var addressStr = ""
         if (address.address?.isNotEmpty()!! && city.isNotEmpty() && postalCode.isNotEmpty()) {

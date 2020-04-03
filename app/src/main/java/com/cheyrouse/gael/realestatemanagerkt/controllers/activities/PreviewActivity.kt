@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import com.cheyrouse.gael.realestatemanagerkt.R
-import com.cheyrouse.gael.realestatemanagerkt.utils.Prefs
+import com.cheyrouse.gael.realestatemanagerkt.RealEstateManagerApplication
 
 class PreviewActivity : AppCompatActivity() {
 
@@ -19,14 +19,14 @@ class PreviewActivity : AppCompatActivity() {
         }, 800)
     }
 
+    // Launch activity main
     private fun launchMain() {
-        val prefs: Prefs = Prefs.get(this)
-        prefs.storeLastItemClicked(0)
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         this.finish()
     }
 
+    // To define screen orientation
     private fun checkScreenOrientation() {
         if (resources.getBoolean(R.bool.portrait_only)) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT

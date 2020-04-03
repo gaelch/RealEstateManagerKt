@@ -2,6 +2,7 @@ package com.cheyrouse.gael.realestatemanagerkt.utils
 
 class SearchUtils {
 
+    // Search engine to request properties in database
     fun makeQuery(
         typeOfProperty: String, surfaceMin: Int, surfaceMax: Int,
         roomMin: Int, roomMax: Int, city: String, postalCode: String,

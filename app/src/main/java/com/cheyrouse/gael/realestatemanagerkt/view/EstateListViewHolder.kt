@@ -14,17 +14,17 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.cheyrouse.gael.realestatemanagerkt.R
+import com.cheyrouse.gael.realestatemanagerkt.RealEstateManagerApplication
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
-import com.cheyrouse.gael.realestatemanagerkt.utils.Prefs
 import kotlinx.android.synthetic.main.estate_list_item.view.*
 import java.text.NumberFormat
 import java.util.*
 
 
-
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class EstateListViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
     RecyclerView.ViewHolder(inflater.inflate(R.layout.estate_list_item, parent, false)) {
+
     private val mTypeView = itemView.estate_type
     private val mTownView = itemView.estate_town
     private var mPriceView = itemView.estate_price
@@ -38,9 +38,8 @@ class EstateListViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
     @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun bind(property: Property, clickListener: (Property) -> Unit, position: Int) {
-        val prefs: Prefs = Prefs.get(itemView.context)
         currencyFormat.maximumFractionDigits = 0
-        index = prefs.lastItemClicked
+        index = RealEstateManagerApplication.getLastItemClicked()
         mTypeView?.text = property.type
         mTownView?.text = property.address?.city
         mPriceView?.text = currencyFormat.format(property.price)
@@ -58,12 +57,13 @@ class EstateListViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
             mSoldTextView.visibility = View.VISIBLE
         }
         itemView.setOnClickListener {
-            if(index!=-1)prefs.storeLastItemClicked(position)
+            if(index!=-1) RealEstateManagerApplication.setLastItemClicked(position)
             clickListener(property)
         }
         if(index!=-1)setItemColor(position)
     }
 
+    //To set item and view color
     private fun setItemColor(position: Int) {
         if (index == position) {
             constraint.setBackgroundColor(

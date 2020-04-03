@@ -57,6 +57,7 @@ class MortGageCalculatorFragment : Fragment() {
         initViews()
     }
 
+    // To init views
     @SuppressLint("SetTextI18n")
     private fun initViews() {
         editTextPurchasePrice.addTextChangedListener(
@@ -134,6 +135,7 @@ class MortGageCalculatorFragment : Fragment() {
         }
     }
 
+    // Get textWatcher
     private fun getEditableTextWatcher(textView: TextView, type: String): TextWatcher? {
         return object : TextWatcher {
             override fun beforeTextChanged(
@@ -175,7 +177,7 @@ class MortGageCalculatorFragment : Fragment() {
         }
     }
 
-
+    // To calculate monthly payment
     fun getMonthlyPayment(
         interestRate: Double,
         purchaseAmount: Double,
@@ -187,6 +189,7 @@ class MortGageCalculatorFragment : Fragment() {
                 (1 / (1 + monthlyInterestRate).pow(duration * 12.toDouble())))
     }
 
+    // To calculate total
     fun getTotalPayment(monthlyPayment: Double, duration: Int): Double {
         return monthlyPayment * duration * 12
     }

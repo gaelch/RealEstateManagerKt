@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.OrientationHelper
 import com.cheyrouse.gael.realestatemanagerkt.BuildConfig
 import com.cheyrouse.gael.realestatemanagerkt.R
+import com.cheyrouse.gael.realestatemanagerkt.RealEstateManagerApplication
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.DataInjection
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.PropertyViewModel
 import com.cheyrouse.gael.realestatemanagerkt.models.Address
@@ -117,12 +118,14 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         configureButtonValidate()
     }
 
+    // To define screen orientation
     private fun checkScreenOrientation() {
         if (resources.getBoolean(R.bool.portrait_only)) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
     }
 
+    // To check internet and location
     private fun checkDeviceServices() {
         if (!Utils.isInternetAvailable(this)) {
             showAlertDialogDevice("internet")
@@ -132,6 +135,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         }
     }
 
+    // To display AlertDialogs
     private fun showAlertDialogDevice(s: String) {
         var title = ""
         var text = ""
@@ -161,6 +165,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         mAlertDialog = builder.show()
     }
 
+    // init ViewModel
     private fun initViewModelFactory() {
         this.propertyViewModel = ViewModelProviders.of(
             this,
@@ -168,6 +173,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         ).get(PropertyViewModel::class.java)
     }
 
+    //To request intent data
     private fun getTheBundle() {
         propertyId = intent.getLongExtra(DetailActivity.PROPERTY, 0)
         if (propertyId != 0L) {
@@ -179,12 +185,14 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         }
     }
 
+    // Request selected property
     private fun getSelectProperty() {
         propertyViewModel.getProperty(propertyId).observe(this, Observer { property ->
             property?.let { initVars(it) }
         })
     }
 
+    // Variables initialisation to edit property
     private fun initVars(property: Property) {
         this.property = property
         typeOfProperty = property.type
@@ -222,6 +230,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         initWidgets()
     }
 
+    // Views initialisation
     private fun initWidgets() {
         configureRecyclerView()
         val spinnerPosition: Int = listOfTypes.indexOf(typeOfProperty)
@@ -254,6 +263,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
     }
 
 
+    // To init checkbox
     private fun initCheckbox() {
         if (airport) {
             checkbox_airport.isChecked = true
@@ -276,6 +286,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
 
     }
 
+    // Buttons configuration
     private fun configureButtons() {
         button_gallery.setOnClickListener {
             checkPermissionToReadStorage()
@@ -285,6 +296,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         }
     }
 
+    // RecyclerView config
     @SuppressLint("WrongConstant")
     private fun configureRecyclerView() {
         create_picture_recycler_view.apply {
@@ -294,6 +306,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         }
     }
 
+    // Date picker to sold date
     private fun configureDatePickerSold() {
         picker_sold_date.setOnClickListener {
             val dpd = DatePickerDialog(
@@ -319,6 +332,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         }
     }
 
+    //// Date picker to entry date
     private fun configureDatePickerEntry() {
         entryDate = Utils.getStringDate(year, month, day)
         picker_entry_date.text = Utils.getTodayDate()
@@ -344,6 +358,8 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
 
     }
 
+
+    // Realtor name configuration
     private fun configureRealtorName() {
         edit_realtor.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
@@ -362,6 +378,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         })
     }
 
+    // Price config
     private fun configurePrice() {
         picker_price.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
@@ -381,6 +398,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         })
     }
 
+    // Description config
     private fun configureDescription() {
         edit_description.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
@@ -399,6 +417,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         })
     }
 
+    // Address config
     private fun configureAddress() {
         edit_address.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
@@ -418,6 +437,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         })
     }
 
+    // City config
     private fun configureCity() {
         edit_city.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
@@ -436,6 +456,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         })
     }
 
+    // Postal Code config
     private fun configurePostalCode() {
         edit_postal_code.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
@@ -454,6 +475,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         })
     }
 
+    // Country config
     private fun configureCountry() {
         edit_country.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
@@ -472,6 +494,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         })
     }
 
+    // Additional address config
     private fun configureEditAddress() {
         edit_additional_address.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
@@ -490,6 +513,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         })
     }
 
+    // Number of rooms config
     private fun configureNumRooms() {
         edit_nbr_rooms.addTextChangedListener(object : TextWatcher {
 
@@ -513,6 +537,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         })
     }
 
+    // Number of bed config
     private fun configureNumBed() {
         edit_nbr_bed.addTextChangedListener(object : TextWatcher {
 
@@ -536,6 +561,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         })
     }
 
+    // Number of bathrooms config
     private fun configureNumBath() {
         edit_nbr_bath.addTextChangedListener(object : TextWatcher {
 
@@ -559,6 +585,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         })
     }
 
+    // Apart number config
     private fun configureNumApart() {
         edit_apart_nbr.addTextChangedListener(object : TextWatcher {
 
@@ -582,6 +609,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         })
     }
 
+    // Living space config
     private fun configureSurface() {
         edit_surface.addTextChangedListener(object : TextWatcher {
 
@@ -605,6 +633,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         })
     }
 
+    // Toolbar configuration
     private fun configureToolbar() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -613,6 +642,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         }
     }
 
+    // Spinner to select typ of properties
     private fun configureSpinner() {
         type_spinner!!.onItemSelectedListener = this
         // Create an ArrayAdapter using a simple spinner layout and languages array
@@ -639,6 +669,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         }
     }
 
+    // Checkbox clicks
     private fun configureCheckBoxClick() {
         checkbox_airport.setOnClickListener { airport = checkbox_airport.isChecked }
         checkbox_school.setOnClickListener { school = checkbox_school.isChecked }
@@ -660,6 +691,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         }
     }
 
+    // Check storage permission
     private fun checkPermissionToReadStorage() {
         if (ContextCompat.checkSelfPermission(
                 applicationContext,
@@ -677,6 +709,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         }
     }
 
+    // Check access camera permission
     private fun checkPermissionToAccessCamera() {
         if (ContextCompat.checkSelfPermission(
                 applicationContext,
@@ -694,6 +727,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         }
     }
 
+    // To open device camera
     private fun openCamera() {
         val values = ContentValues()
         values.put(MediaStore.Images.Media.TITLE, "New Picture")
@@ -713,6 +747,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         private const val CAMERA_PICK_CODE = 100
     }
 
+    // To open and get picture in gallery
     private fun pickImageFromGallery() {
         //Intent to pick image
         val intent = Intent(Intent.ACTION_PICK)
@@ -737,6 +772,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         }
     }
 
+    // To show picture title dialog
     @SuppressLint("InflateParams")
     private fun showCustomDialog(image_uri: Uri) {
         var picture: Picture?
@@ -767,11 +803,12 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         }
     }
 
+    // Update UI
     private fun updateUi() {
         configureRecyclerView()
-//        this.adapter.notifyDataSetChanged()
     }
 
+    // Button valid configuration
     private fun configureButtonValidate() {
         button_validate.setOnClickListener {
             if (Utils.isInternetAvailable(this)) {
@@ -782,6 +819,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         }
     }
 
+    // To save geolocation in database
     private fun storeLocationToDatabase() {
         progressBar_create.visibility = View.VISIBLE
         val addressStr = checkClass.checksAddressElements(address, city, postalCode)
@@ -806,6 +844,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         }
     }
 
+    // To set values in object
     private fun setValuesInProperty() {
         progressBar_create.visibility = View.GONE
         lat = geoLocation.results?.get(0)?.geometry?.location?.lat!!
@@ -819,6 +858,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         returnToHome()
     }
 
+    // Show alertDialog if internet is not available
     private fun showAlertDialog() {
         val builder = AlertDialog.Builder(this)
         //set title for alert dialog
@@ -842,6 +882,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         alertDialog.show()
     }
 
+    // Check empty values
     private fun checkValues() {
         if (checkClass.checkValueBeforeStoreProperty(
                 this, typeOfProperty, surface, numberOfRooms, numberOfBed,
@@ -858,6 +899,7 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         }
     }
 
+    // Listener to remove pictures
     private fun onItemClicked(position: Int) {
         pictures.remove(pictures[position])
         configureRecyclerView()
@@ -869,10 +911,10 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         notificationClass.showNotification(this, isEdit)
     }
 
+    //To display list with new or updated property
     private fun returnToHome() {
-        val prefs: Prefs = Prefs.get(this)
         if(!isEdit){
-            prefs.storeLastItemClicked(-2)
+            RealEstateManagerApplication.setLastItemClicked(-2)
         }
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)

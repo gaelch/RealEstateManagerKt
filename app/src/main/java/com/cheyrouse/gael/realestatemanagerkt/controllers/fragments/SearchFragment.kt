@@ -24,6 +24,7 @@ import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.listOfS
 import com.cheyrouse.gael.realestatemanagerkt.utils.SearchUtils
 import com.cheyrouse.gael.realestatemanagerkt.utils.Utils
 import kotlinx.android.synthetic.main.fragment_search.*
+import kotlinx.android.synthetic.main.fragment_search.type_spinner
 import java.util.*
 
 
@@ -91,21 +92,21 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
-        configureSeekBarSurface()
         configureTypes()
-        configureSeekBarNumbRooms()
         configureEditTown()
-        configureSeekBarPrice()
         configurePostalCode()
         configureCountry()
         configureCheckBox()
-        configureSeekBarBeds()
         configureDateEntry()
         configureDateSold()
         configureRealtorName()
         configureNbrBathrooms()
         configureNbrOfImages()
+        configureSeekBarSurface()
+        configureSeekBarNumbRooms()
+        configureSeekBarPrice()
         configureButtonSearch()
+        configureSeekBarBeds()
     }
 
     // ViewModel initialisation
@@ -119,10 +120,10 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
     // To configure asked surface
     private fun configureSeekBarSurface() {
         seekBar_surface.setOnRangeSeekbarChangeListener { minValue, maxValue ->
+            getEditTextFocus()
             tvSurfaceResultMin.text = minValue.toString()
             tvSurfaceResultMax.text = maxValue.toString()
         }
-
     }
 
     // To configure asked bathrooms number
@@ -212,6 +213,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
     // To configure asked bed number
     private fun configureSeekBarBeds() {
         seekBar_nbr_bed.setOnRangeSeekbarChangeListener { minValue, maxValue ->
+            getEditTextFocus()
             bedroom_min.text = minValue.toString()
             bedroom_max.text = maxValue.toString()
         }
@@ -276,6 +278,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
     // To configure Price SeekBar
     private fun configureSeekBarPrice() {
         seekBar_price.setOnRangeSeekbarChangeListener { minValue, maxValue ->
+            getEditTextFocus()
             price_min.text = minValue.toString()
             price_max.text = maxValue.toString()
         }
@@ -325,9 +328,19 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
     // To configure rooms SeekBar
     private fun configureSeekBarNumbRooms() {
         seekBar_nbr_rooms.setOnRangeSeekbarChangeListener { minValue, maxValue ->
+            getEditTextFocus()
             room_min.text = minValue.toString()
             room_max.text = maxValue.toString()
         }
+    }
+
+    private fun getEditTextFocus() {
+        when{
+            edit_town.hasFocus() -> edit_town.clearFocus()
+            edit_postl_code.hasFocus() -> edit_postl_code.clearFocus()
+            edt_country.hasFocus() -> edt_country.clearFocus()
+        }
+
     }
 
     // To configure spinner Types
@@ -335,7 +348,13 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         type_spinner!!.onItemSelectedListener = this
         // Create an ArrayAdapter using a simple spinner layout and languages array
         val aa =
-            activity?.let { ArrayAdapter(it, android.R.layout.simple_spinner_item, listOfSearchTypes) }
+            activity?.let {
+                ArrayAdapter(
+                    it,
+                    android.R.layout.simple_spinner_item,
+                    listOfSearchTypes
+                )
+            }
         // Set layout to use when the list of choices appear
         aa?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         // Set Adapter to Spinner
@@ -374,10 +393,33 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
     // --- Make Search -- //
     private fun makeSearchQuery() {
         val searchUtils = SearchUtils()
-        val query = searchUtils.makeQuery(typeOfProperty,surfaceMin, surfaceMax,
-        roomMin, roomMax, city, postalCode, country, shops, airport, park, subway, school, trainStation,
-        sold, available, priceMin, priceMax, bedRoomsMin, bedRoomsMax, entryDate, maxDate, realtorName,
-        numberOfBath, numberOfImages)
+        val query = searchUtils.makeQuery(
+            typeOfProperty,
+            surfaceMin,
+            surfaceMax,
+            roomMin,
+            roomMax,
+            city,
+            postalCode,
+            country,
+            shops,
+            airport,
+            park,
+            subway,
+            school,
+            trainStation,
+            sold,
+            available,
+            priceMin,
+            priceMax,
+            bedRoomsMin,
+            bedRoomsMax,
+            entryDate,
+            maxDate,
+            realtorName,
+            numberOfBath,
+            numberOfImages
+        )
 
         Log.e("***test args: ", query)
         propertyViewModel.getPropertyByArgs(query).observe(this, Observer {

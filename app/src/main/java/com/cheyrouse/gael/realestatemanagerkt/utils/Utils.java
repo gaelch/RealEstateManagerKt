@@ -5,7 +5,6 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
-
 import com.cheyrouse.gael.realestatemanagerkt.RealEstateManagerApplication;
 import com.cheyrouse.gael.realestatemanagerkt.models.Property;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +14,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
 import static com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.TEXT_DATE;
 
 /**

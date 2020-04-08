@@ -1,6 +1,7 @@
 package com.cheyrouse.gael.realestatemanagerkt.contentProvider
 
 import android.content.ContentProvider
+import android.content.ContentUris
 import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
@@ -27,7 +28,8 @@ class PropertyContentProvider : ContentProvider() {
         p4: String?
     ): Cursor? {
         if (context != null){
-            val cursor = RealEstateDatabase.getInstance(context!!).propertyDao().getAllPropertyWithCursor()
+            val index:Long = ContentUris.parseId(p0)
+            val cursor = RealEstateDatabase.getInstance(context!!).propertyDao().getPropertyWithCursor(index)
             cursor.setNotificationUri(context!!.contentResolver,p0)
             return cursor
         }

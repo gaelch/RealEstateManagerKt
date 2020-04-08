@@ -34,7 +34,4 @@ interface PropertyDao {
 
     @Query("SELECT * FROM property WHERE id = :idProperty")
     fun getPropertyWithCursor(idProperty: Long): Cursor
-
-    @Query("SELECT * FROM property")
-    fun getAllPropertyWithCursor(): Cursor
 }

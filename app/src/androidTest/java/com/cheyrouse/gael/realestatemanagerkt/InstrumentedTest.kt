@@ -130,26 +130,11 @@ class InstrumentedTest {
     @Test
     fun checkIfInternetIsAvailableTest() {
         assertNotNull(Utils.isInternetAvailable(context))
-        val connectivityManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val network: Network?
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            network = Objects.requireNonNull(connectivityManager).activeNetwork
-            val capabilities = connectivityManager.getNetworkCapabilities(network)
-            if (capabilities != null && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)) {
-                assertTrue(Utils.isInternetAvailable(context))
-            } else {
-                assertFalse(Utils.isInternetAvailable(context))
-            }
-        }
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
-            val activeNetwork =
-                Objects.requireNonNull(connectivityManager).activeNetworkInfo
-            if (activeNetwork != null && activeNetwork.isConnected) {
-                assertTrue(Utils.isInternetAvailable(context))
-            }else{
-                assertFalse(Utils.isInternetAvailable(context))
-            }
+
+        if(Utils.isInternetAvailable(context)){
+            assertTrue(Utils.isInternetAvailable(context))
+        }else{
+            assertFalse(Utils.isInternetAvailable(context))
         }
     }
 

@@ -2,7 +2,6 @@ package com.cheyrouse.gael.realestatemanagerkt.controllers.activities
 
 import android.Manifest
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
@@ -60,7 +59,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        checkScreenOrientation()
         checkSelfPermissions()
         checkDeviceServices()
         configureToolbar()
@@ -68,13 +66,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         configureNavDrawer()
         configureNavView()
         getTheBundle()
-    }
-
-    // Check if screen is on portrait or landscape
-    private fun checkScreenOrientation() {
-        if (resources.getBoolean(R.bool.portrait_only)) {
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        }
     }
 
     //Get intent bundle
@@ -93,7 +84,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun defineIsTablet() {
         if (activity_main_detail_frame_layout != null) {
             isTablet = true
-        } else RealEstateManagerApplication.setLastItemClicked(-1)
+        }
     }
 
     // Check permissions
@@ -264,11 +255,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 launchSearchFragment()
                 return true
             }
-            R.id.menu_edit -> {
-                // Open edit fragment
-                openEditFragment()
-                return true
-            }
             R.id.menu_create -> {
                 // Open create activity
                 launchCreateActivity()
@@ -278,15 +264,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return super.onOptionsItemSelected(item)
     }
 
-    // To open EditFragment
-    private fun openEditFragment() {
-        val intent = Intent(this, CreateEstateActivity::class.java)
-        if (propertyId == 0L) {
-            propertyId = propertiesList[0].id
-        }
-        intent.putExtra(DetailActivity.PROPERTY, propertyId)
-        startActivity(intent)
-    }
 
     // To launch CreateActivity
     private fun launchCreateActivity() {
@@ -334,10 +311,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.activity_main_drawer_create -> {
                 // Open create activity
                 launchCreateActivity()
-            }
-            R.id.activity_main_drawer_edit -> {
-                // Open edit fragment
-                openEditFragment()
             }
             R.id.activity_main_drawer_search -> {
                 // Open search fragment

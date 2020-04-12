@@ -2,9 +2,18 @@ package com.cheyrouse.gael.realestatemanagerkt
 
 import android.content.ContentResolver
 import android.content.ContentUris
+import android.content.ContentValues
+import android.content.Context
 import android.database.Cursor
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
 import android.net.Uri
+import android.os.Build
+import android.telephony.TelephonyManager
 import androidx.room.Room
+import androidx.sqlite.db.SimpleSQLiteQuery
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -12,15 +21,17 @@ import com.cheyrouse.gael.realestatemanagerkt.database.RealEstateDatabase
 import com.cheyrouse.gael.realestatemanagerkt.models.Address
 import com.cheyrouse.gael.realestatemanagerkt.models.GeocodeInfo
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
-import com.cheyrouse.gael.realestatemanagerkt.utils.*
+import com.cheyrouse.gael.realestatemanagerkt.utils.CreateEstateUtils
+import com.cheyrouse.gael.realestatemanagerkt.utils.RealEstateStream
+import com.cheyrouse.gael.realestatemanagerkt.utils.Utils
 import io.reactivex.observers.TestObserver
-import junit.framework.TestCase.assertEquals
-import org.hamcrest.CoreMatchers.`is`
+import junit.framework.TestCase.*
 import org.hamcrest.CoreMatchers.notNullValue
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.*
 
 
 /**
@@ -28,6 +39,7 @@ import org.junit.runner.RunWith
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
+@Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 @RunWith(AndroidJUnit4::class)
 
 class InstrumentedTest {
@@ -37,62 +49,136 @@ class InstrumentedTest {
     private val authority = "com.gael.openclassrooms.realestatemanager.provider"
     private val tableName = Property::class.java.simpleName
     private val uriProperty: Uri = Uri.parse("content://$authority/$tableName")
+    private lateinit var db: RealEstateDatabase
+    private var telephonyManager: TelephonyManager? = null
+    private lateinit var context: Context
+    private val apiKey = BuildConfig.GoogleSecAPIKEY
+    private val address = "4 Avenue Jean Jaurès, 46100 Figeac France"
 
     // DATA SET FOR TEST
-    private val userId: Long = 1
+    private val estateId: Long = 10001
+    private val estateId2: Long = 10000
 
     //Root test
     @Before
     fun setUp() {
-        Room.inMemoryDatabaseBuilder(
+        db = Room.inMemoryDatabaseBuilder(
                 InstrumentationRegistry.getInstrumentation().context,
                 RealEstateDatabase::class.java
             )
             .allowMainThreadQueries()
             .build()
+        context = InstrumentationRegistry.getInstrumentation().context
         mContentResolver = InstrumentationRegistry.getInstrumentation().context.contentResolver
+        telephonyManager = ApplicationProvider.getApplicationContext<Context>()
+            .getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
     }
 
-    // Check ContentProvider
+    // Check ContentProvider when no item inserted
     @Test
     fun getItemsWhenNoItemInserted() {
         val cursor: Cursor? = mContentResolver!!.query(
-            ContentUris.withAppendedId(uriProperty, userId), null, null, null, null
+            ContentUris.withAppendedId(uriProperty, estateId2), null, null, null, null
         ).also {
             assertThat(it, notNullValue())
         }
-        assertThat(cursor?.count, `is`(notNullValue()))
+        assertEquals(0, cursor?.count)
         cursor?.close()
+    }
+
+    // Get property and test contentProvider return
+    @Test
+    fun insertAndGetItem() {
+        mContentResolver?.insert(uriProperty, createEstate())
+        val cursor = mContentResolver!!.query(
+            ContentUris.withAppendedId(uriProperty, estateId),
+            null,
+            null,
+            null,
+            null
+        )
+        assertNotNull(cursor)
+        assertEquals(1, cursor?.count)
+        assertEquals(true, cursor?.moveToFirst())
+        assertEquals("Manor", cursor?.getString(cursor.getColumnIndexOrThrow("type")))
+
+        //for clean database
+        db.query(SimpleSQLiteQuery("DELETE FROM property WHERE id = $estateId"))
+    }
+
+    // Create property to test
+    private fun createEstate(): ContentValues {
+        val values = ContentValues()
+        values.put("id", estateId)
+        values.put("type", "Manor")
+        values.put("price", 500000.0)
+        values.put("surface", 550)
+        values.put("roomNumber", 12)
+        values.put("bathroomNumber", 4)
+        values.put("bedroomNumber", 6)
+        values.put("park", false)
+        values.put("shops", false)
+        values.put("school", false)
+        values.put("status", true)
+        values.put("dateOfEntry", "16-03-2020")
+        values.put("dateOfSale", "")
+        values.put("realtor", "Julien")
+        return values
     }
 
     // Check if internet is available
     @Test
-    fun checkIfInternetIsAvailable() {
-        assertEquals(true, Utils.isInternetAvailable(InstrumentationRegistry.getInstrumentation().context))
+    fun checkIfInternetIsAvailableTest() {
+        assertNotNull(Utils.isInternetAvailable(context))
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network: Network?
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            network = Objects.requireNonNull(connectivityManager).activeNetwork
+            val capabilities = connectivityManager.getNetworkCapabilities(network)
+            if (capabilities != null && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)) {
+                assertTrue(Utils.isInternetAvailable(context))
+            } else {
+                assertFalse(Utils.isInternetAvailable(context))
+            }
+        }
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
+            val activeNetwork =
+                Objects.requireNonNull(connectivityManager).activeNetworkInfo
+            if (activeNetwork != null && activeNetwork.isConnected) {
+                assertTrue(Utils.isInternetAvailable(context))
+            }else{
+                assertFalse(Utils.isInternetAvailable(context))
+            }
+        }
     }
 
-    // Http test
-    private val apiKey = BuildConfig.GoogleSecAPIKEY
-    private val address = "4 Avenue Jean Jaurès, 46100 Figeac France"
-
+    //
     @Test
-    fun streamGeocodeInfoTest(){
-        val geocodeObservable = RealEstateStream().streamFetchGeocodeInfo(address,apiKey)
+    fun checkIf_InternetIsAvailable() {
+        val geocodeObservable = RealEstateStream().streamFetchGeocodeInfo(address, apiKey)
         val testObserver = TestObserver<GeocodeInfo>()
         geocodeObservable.subscribeWith(testObserver)
             .assertNoErrors()
             .assertNoTimeout()
             .awaitTerminalEvent()
         val geocodeInfo = testObserver.values()[0]
-        assertEquals("OK", geocodeInfo.status)
+        if (geocodeInfo.status == "OK") {
+            assertEquals(true, Utils.isInternetAvailable(context))
+        } else {
+            assertEquals(false, Utils.isInternetAvailable(context))
+        }
+
     }
 
     // Check property values
     @Test
-    fun checkValueBeforeStorePropertyTest(){
-        val address = Address(0, "75 PARK PLACE 8TH FLOOR   ", "",
+    fun checkValueBeforeStorePropertyTest() {
+        val address = Address(
+            0, "75 PARK PLACE 8TH FLOOR   ", "",
             2, "NEW YORK", "NY 10007", "United States",
-            40.7808, -73.9772, "")
+            40.7808, -73.9772, ""
+        )
         val propertyToSend = Property(
             0, "Manor", "cute house", 200000.0, 300, 9,
             shops = false,
@@ -107,17 +193,34 @@ class InstrumentedTest {
             realtor = "Julien",
             numOfBath = 2,
             numOfBed = 4,
-            address = Address(0, "75 PARK PLACE 8TH FLOOR   ", "",
+            address = Address(
+                0, "75 PARK PLACE 8TH FLOOR   ", "",
                 2, "NEW YORK", "NY 10007", "United States",
-                40.7808, -73.9772, ""),
+                40.7808, -73.9772, ""
+            ),
             pictures = emptyList()
         )
 
         val checkClass = CreateEstateUtils()
         val propertyToReturn: Property
-        propertyToReturn = checkClass.checkValueBeforeStoreProperty(InstrumentationRegistry.getInstrumentation().context, "Manor", 300,
-            9, 4, 2, address,   200000.0,"Julien",
-            "16-03-2020","", true, propertyToSend, "NEW YORK","NY 10007", "United States")
+        propertyToReturn = checkClass.checkValueBeforeStoreProperty(
+            InstrumentationRegistry.getInstrumentation().context, "Manor", 300,
+            9, 4, 2, address, 200000.0, "Julien",
+            "16-03-2020", "", true, propertyToSend, "NEW YORK", "NY 10007", "United States"
+        )
         Assert.assertEquals(propertyToSend, propertyToReturn)
+    }
+
+    // Http test
+    @Test
+    fun streamGeocodeInfoTest() {
+        val geocodeObservable = RealEstateStream().streamFetchGeocodeInfo(address, apiKey)
+        val testObserver = TestObserver<GeocodeInfo>()
+        geocodeObservable.subscribeWith(testObserver)
+            .assertNoErrors()
+            .assertNoTimeout()
+            .awaitTerminalEvent()
+        val geocodeInfo = testObserver.values()[0]
+        assertEquals("OK", geocodeInfo.status)
     }
 }

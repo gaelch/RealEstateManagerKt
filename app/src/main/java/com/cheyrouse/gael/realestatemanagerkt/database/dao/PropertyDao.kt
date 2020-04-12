@@ -22,7 +22,7 @@ interface PropertyDao {
     fun getPropertyByArgs(query: SupportSQLiteQuery) : LiveData<List<Property>>
 
     @Insert(onConflict = REPLACE)
-    fun insertProperty(property: Property)
+    fun insertProperty(property: Property): Long
 
     @Update
     fun updateProperty(property: Property): Int

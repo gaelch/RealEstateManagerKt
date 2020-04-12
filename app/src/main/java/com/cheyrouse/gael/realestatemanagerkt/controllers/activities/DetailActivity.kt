@@ -40,19 +40,11 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
-        checkScreenOrientation()
         configureToolbar()
         configureNavDrawer()
         configureNavView()
         getTheBundle()
         configureAndShowFragmentDetail()
-    }
-
-    // To define screen orientation
-    private fun checkScreenOrientation() {
-        if (resources.getBoolean(R.bool.portrait_only)) {
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        }
     }
 
     // Get data
@@ -109,14 +101,9 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 launchSearchFragment()
                 return true
             }
-            R.id.menu_edit -> {
-                // Open edit fragment
-                launchCreateActivity(propertyId)
-                return true
-            }
             R.id.menu_create -> {
                 // Open create activity
-                launchCreateActivity(null)
+                launchCreateActivity()
                 return true
             }
         }
@@ -187,10 +174,7 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 launchMortGageSimulator()
             }
             R.id.activity_main_drawer_create -> {
-                launchCreateActivity(null)
-            }
-            R.id.activity_main_drawer_edit -> {
-                launchCreateActivity(propertyId)
+                launchCreateActivity()
             }
             R.id.activity_main_drawer_search -> {
                 launchSearchFragment()
@@ -204,11 +188,8 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     }
 
     // To launch CreateActivity
-    private fun launchCreateActivity(id: Long?) {
+    private fun launchCreateActivity() {
         val intent = Intent(this, CreateEstateActivity::class.java)
-        if (id != null) {
-            intent.putExtra(PROPERTY, propertyId)
-        }
         startActivity(intent)
     }
 

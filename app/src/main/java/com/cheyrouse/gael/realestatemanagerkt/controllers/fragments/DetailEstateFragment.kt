@@ -2,6 +2,7 @@ package com.cheyrouse.gael.realestatemanagerkt.controllers.fragments
 
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +14,8 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.OrientationHelper
 import com.cheyrouse.gael.realestatemanagerkt.R
+import com.cheyrouse.gael.realestatemanagerkt.controllers.activities.CreateEstateActivity
+import com.cheyrouse.gael.realestatemanagerkt.controllers.activities.DetailActivity
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.DataInjection
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.PropertyViewModel
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
@@ -25,7 +28,16 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.android.synthetic.main.activity_create_estate.*
 import kotlinx.android.synthetic.main.fragment_detail_estate.*
+import kotlinx.android.synthetic.main.fragment_detail_estate.checkbox_airport
+import kotlinx.android.synthetic.main.fragment_detail_estate.checkbox_park
+import kotlinx.android.synthetic.main.fragment_detail_estate.checkbox_school
+import kotlinx.android.synthetic.main.fragment_detail_estate.checkbox_shops
+import kotlinx.android.synthetic.main.fragment_detail_estate.checkbox_subway
+import kotlinx.android.synthetic.main.fragment_detail_estate.checkbox_train_station
+import java.text.NumberFormat
+import java.util.*
 
 
 class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
@@ -36,6 +48,7 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var mListener: OnFragmentDetailListener? = null
+    private val currencyFormat: NumberFormat = NumberFormat.getCurrencyInstance(Locale.US)
 
     companion object {
         private const val ARG_PARAM = "property"
@@ -84,15 +97,18 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
     @SuppressLint("SetTextI18n")
     private fun initVars(property: Property) {
         this.property = property
-        tv_description_text.text = property.description
-        text_surface.text = property.livingSpace.toString()
-        text_nbr_of_rooms.text = property.rooms.toString()
-        text_nbr_bathrooms.text = property.numOfBath.toString()
-        text_nbr_bedrooms.text = property.numOfBed.toString()
-        text_location_num_street.text = property.address?.address
-        text_location_town.text = property.address?.city
-        text_location_country.text = property.address?.country
-        text_location_cp.text = property.address?.postalCode
+        text_type.text = property.type
+        if (property.description != null) tv_description_text.text = property.description
+        if (property.livingSpace != null)text_surface.text = property.livingSpace.toString()
+        if (property.rooms != null) text_nbr_of_rooms.text = property.rooms.toString()
+        if (property.numOfBath != null)text_nbr_bathrooms.text = property.numOfBath.toString()
+        if (property.numOfBed != null)text_nbr_bedrooms.text = property.numOfBed.toString()
+        if (property.address?.address != null)text_location_num_street.text = property.address?.address
+        if (property.address?.city != null)text_location_town.text = property.address?.city
+        if (property.address?.country != null)text_location_country.text = property.address?.country
+        if (property.address?.postalCode != null)text_location_cp.text = property.address?.postalCode
+        val price = property.price
+        if (price != null)text_price.text = currencyFormat.format(price)
         if (property.address?.apartmentNumber != 0) {
             text_location_num_type.text =
                 resources.getString(R.string.nbr_of_apart) + property.address?.apartmentNumber.toString()
@@ -104,8 +120,69 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
         }else{
             text_location_additional.visibility = View.GONE
         }
+        if (property.realtor != null)text_realtor.text = property.realtor
+        initCheckbox()
+        initStatus()
+        configureButtonEdit()
         configureRecyclerView()
         addMarkers()
+    }
+
+    private fun initStatus() {
+        if(property.status!!){
+            checkboxAvailable.isChecked = true
+        }else{
+            checkboxSold.isChecked = true
+            tv_soldDate.visibility = View.VISIBLE
+            picker_soldDate.visibility = View.VISIBLE
+            picker_soldDate.text = property.dateOfSale
+        }
+        picker_entryDate.text = property.dateOfEntry
+        checkboxAvailable.isEnabled = false
+        checkboxSold.isEnabled = false
+    }
+
+    // To init checkbox
+    private fun initCheckbox() {
+        if (property.airport!!) {
+            checkbox_airport.isChecked = true
+        }
+        if (property.school!!) {
+            checkbox_school.isChecked = true
+        }
+        if (property.shops!!) {
+            checkbox_shops.isChecked = true
+        }
+        if (property.subway!!) {
+            checkbox_subway.isChecked = true
+        }
+        if (property.trainStation!!) {
+            checkbox_train_station.isChecked = true
+        }
+        if (property.park!!) {
+            checkbox_park.isChecked = true
+        }
+        checkbox_airport.isEnabled = false
+        checkbox_school.isEnabled = false
+        checkbox_shops.isEnabled = false
+        checkbox_subway.isEnabled = false
+        checkbox_train_station.isEnabled = false
+        checkbox_park.isEnabled = false
+    }
+
+    private fun configureButtonEdit() {
+        button_edit.setOnClickListener {
+            launchCreateActivity(propertyId)
+        }
+    }
+
+    // To launch CreateActivity
+    private fun launchCreateActivity(id: Long?) {
+        val intent = Intent(activity, CreateEstateActivity::class.java)
+        if (id != null) {
+            intent.putExtra(DetailActivity.PROPERTY, propertyId)
+        }
+        startActivity(intent)
     }
 
     // To configure recyclerView

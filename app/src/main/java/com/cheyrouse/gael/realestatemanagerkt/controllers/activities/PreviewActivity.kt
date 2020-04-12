@@ -5,15 +5,20 @@ import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import androidx.lifecycle.ViewModelProviders
 import com.cheyrouse.gael.realestatemanagerkt.R
 import com.cheyrouse.gael.realestatemanagerkt.RealEstateManagerApplication
+import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.DataInjection
+import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.PropertyViewModel
 
 class PreviewActivity : AppCompatActivity() {
+
+    private lateinit var propertyViewModel: PropertyViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_preview)
-        checkScreenOrientation()
+        deleteIfExist()
         Handler().postDelayed({
             launchMain()
         }, 800)
@@ -26,10 +31,13 @@ class PreviewActivity : AppCompatActivity() {
         this.finish()
     }
 
-    // To define screen orientation
-    private fun checkScreenOrientation() {
-        if (resources.getBoolean(R.bool.portrait_only)) {
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        }
+    private fun deleteIfExist(){
+        propertyViewModel = ViewModelProviders.of(
+            this,
+            this.let { DataInjection.Injection.provideViewModelFactory(it) }
+        ).get(PropertyViewModel::class.java)
+        Thread {
+            propertyViewModel.deleteProperty(10001)
+        }.start()
     }
 }

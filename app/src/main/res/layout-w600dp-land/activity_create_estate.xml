@@ -123,12 +123,11 @@
                     android:id="@+id/tv_rooms"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
+                    android:layout_marginEnd="40dp"
                     android:text="@string/nbr_of_rooms"
                     android:textColor="@android:color/black"
                     app:layout_constraintEnd_toStartOf="@+id/tv_nbr_bed"
-                    app:layout_constraintStart_toStartOf="@+id/guideline"
                     app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
@@ -148,9 +147,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:layout_marginEnd="40dp"
                     android:text="@string/nbr_of_bedrooms"
                     android:textColor="@android:color/black"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_nbr_bath"
+                    app:layout_constraintHorizontal_bias="0.978"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -172,10 +173,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:layout_marginEnd="40dp"
                     android:text="@string/nbr_of_bathrooms"
                     android:textColor="@android:color/black"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/tv_nbr_bed"
                     app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
@@ -689,8 +690,7 @@
     <Button
             android:id="@+id/button_validate"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_height="40dp"
             android:layout_marginEnd="20dp"
             android:background="@color/colorPrimary"
             android:text="@string/validate"

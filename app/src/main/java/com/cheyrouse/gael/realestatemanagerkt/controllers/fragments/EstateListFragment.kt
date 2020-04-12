@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.cheyrouse.gael.realestatemanagerkt.R
 import com.cheyrouse.gael.realestatemanagerkt.RealEstateManagerApplication
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.DataInjection
@@ -116,8 +117,9 @@ class EstateListFragment : Fragment() {
     // To set list of properties in recyclerView
     private fun displayList(properties: List<Property>) {
         listProperty = properties
+        val recycler: RecyclerView  = estate_picture_recycler_view
         // Data bind the recycler view
-        estate_picture_recycler_view.apply {
+        recycler.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter =
                 EstateListAdapter(properties) { property: Property -> onItemClicked(property) }
@@ -125,8 +127,8 @@ class EstateListFragment : Fragment() {
         }
         addItemDecoration()
         if(!RealEstateManagerApplication.isSearch()){
-            estate_picture_recycler_view.post {
-                estate_picture_recycler_view.scrollToPosition(Utils.getPropertyPosition(listProperty))
+            recycler.post {
+                recycler.scrollToPosition(Utils.getPropertyPosition(listProperty))
             }
         }else{
             RealEstateManagerApplication.setSearchCalls(false)

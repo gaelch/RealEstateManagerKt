@@ -92,7 +92,6 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_estate)
-        checkScreenOrientation()
         checkDeviceServices()
         initViewModelFactory()
         getTheBundle()
@@ -116,13 +115,6 @@ class CreateEstateActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         configureCheckBoxClick()
         configureButtons()
         configureButtonValidate()
-    }
-
-    // To define screen orientation
-    private fun checkScreenOrientation() {
-        if (resources.getBoolean(R.bool.portrait_only)) {
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        }
     }
 
     // To check internet and location

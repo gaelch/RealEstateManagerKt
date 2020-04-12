@@ -5,6 +5,7 @@ import android.content.ContentUris
 import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
+import android.util.Log
 import com.cheyrouse.gael.realestatemanagerkt.database.RealEstateDatabase
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
 
@@ -16,7 +17,14 @@ class PropertyContentProvider : ContentProvider() {
 
 
     override fun insert(p0: Uri, p1: ContentValues?): Uri? {
-        throw IllegalArgumentException("You can't insert row into $p0")
+        if (context != null && p1 != null){
+            val index = RealEstateDatabase.getInstance(context!!).propertyDao().insertProperty(Property().fromContentValues(p1))
+            if (index != 0L){
+                context!!.contentResolver.notifyChange(p0,null)
+                return ContentUris.withAppendedId(p0,index)
+            }
+        }
+        throw IllegalArgumentException("Failed to insert row into $p0")
     }
 
     // For request data

@@ -13,10 +13,6 @@
                 android:icon="@drawable/ic_search_black_24dp"
                 android:title="@string/item_search_title" />
         <item
-                android:id="@+id/activity_main_drawer_edit"
-                android:icon="@drawable/ic_create_black_18dp"
-                android:title="@string/item_edit_title" />
-        <item
                 android:id="@+id/activity_main_drawer_create"
                 android:icon="@drawable/ic_add_black_18dp"
                 android:title="@string/item_create_title" />

@@ -12,150 +12,165 @@
         android:background="@color/light_grey"
         tools:context=".controllers.fragments.MortGageCalculatorFragment">
 
-    <EditText
-            android:id="@+id/editTextPurchasePrice"
+    <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:digits="0123456789"
-            android:ems="10"
-            android:inputType="numberDecimal"
-            android:maxLength="11"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:importantForAutofill="no"
-            tools:ignore="LabelFor" />
+            android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <EditText
+                    android:id="@+id/editTextPurchasePrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:digits="0123456789"
+                    android:ems="10"
+                    android:inputType="numberDecimal"
+                    android:maxLength="11"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:importantForAutofill="no"
+                    tools:ignore="LabelFor" />
 
 
-    <TextView
-            android:id="@+id/textViewPurchasePrice"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:elevation="2dp"
-            android:hint="@string/purchase_price"
-            android:padding="10dp"
-            app:layout_constraintBottom_toBottomOf="@+id/editTextPurchasePrice"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/editTextPurchasePrice"
-            app:layout_constraintVertical_bias="1.0"
-            tools:targetApi="lollipop" />
+            <TextView
+                    android:id="@+id/textViewPurchasePrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:elevation="2dp"
+                    android:hint="@string/purchase_price"
+                    android:padding="10dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/editTextPurchasePrice"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/editTextPurchasePrice"
+                    app:layout_constraintVertical_bias="1.0"
+                    tools:targetApi="lollipop" />
 
-    <EditText
-            android:id="@+id/editTextDownPaymentAmount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_gravity="fill_horizontal"
-            android:digits="0123456789"
-            android:ems="10"
-            android:inputType="numberDecimal"
-            android:maxLength="10"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextPurchasePrice"
-            android:importantForAutofill="no"
-            tools:ignore="LabelFor" />
+            <EditText
+                    android:id="@+id/editTextDownPaymentAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="fill_horizontal"
+                    android:digits="0123456789"
+                    android:ems="10"
+                    android:inputType="numberDecimal"
+                    android:maxLength="10"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/editTextPurchasePrice"
+                    android:importantForAutofill="no"
+                    tools:ignore="LabelFor" />
 
-    <TextView
-            android:id="@+id/textViewDownPaymentAmount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:elevation="2dp"
-            android:hint="@string/Enter_contribution"
-            android:padding="10dp"
-            app:layout_constraintBottom_toBottomOf="@+id/editTextDownPaymentAmount"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/editTextDownPaymentAmount"
-            app:layout_constraintVertical_bias="1.0"
-            tools:targetApi="lollipop" />
+            <TextView
+                    android:id="@+id/textViewDownPaymentAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:elevation="2dp"
+                    android:hint="@string/Enter_contribution"
+                    android:padding="10dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/editTextDownPaymentAmount"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/editTextDownPaymentAmount"
+                    app:layout_constraintVertical_bias="1.0"
+                    tools:targetApi="lollipop" />
 
-    <EditText
-            android:id="@+id/editTextInterestRate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:digits="0123456789"
-            android:ems="10"
-            android:inputType="number"
-            android:maxLength="5"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextDownPaymentAmount"
-            android:importantForAutofill="no"
-            tools:ignore="LabelFor" />
+            <EditText
+                    android:id="@+id/editTextInterestRate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:digits="0123456789"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:maxLength="5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/editTextDownPaymentAmount"
+                    android:importantForAutofill="no"
+                    tools:ignore="LabelFor" />
 
-    <TextView
-            android:id="@+id/textViewInterestRate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:elevation="2dp"
-            android:hint="@string/interest_rate"
-            android:padding="10dp"
-            app:layout_constraintBottom_toBottomOf="@+id/editTextInterestRate"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/editTextInterestRate"
-            tools:targetApi="lollipop" />
+            <TextView
+                    android:id="@+id/textViewInterestRate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:elevation="2dp"
+                    android:hint="@string/interest_rate"
+                    android:padding="10dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/editTextInterestRate"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/editTextInterestRate"
+                    tools:targetApi="lollipop" />
 
 
-    <TextView
-            android:id="@+id/duration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="@string/duration"
-            android:textSize="15sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextInterestRate" />
+            <TextView
+                    android:id="@+id/duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/duration"
+                    android:textSize="15sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/editTextInterestRate" />
 
-    <TextView
-            android:id="@+id/textViewDuration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/duration1"
-            app:layout_constraintTop_toTopOf="@+id/duration"
-            app:layout_constraintStart_toEndOf="@+id/duration" />
+            <TextView
+                    android:id="@+id/textViewDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/duration1"
+                    app:layout_constraintTop_toTopOf="@+id/duration"
+                    app:layout_constraintStart_toEndOf="@+id/duration" />
 
-    <com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar
-            android:id="@+id/loan_seekBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="fill_horizontal"
-            android:layout_marginTop="15dp"
-            android:inputType="number"
-            android:max="35"
-            android:progress="1"
-            app:bar_color="@color/colorPrimary"
-            app:right_thumb_color="@color/colorRed"
-            app:bar_highlight_color="@color/orange_red"
-            app:corner_radius="5"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/duration"
-            app:max_value="30"
-            app:min_value="0"
-            app:steps="1" />
+            <com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar
+                    android:id="@+id/loan_seekBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="fill_horizontal"
+                    android:layout_marginTop="15dp"
+                    android:inputType="number"
+                    android:max="35"
+                    android:progress="1"
+                    app:bar_color="@color/colorPrimary"
+                    app:right_thumb_color="@color/colorRed"
+                    app:bar_highlight_color="@color/orange_red"
+                    app:corner_radius="5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/duration"
+                    app:max_value="30"
+                    app:min_value="0"
+                    app:steps="1" />
 
-    <Button
-            android:id="@+id/calculate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_row="4"
-            android:layout_column="0"
-            android:layout_columnSpan="3"
-            android:layout_gravity="fill_horizontal"
-            android:background="@color/colorPrimary"
-            android:text="@string/calculate"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/loan_seekBar" />
+            <Button
+                    android:id="@+id/calculate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_row="4"
+                    android:layout_column="0"
+                    android:layout_columnSpan="3"
+                    android:layout_gravity="fill_horizontal"
+                    android:background="@color/colorPrimary"
+                    android:text="@string/calculate"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/loan_seekBar" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    </androidx.core.widget.NestedScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

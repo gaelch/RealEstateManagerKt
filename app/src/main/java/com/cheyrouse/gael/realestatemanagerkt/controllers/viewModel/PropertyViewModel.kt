@@ -21,16 +21,22 @@ class PropertyViewModel(private val mPropertyDataRepository: PropertyDataReposit
     fun getProperty(propertyId: Long): LiveData<Property> {
         return mPropertyDataRepository.getProperty(propertyId)
     }
+    // --- CREATE ---
     fun createProperty(property: Property?) {
         executor.execute { mPropertyDataRepository.createProperty(property) }
     }
 
+    // --- UPDATE ---
     fun updateProperty(property: Property?) {
         executor.execute { mPropertyDataRepository.updateProperty(property) }
     }
 
-    //// --- SEARCH --- ////
+    // --- DELETE ---
+    fun deleteProperty(propertyId: Long) {
+        mPropertyDataRepository.deleteProperty(propertyId)
+    }
 
+    //// --- SEARCH --- ////
     fun getPropertyByArgs(queryString:String) : LiveData<List<Property>>{
         val query = SimpleSQLiteQuery(queryString)
         Log.e("get properties by args","Query : ${query.sql}")

@@ -5,6 +5,8 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
+import android.os.Build;
 import com.cheyrouse.gael.realestatemanagerkt.RealEstateManagerApplication;
 import com.cheyrouse.gael.realestatemanagerkt.models.Property;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +16,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import static com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.TEXT_DATE;
 
 /**
@@ -56,15 +59,22 @@ public class Utils {
     // return true if network is connected
     @NotNull
     public static Boolean isInternetAvailable(@NotNull Context context) {
+        boolean isInternet = false;
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         Network network;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            assert connectivityManager != null;
-            network = connectivityManager.getActiveNetwork();
-        } else
-            return true;
-        NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(network);
-        return capabilities != null && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            network = Objects.requireNonNull(connectivityManager).getActiveNetwork();
+            NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(network);
+            if (capabilities != null && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)){
+                isInternet = true;
+            }
+        }else{
+            NetworkInfo activeNetwork = Objects.requireNonNull(connectivityManager).getActiveNetworkInfo();
+            if (activeNetwork != null && activeNetwork.isConnected()){
+                isInternet = true;
+            }
+        }
+        return isInternet;
     }
 
     //To check if location is enable

@@ -725,13 +725,13 @@
 
     <Button
             android:id="@+id/button_validate"
-            android:layout_width="60dp"
+            android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_margin="10dp"
             android:textSize="13sp"
             android:text="@string/validate"
             android:textColor="@android:color/white"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/bg_button_radius"
             app:layout_constraintBottom_toBottomOf="@+id/toolbar_create"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/scrollView" />

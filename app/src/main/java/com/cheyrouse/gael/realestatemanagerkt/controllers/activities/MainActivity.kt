@@ -31,6 +31,7 @@ import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.FRAGMEN
 import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.FRAGMENT_MAP
 import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.FRAGMENT_MORT_GAGE
 import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.FRAGMENT_SEARCH
+import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.FRAGMENT_SETTINGS
 import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.INTERNET
 import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.IS_DETAIL_CALLING_YOU
 import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.LIST_PROPERTY
@@ -316,12 +317,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 // Open search fragment
                 launchSearchFragment()
             }
+            R.id.activity_main_drawer_prefs -> {
+                // Open settings fragment
+                launchSettingsFragment()
+            }
             R.id.activity_main_drawer_logout -> {
                 showAlertDialogCloseApp()
             }
         }
         activity_main_drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    private fun launchSettingsFragment() {
+        // Open settings fragment
+        if (isTablet) {
+            launchFragment(FRAGMENT_SETTINGS, 0, R.id.activity_main_100_frame_layout, null)
+        } else {
+            launchFragment(FRAGMENT_SETTINGS, 0, R.id.activity_main_frame_layout, null)
+        }
     }
 
     // To launch Loan Simulator
@@ -418,6 +432,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             FRAGMENT_MAP -> fragment = MapsFragment.newInstance()
             FRAGMENT_DETAIL -> fragment = DetailEstateFragment.newInstance(propId)
             FRAGMENT_MORT_GAGE -> fragment = MortGageCalculatorFragment.newInstance()
+            FRAGMENT_SETTINGS -> fragment = SettingsFragment.newInstance()
         }
         supportFragmentManager.beginTransaction()
             .replace(frameLayout, fragment)

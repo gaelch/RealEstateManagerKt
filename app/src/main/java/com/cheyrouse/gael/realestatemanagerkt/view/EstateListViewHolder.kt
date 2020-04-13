@@ -16,6 +16,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.cheyrouse.gael.realestatemanagerkt.R
 import com.cheyrouse.gael.realestatemanagerkt.RealEstateManagerApplication
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
+import com.cheyrouse.gael.realestatemanagerkt.utils.Prefs
 import kotlinx.android.synthetic.main.estate_list_item.view.*
 import java.text.NumberFormat
 import java.util.*
@@ -33,13 +34,18 @@ class EstateListViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
     private var constraint = itemView.constraint_item
     private val glide: RequestManager = Glide.with(itemView)
     private var index: Int = 0
-    private val currencyFormat: NumberFormat = NumberFormat.getCurrencyInstance(Locale.US)
+    private lateinit var currencyFormat: NumberFormat
 
     @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun bind(property: Property, clickListener: (Property) -> Unit, position: Int) {
+        val prefs:Prefs= Prefs.get(RealEstateManagerApplication.getContext())
+        currencyFormat =
+            if(prefs.foreignCurrency) NumberFormat.getCurrencyInstance(Locale.FRANCE) else NumberFormat.getCurrencyInstance(Locale.US)
         currencyFormat.maximumFractionDigits = 0
+
         index = RealEstateManagerApplication.getLastItemClicked()
+
         mTypeView?.text = property.type
         mTownView?.text = property.address?.city
         mPriceView?.text = currencyFormat.format(property.price)

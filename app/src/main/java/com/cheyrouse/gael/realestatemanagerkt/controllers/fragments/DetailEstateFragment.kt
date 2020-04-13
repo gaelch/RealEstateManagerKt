@@ -14,11 +14,13 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.OrientationHelper
 import com.cheyrouse.gael.realestatemanagerkt.R
+import com.cheyrouse.gael.realestatemanagerkt.RealEstateManagerApplication
 import com.cheyrouse.gael.realestatemanagerkt.controllers.activities.CreateEstateActivity
 import com.cheyrouse.gael.realestatemanagerkt.controllers.activities.DetailActivity
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.DataInjection
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.PropertyViewModel
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
+import com.cheyrouse.gael.realestatemanagerkt.utils.Prefs
 import com.cheyrouse.gael.realestatemanagerkt.view.DetailPictureAdapter
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -48,7 +50,7 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var mListener: OnFragmentDetailListener? = null
-    private val currencyFormat: NumberFormat = NumberFormat.getCurrencyInstance(Locale.US)
+    private lateinit var currencyFormat: NumberFormat
 
     companion object {
         private const val ARG_PARAM = "property"
@@ -76,6 +78,7 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
         detail_lite_map.getMapAsync(this)
         initViewModelFactory()
         getTheBundle()
+        getDevice()
     }
 
     // Get intent data
@@ -93,6 +96,12 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
         }
     }
 
+    private fun getDevice() {
+        val prefs: Prefs = Prefs.get(RealEstateManagerApplication.getContext())
+        currencyFormat =
+            if(prefs.foreignCurrency) NumberFormat.getCurrencyInstance(Locale.FRANCE) else NumberFormat.getCurrencyInstance(Locale.US)
+    }
+
     // To set data in views
     @SuppressLint("SetTextI18n")
     private fun initVars(property: Property) {
@@ -107,8 +116,7 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
         if (property.address?.city != null)text_location_town.text = property.address?.city
         if (property.address?.country != null)text_location_country.text = property.address?.country
         if (property.address?.postalCode != null)text_location_cp.text = property.address?.postalCode
-        val price = property.price
-        if (price != null)text_price.text = currencyFormat.format(price)
+        text_price.text = currencyFormat.format(property.price)
         if (property.address?.apartmentNumber != 0) {
             text_location_num_type.text =
                 resources.getString(R.string.nbr_of_apart) + property.address?.apartmentNumber.toString()

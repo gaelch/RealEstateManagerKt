@@ -18,10 +18,14 @@ class Constant {
         const val FRAGMENT_MAP = "mapsFragment"
         const val FRAGMENT_MORT_GAGE = "mortGageCalculatorFragment"
         const val FRAGMENT_DETAIL = "DetailEstateFragment"
+        const val FRAGMENT_SETTINGS = "SettingsFragment"
         const val DATA = "data"
         const val LOCATION = "location"
         const val INTERNET = "internet"
         const val OPEN_MAPS = "open_maps"
+        const val REAL_ESTATE_PREFS = "real_estate_prefs"
+        const val Foreign_Currency = "Foreign_Currency"
+
     }
 
 }

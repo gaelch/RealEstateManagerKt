@@ -14,11 +14,9 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.cheyrouse.gael.realestatemanagerkt.R
 import com.cheyrouse.gael.realestatemanagerkt.RealEstateManagerApplication
-import com.cheyrouse.gael.realestatemanagerkt.controllers.fragments.DetailEstateFragment
-import com.cheyrouse.gael.realestatemanagerkt.controllers.fragments.MapsFragment
-import com.cheyrouse.gael.realestatemanagerkt.controllers.fragments.MortGageCalculatorFragment
-import com.cheyrouse.gael.realestatemanagerkt.controllers.fragments.SearchFragment
+import com.cheyrouse.gael.realestatemanagerkt.controllers.fragments.*
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
+import com.cheyrouse.gael.realestatemanagerkt.utils.Constant
 import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.IS_DETAIL_CALLING_YOU
 import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.LIST_PROPERTY
 import com.cheyrouse.gael.realestatemanagerkt.utils.Utils
@@ -179,12 +177,23 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             R.id.activity_main_drawer_search -> {
                 launchSearchFragment()
             }
+            R.id.activity_main_drawer_prefs -> {
+                // Open settings fragment
+                launchSettingsFragment()
+            }
             R.id.activity_main_drawer_logout -> {
                 showAlertDialog("closeApp")
             }
         }
         activity_detail_drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    private fun launchSettingsFragment() {
+        // Open settings fragment
+        val settingsFragment = SettingsFragment.newInstance()
+        supportFragmentManager.beginTransaction()
+            .add(R.id.activity_detail_frame_layout, settingsFragment).commit()
     }
 
     // To launch CreateActivity
@@ -198,7 +207,6 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         val mortGageCalculatorFragment = MortGageCalculatorFragment.newInstance()
         supportFragmentManager.beginTransaction()
             .replace(R.id.activity_detail_frame_layout, mortGageCalculatorFragment)
-//            .addToBackStack("mortGageCalculatorFragment")
             .commit()
     }
 

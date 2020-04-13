@@ -13,9 +13,11 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatDialog
 import androidx.fragment.app.Fragment
 import com.cheyrouse.gael.realestatemanagerkt.R
+import com.cheyrouse.gael.realestatemanagerkt.RealEstateManagerApplication
 import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.FORMAT_TO_TWO_DEC
 import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.SYMBOL_DOLLAR
 import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.SYMBOL_EURO
+import com.cheyrouse.gael.realestatemanagerkt.utils.Prefs
 import com.cheyrouse.gael.realestatemanagerkt.utils.Utils
 import kotlinx.android.synthetic.main.fragment_mort_gage_calculator.*
 import java.text.NumberFormat
@@ -27,8 +29,6 @@ import kotlin.math.pow
  */
 class MortGageCalculatorFragment : Fragment() {
 
-    private val currencyFormat: NumberFormat = NumberFormat.getCurrencyInstance(Locale.US)
-
     private var purchaseAmount = 0.0
     private var contribution = 0.0
     private var interestRate = 1.0
@@ -37,6 +37,9 @@ class MortGageCalculatorFragment : Fragment() {
     private var isDollars: Boolean = true
     private var monthlyEuro = ""
     private var totalEuro = ""
+    private lateinit var currencyFormat: NumberFormat
+    private lateinit var prefs: Prefs
+    private var device: Boolean = false
 
     companion object {
 
@@ -54,7 +57,18 @@ class MortGageCalculatorFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        getDevice()
         initViews()
+    }
+
+    private fun getDevice() {
+        prefs = Prefs.get(RealEstateManagerApplication.getContext())
+        device = prefs.foreignCurrency
+        currencyFormat =
+            if (prefs.foreignCurrency) NumberFormat.getCurrencyInstance(Locale.FRANCE) else NumberFormat.getCurrencyInstance(Locale.US)
+        if(prefs.foreignCurrency){
+            isDollars = false
+        }
     }
 
     // To init views
@@ -100,27 +114,40 @@ class MortGageCalculatorFragment : Fragment() {
                 contribution,
                 duration
             )
-            monthlyPaymentTV?.text = FORMAT_TO_TWO_DEC.format(monthlyStr) + SYMBOL_DOLLAR
+            monthlyPaymentTV?.text =
+                currencyFormat.format(monthlyStr)
+
             val totalStr: Double = getTotalPayment(monthlyStr, duration)
-            totalPaymentTV?.text = FORMAT_TO_TWO_DEC.format(totalStr) + SYMBOL_DOLLAR
+            totalPaymentTV?.text =
+                currencyFormat.format(totalStr)
 
             val dialogBtnConvert =
                 dialog.findViewById<View>(R.id.dialogButtonConvert) as Button?
             dialogBtnConvert!!.setOnClickListener {
                 if (isDollars) {
+                    currencyFormat = NumberFormat.getCurrencyInstance(Locale.FRANCE)
                     if (monthlyEuro.isEmpty()) {
                         monthlyEuro = (Utils.convertDollarToEuro(monthlyStr)).toString()
                         totalEuro = (Utils.convertDollarToEuro(totalStr)).toString()
                     }
-                    monthlyPaymentTV?.text = monthlyEuro + SYMBOL_EURO
-                    totalPaymentTV?.text = totalEuro + SYMBOL_EURO
+                    monthlyPaymentTV?.text = currencyFormat.format(monthlyEuro.toDouble())
+                    totalPaymentTV?.text = currencyFormat.format(totalEuro.toDouble())
                     dialogBtnConvert.setText(R.string.convertDollar)
                     isDollars = false
                 } else {
+                    if (monthlyEuro.isEmpty()) {
+                        monthlyEuro = (Utils.convertEuroToDollar(monthlyStr)).toString()
+                        totalEuro = (Utils.convertEuroToDollar(totalStr)).toString()
+                    }
+                    currencyFormat = NumberFormat.getCurrencyInstance(Locale.US)
                     monthlyPaymentTV?.text =
-                        Utils.convertEuroToDollar(monthlyEuro.toDouble()).toString() + SYMBOL_DOLLAR
+                        currencyFormat.format(
+                            Utils.convertEuroToDollar(monthlyEuro.toDouble())
+                        )
                     totalPaymentTV?.text =
-                        Utils.convertEuroToDollar(totalEuro.toDouble()).toString() + SYMBOL_DOLLAR
+                        currencyFormat.format(
+                            Utils.convertEuroToDollar(totalEuro.toDouble())
+                        )
                     dialogBtnConvert.setText(R.string.convertEuro)
                     isDollars = true
                 }

@@ -1,15 +1,8 @@
 package com.cheyrouse.gael.realestatemanagerkt.utils
 
-import android.app.Activity
 import android.content.Context
 import android.widget.Toast
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProviders
 import com.cheyrouse.gael.realestatemanagerkt.R
-import com.cheyrouse.gael.realestatemanagerkt.RealEstateManagerApplication
-import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.DataInjection
-import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.PropertyViewModel
 import com.cheyrouse.gael.realestatemanagerkt.models.Address
 import com.cheyrouse.gael.realestatemanagerkt.models.Picture
 import com.cheyrouse.gael.realestatemanagerkt.models.Property

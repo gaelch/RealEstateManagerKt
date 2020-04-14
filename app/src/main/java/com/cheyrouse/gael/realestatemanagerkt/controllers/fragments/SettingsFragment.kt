@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.fragment_settings.*
  */
 class SettingsFragment : Fragment() {
 
-    private var device: Boolean = false
+    private var foreign: Boolean = false
     private lateinit var prefs: Prefs
 
     companion object {
@@ -37,18 +37,19 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getPrefs()
-        initCheckBoxDevice()
+        initCheckBoxForeign()
         configureValidBtn()
     }
 
-
+    // Request preferences
     private fun getPrefs() {
         prefs = Prefs.get(activity)
-        device = prefs.foreignCurrency
+        foreign = prefs.foreignCurrency
     }
 
-    private fun initCheckBoxDevice() {
-        if(device){
+    // Checkbox foreign choice configuration
+    private fun initCheckBoxForeign() {
+        if(foreign){
             euros_box.isChecked = true
             dollars_box.isChecked = false
         }else{
@@ -59,21 +60,22 @@ class SettingsFragment : Fragment() {
             if (b) {
                 dollars_box.isChecked = true
                 euros_box.isChecked = false
-                device = false
+                foreign = false
             }
         }
         euros_box.setOnCheckedChangeListener { _, b ->
             if (b) {
                 euros_box.isChecked = true
                 dollars_box.isChecked = false
-                device = true
+                foreign = true
             }
         }
     }
 
+    // Button to valid preferences
     private fun configureValidBtn() {
-        valid_device_btn.setOnClickListener {
-            prefs.storeForeignCurrency(device)
+        valid_foreign_btn.setOnClickListener {
+            prefs.storeForeignCurrency(foreign)
             activity?.onBackPressed()
         }
     }

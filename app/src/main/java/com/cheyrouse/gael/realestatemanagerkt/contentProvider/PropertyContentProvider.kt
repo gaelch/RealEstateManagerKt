@@ -5,7 +5,6 @@ import android.content.ContentUris
 import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
-import android.util.Log
 import com.cheyrouse.gael.realestatemanagerkt.database.RealEstateDatabase
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
 

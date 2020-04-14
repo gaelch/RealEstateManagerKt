@@ -329,8 +329,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
+    // Open settings fragment
     private fun launchSettingsFragment() {
-        // Open settings fragment
         if (isTablet) {
             launchFragment(FRAGMENT_SETTINGS, 0, R.id.activity_main_100_frame_layout, null)
         } else {

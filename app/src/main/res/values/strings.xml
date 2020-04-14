@@ -50,9 +50,6 @@ Do you want to access the wifi settings?</string>
     <string name="price_title">Price</string>
     <string name="type_title">Type of property</string>
 
-    <!--Fragment list-->
-    <string name="sold_text">SOLD</string>
-
     <!--    Create Activity-->
     <string name="type_choice_tv">Choose a type</string>
     <string name="surface_tv">Surface: </string>
@@ -135,7 +132,7 @@ Do you want to access the wifi settings?</string>
     <string name="cancel">Cancel</string>
 
     <!-- Settings Fragment -->
-    <string name="device_choice">Choose your app device :</string>
+    <string name="foreign_choice">Choose your app foreign :</string>
     <string name="dollars">$</string>
     <string name="euros">€</string>
 

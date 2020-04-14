@@ -1,7 +1,6 @@
 package com.cheyrouse.gael.realestatemanagerkt.controllers.activities
 
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -16,7 +15,6 @@ import com.cheyrouse.gael.realestatemanagerkt.R
 import com.cheyrouse.gael.realestatemanagerkt.RealEstateManagerApplication
 import com.cheyrouse.gael.realestatemanagerkt.controllers.fragments.*
 import com.cheyrouse.gael.realestatemanagerkt.models.Property
-import com.cheyrouse.gael.realestatemanagerkt.utils.Constant
 import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.IS_DETAIL_CALLING_YOU
 import com.cheyrouse.gael.realestatemanagerkt.utils.Constant.ConstantVal.LIST_PROPERTY
 import com.cheyrouse.gael.realestatemanagerkt.utils.Utils
@@ -189,8 +187,8 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         return true
     }
 
+    // Open settings fragment
     private fun launchSettingsFragment() {
-        // Open settings fragment
         val settingsFragment = SettingsFragment.newInstance()
         supportFragmentManager.beginTransaction()
             .add(R.id.activity_detail_frame_layout, settingsFragment).commit()

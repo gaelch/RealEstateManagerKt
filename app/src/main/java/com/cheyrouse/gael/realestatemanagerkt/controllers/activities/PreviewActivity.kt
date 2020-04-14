@@ -1,13 +1,11 @@
 package com.cheyrouse.gael.realestatemanagerkt.controllers.activities
 
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import androidx.lifecycle.ViewModelProviders
 import com.cheyrouse.gael.realestatemanagerkt.R
-import com.cheyrouse.gael.realestatemanagerkt.RealEstateManagerApplication
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.DataInjection
 import com.cheyrouse.gael.realestatemanagerkt.controllers.viewModel.PropertyViewModel
 

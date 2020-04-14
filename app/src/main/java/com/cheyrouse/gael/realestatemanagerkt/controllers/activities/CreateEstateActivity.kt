@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.app.*
 import android.content.ContentValues
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle

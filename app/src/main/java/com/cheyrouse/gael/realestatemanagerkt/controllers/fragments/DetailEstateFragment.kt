@@ -30,7 +30,6 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.android.synthetic.main.activity_create_estate.*
 import kotlinx.android.synthetic.main.fragment_detail_estate.*
 import kotlinx.android.synthetic.main.fragment_detail_estate.checkbox_airport
 import kotlinx.android.synthetic.main.fragment_detail_estate.checkbox_park
@@ -78,7 +77,7 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
         detail_lite_map.getMapAsync(this)
         initViewModelFactory()
         getTheBundle()
-        getDevice()
+        getForeign()
     }
 
     // Get intent data
@@ -96,7 +95,7 @@ class DetailEstateFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerC
         }
     }
 
-    private fun getDevice() {
+    private fun getForeign() {
         val prefs: Prefs = Prefs.get(RealEstateManagerApplication.getContext())
         currencyFormat =
             if(prefs.foreignCurrency) NumberFormat.getCurrencyInstance(Locale.FRANCE) else NumberFormat.getCurrencyInstance(Locale.US)

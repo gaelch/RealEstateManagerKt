@@ -39,7 +39,7 @@ class UnitTest {
 
     @Test
     fun getStringDateTest(){
-        val dateStr = "04-04-2020"
+        val dateStr = "04/04/2020"
         assertEquals(dateStr, Utils.getStringDate(2020, 4, 3))
     }
 
